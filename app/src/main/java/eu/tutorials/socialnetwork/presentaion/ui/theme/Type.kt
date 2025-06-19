@@ -24,7 +24,15 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ) ,
-    displayLarge = TextStyle(
+    bodyMedium = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp ,
+        color = TextWhite
+    ),
+            displayLarge = TextStyle(
         fontFamily = quicksand,
         fontWeight = FontWeight.Bold,
         fontSize = 30.sp,

@@ -3,4 +3,8 @@
     <string name="login">Login</string>
     <string name="username_email">Username/Email</string>
     <string name="password">Password</string>
+    <string name="password_visible_content">hide password\n</string>
+    <string name="password_hidden_content">show password\n</string>
+    <string name="dont_have_an_account_yet">Don\'t have an account yet?</string>
+    <string name="sign_up">Sign_up\n</string>
 </resources>

@@ -16,7 +16,7 @@ import eu.tutorials.socialnetwork.presentaion.util.Navigation
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()//staus bar??
+        enableEdgeToEdge()//status bar??
         setContent {
             SocialNetworkTheme {
                 Surface(

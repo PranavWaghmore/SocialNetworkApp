@@ -44,6 +44,7 @@ timber = "5.0.1"
 truth = "1.4.2"
 credentials = "1.5.0"
 airbnbLottieCompose = "6.6.1"
+junitKtx = "1.2.1"
 
 [libraries]
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanistFlowlayout" }
@@ -106,6 +107,7 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 androidx-credentials-core = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
 androidx-credentials-compat = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
