@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import eu.tutorials.socialnetwork.presentaion.splash.SplashScreen
 import eu.tutorials.socialnetwork.presentaion.login.LoginScreen
+import eu.tutorials.socialnetwork.presentaion.register.RegisterScreen
+import eu.tutorials.socialnetwork.presentaion.splash.SplashScreen
 
 
 @Composable
@@ -21,6 +22,9 @@ fun Navigation(){
         }
         composable (Screen.LoginScreen.route){
            LoginScreen(navController=navController)
+        }
+        composable (Screen.RegisterScreen.route){
+            RegisterScreen(navController=navController)
         }
     }
 }

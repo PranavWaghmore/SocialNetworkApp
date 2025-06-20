@@ -3,8 +3,18 @@
     <string name="login">Login</string>
     <string name="username_email">Username/Email</string>
     <string name="password">Password</string>
-    <string name="password_visible_content">hide password\n</string>
-    <string name="password_hidden_content">show password\n</string>
+    <string name="password_visible_content">hide password</string>
+    <string name="password_hidden_content">show password</string>
     <string name="dont_have_an_account_yet">Don\'t have an account yet?</string>
-    <string name="sign_up">Sign_up\n</string>
+    <string name="sign_up">Sign_up</string>
+    <string name="Register">Register</string>
+    <string name="email">E-Mail</string>
+    <string name="username">Username</string>
+    <string name="Already_have_an_Account">Already_have_an_account?</string>
+    <string name="sign_in">Sign_in</string>
+    <string name="pass">pass</string>
+    <string name="unlike">unlike</string>
+    <string name="like">like</string>
+    <string name="comment">comment</string>
+    <string name="share">share</string>
 </resources>

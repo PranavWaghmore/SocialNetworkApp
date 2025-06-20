@@ -1,5 +1,6 @@
 package eu.tutorials.socialnetwork.presentaion.login
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import eu.tutorials.socialnetwork.presentaion.components.StandardTextField
 import eu.tutorials.socialnetwork.presentaion.ui.theme.LargeSpace
 import eu.tutorials.socialnetwork.presentaion.ui.theme.MediumSpace
 import eu.tutorials.socialnetwork.presentaion.ui.theme.SmallSpace
+import eu.tutorials.socialnetwork.presentaion.util.Screen
 
 
 @Composable
@@ -54,7 +56,7 @@ fun LoginScreen(
             Text(
                 text = stringResource(id = R.string.login),
                 color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.displayLarge
+                style = MaterialTheme.typography.displayLarge,
             )
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
@@ -92,6 +94,7 @@ fun LoginScreen(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
+
         }
         Text(
             text = buildAnnotatedString {
@@ -107,7 +110,13 @@ fun LoginScreen(
                 }
             },
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .clickable(
+                    onClick = {
+                        navController.navigate(Screen.RegisterScreen.route)
+                    }
+                ),
             softWrap = true
         )
     }
