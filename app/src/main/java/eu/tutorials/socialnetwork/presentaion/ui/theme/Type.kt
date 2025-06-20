@@ -32,6 +32,12 @@ val Typography = Typography(
         letterSpacing = 0.5.sp ,
         color = TextWhite
     ),
+    bodySmall = TextStyle(
+        fontFamily = quicksand,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        color = TextGrayLighter
+    ),
     displayLarge = TextStyle(
         fontFamily = quicksand,
         fontWeight = FontWeight.Bold,
@@ -44,7 +50,7 @@ val Typography = Typography(
         fontSize = 24.sp,
         color = TextWhite
     ),
-    bodySmall = TextStyle(
+    labelMedium = TextStyle(
         fontFamily = quicksand,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,

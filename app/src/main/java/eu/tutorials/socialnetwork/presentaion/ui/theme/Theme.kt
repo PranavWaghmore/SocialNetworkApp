@@ -19,7 +19,6 @@ fun SocialNetworkTheme(
     //dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-
     MaterialTheme(
         colorScheme = DarkColorScheme,
         typography = Typography,

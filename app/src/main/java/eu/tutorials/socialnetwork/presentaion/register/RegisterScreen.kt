@@ -1,5 +1,6 @@
 package eu.tutorials.socialnetwork.presentaion.register
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,15 +24,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import eu.tutorials.socialnetwork.R
 import eu.tutorials.socialnetwork.presentaion.components.StandardTextField
-import eu.tutorials.socialnetwork.presentaion.login.LoginViewModel
 import eu.tutorials.socialnetwork.presentaion.ui.theme.LargeSpace
 import eu.tutorials.socialnetwork.presentaion.ui.theme.MediumSpace
 import eu.tutorials.socialnetwork.presentaion.ui.theme.SmallSpace
 
+
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: RegisterViewModel = hiltViewModel()
 ) {
     Box(
         modifier = Modifier
@@ -49,11 +51,19 @@ fun RegisterScreen(
                 .fillMaxSize()
                 .align(Alignment.Center),
         ) {
-
             Text(
-                text = stringResource(id = R.string.login),
-                color = MaterialTheme.colorScheme.onBackground,
+                text = stringResource(id = R.string.Register),
+                //color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.displayLarge
+            )
+            Spacer(modifier = Modifier.height(SmallSpace))
+            StandardTextField(
+                text = viewModel.emailText.value,
+                onValueChange = {
+                    viewModel.setEmailText(it)
+                },
+                hint = stringResource(id = R.string.email),
+                error = viewModel.emailError.value
             )
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
@@ -61,7 +71,8 @@ fun RegisterScreen(
                 onValueChange = {
                     viewModel.setUserNameText(it)
                 },
-                hint = stringResource(id = R.string.username_email)
+                hint = stringResource(id = R.string.username),
+                error = viewModel.userNameError.value
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             StandardTextField(
@@ -71,29 +82,48 @@ fun RegisterScreen(
                 },
                 hint = stringResource(id = R.string.password),
                 keyboardType = KeyboardType.Password,
-                showPasswordToggle = viewModel.showPassword.value ,
+                error = viewModel.passwordError.value,
+                showPasswordToggle = viewModel.showPassword.value,
                 onPasswordToggleClick = {
                     viewModel.setShowPassword(it)
                 }
             )
+            Spacer(modifier = Modifier.height(MediumSpace))
+            Button(
+                modifier = Modifier
+                    .align(Alignment.End),
+                onClick = {
 
+                }
+            ) {
+                Text(
+                    text = stringResource(R.string.Register),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
 
         }
         Text(
             text = buildAnnotatedString {
-                append(stringResource(id = R.string.dont_have_an_account_yet))
+                append(stringResource(id = R.string.Already_have_an_Account))
                 append(" ")
-                val signUpText = stringResource(id = R.string.sign_up)
+                val signInText = stringResource(id = R.string.sign_in)
                 withStyle(
                     style = SpanStyle(
                         color = MaterialTheme.colorScheme.primary
                     )
                 ) {
-                    append(signUpText)
+                    append(signInText)
                 }
             },
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .clickable(
+                    onClick = {
+                        navController.popBackStack()
+                    }
+                ),
             softWrap = true
         )
     }

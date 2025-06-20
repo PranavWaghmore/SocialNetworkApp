@@ -86,7 +86,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .align(Alignment.End),
                 onClick = {
-
+                    navController.navigate(Screen.MainFeedScreen.route)
                 }
             ) {
                 Text(
