@@ -62,7 +62,8 @@ fun LoginScreen(
                 onValueChange = {
                     viewModel.setUserNameText(it)
                 },
-                hint = stringResource(id = R.string.username_email)
+                hint = stringResource(id = R.string.username_email),
+                error = viewModel.userNameError.value
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             StandardTextField(
@@ -72,25 +73,25 @@ fun LoginScreen(
                 },
                 hint = stringResource(id = R.string.password),
                 keyboardType = KeyboardType.Password,
-                showPasswordToggle = viewModel.showPassword.value ,
+                error = viewModel.passwordError.value,
+                showPasswordToggle = viewModel.showPassword.value,
                 onPasswordToggleClick = {
                     viewModel.setShowPassword(it)
                 }
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             Button(
+                modifier = Modifier
+                    .align(Alignment.End),
                 onClick = {
 
-                },
-                modifier = Modifier
-                    .align(Alignment.End)
+                }
             ) {
                 Text(
-                    text = stringResource(id = R.string.login)
+                    text = stringResource(R.string.login),
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
-
-
         }
         Text(
             text = buildAnnotatedString {

@@ -16,10 +16,10 @@ class LoginViewModel @Inject constructor() : ViewModel()  {
     val passwordText: State<String> =_passwordText
 
     private val _userNameError=mutableStateOf("")
-    val isUserNameError: State<String> = _userNameError
+    val userNameError: State<String> = _userNameError
 
     private val _passwordError=mutableStateOf("")
-    val isPasswordError: State<String> = _passwordError
+    val passwordError: State<String> = _passwordError
 
     private val _showPassword=mutableStateOf(false)
     val showPassword: State<Boolean> = _showPassword

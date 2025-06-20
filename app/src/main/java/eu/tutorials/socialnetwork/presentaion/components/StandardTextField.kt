@@ -26,6 +26,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import eu.tutorials.socialnetwork.R
 import eu.tutorials.socialnetwork.presentaion.ui.theme.HintGray
 import eu.tutorials.socialnetwork.presentaion.util.TestTags
@@ -36,7 +37,7 @@ fun StandardTextField(
     text: String = "",
     hint: String = "",
     maxLength: Int = 40,
-    error: String = "s",
+    error: String = "",
     showPasswordToggle: Boolean = false,
     onPasswordToggleClick: (Boolean) -> Unit = {},
     keyboardType: KeyboardType = KeyboardType.Text,
@@ -102,11 +103,14 @@ fun StandardTextField(
                 }
 
             },
+            modifier = Modifier.fillMaxWidth()
         )
         if(error.isNotEmpty()){
-            Text("error" ,
+            Text(text=error ,
                 style = MaterialTheme.typography.bodySmall ,
-                color = MaterialTheme.colorScheme.error
+                color = MaterialTheme.colorScheme.error ,
+                textAlign = TextAlign.End,
+                modifier = Modifier.fillMaxWidth()
             )
 
         }
