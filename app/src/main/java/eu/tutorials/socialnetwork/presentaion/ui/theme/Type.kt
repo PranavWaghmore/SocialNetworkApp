@@ -32,7 +32,7 @@ val Typography = Typography(
         letterSpacing = 0.5.sp ,
         color = TextWhite
     ),
-            displayLarge = TextStyle(
+    displayLarge = TextStyle(
         fontFamily = quicksand,
         fontWeight = FontWeight.Bold,
         fontSize = 30.sp,

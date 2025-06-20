@@ -28,7 +28,7 @@ kotlinxSerializationJson = "1.7.3"
 ktorClient = "3.0.1"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2025.06.00"
+composeBom = "2025.06.01"
 lifecycleViewmodelCompose = "2.9.1"
 loggingInterceptor = "5.0.0-alpha.14"
 materialIconsExtended = "1.6.7"
@@ -45,6 +45,7 @@ truth = "1.4.2"
 credentials = "1.5.0"
 airbnbLottieCompose = "6.6.1"
 junitKtx = "1.2.1"
+uiTestJunit4Android = "1.8.3"
 
 [libraries]
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanistFlowlayout" }
@@ -108,6 +109,7 @@ truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 androidx-credentials-core = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
 androidx-credentials-compat = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

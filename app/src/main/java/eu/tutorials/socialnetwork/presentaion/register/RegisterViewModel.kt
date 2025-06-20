@@ -1,4 +1,4 @@
-package eu.tutorials.socialnetwork.presentaion.login
+package eu.tutorials.socialnetwork.presentaion.register
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -8,18 +8,12 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel()  {
+class RegisterViewModel @Inject constructor() : ViewModel()  {
     private val _usernameText= mutableStateOf("")
     val username : State<String> =_usernameText
 
     private val _passwordText=mutableStateOf("")
     val passwordText: State<String> =_passwordText
-
-    private val _userNameError=mutableStateOf("")
-    val isUserNameError: State<String> = _userNameError
-
-    private val _passwordError=mutableStateOf("")
-    val isPasswordError: State<String> = _passwordError
 
     private val _showPassword=mutableStateOf(false)
     val showPassword: State<Boolean> = _showPassword
@@ -32,16 +26,7 @@ class LoginViewModel @Inject constructor() : ViewModel()  {
         _passwordText.value=password
     }
 
-    fun setIsUserNameError(error: String){
-        _userNameError.value= error
-    }
-
-    fun setIsPasswordError(error: String){
-        _passwordError.value= error
-    }
-
     fun setShowPassword(showPassword: Boolean){
         _showPassword.value= showPassword
     }
-
 }

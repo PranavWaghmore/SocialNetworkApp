@@ -41,6 +41,14 @@ android {
     buildFeatures {
         compose = true
     }
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE*"
+            excludes += "META-INF/NOTICE*"
+            excludes += "META-INF/AL2.0"
+            excludes += "META-INF/LGPL2.1"
+        }
+    }
 }
 
 dependencies {
@@ -151,4 +159,5 @@ dependencies {
 
     // Additional Dependencies
     implementation(libs.androidx.multidex)
+
 }

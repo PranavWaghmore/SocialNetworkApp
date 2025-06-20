@@ -20,12 +20,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import eu.tutorials.socialnetwork.presentaion.util.Screen
 import eu.tutorials.socialnetwork.util.Constants
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 
 
 @Composable
 fun SplashScreen(
-    navController: NavController
+    navController: NavController ,
+    dispatcher: CoroutineDispatcher= Dispatchers.Main
 ){
     // Animation state
     val scale = remember {
@@ -36,20 +41,22 @@ fun SplashScreen(
         OvershootInterpolator(2f)
     }
 
-    // Start animation when composable is first launched
+
     LaunchedEffect(key1=true) {
-        scale.animateTo(
-            targetValue = 0.5f,
-            animationSpec = tween(
-                durationMillis = 500,
-                easing = {
-                    overshootInterpolator.getInterpolation(it)
-                }
+        withContext(dispatcher) {
+            scale.animateTo(
+                targetValue = 0.5f,
+                animationSpec = tween(
+                    durationMillis = 500,
+                    easing = {
+                        overshootInterpolator.getInterpolation(it)
+                    }
+                )
             )
-        )
-        delay(Constants.SPLASH_SCREEN_DURATION)
-        navController.popBackStack()
-        navController.navigate(Screen.LoginScreen.route)
+            delay(Constants.SPLASH_SCREEN_DURATION)
+            navController.popBackStack()
+            navController.navigate(Screen.LoginScreen.route)
+        }
     }
     Box(
         modifier = Modifier.fillMaxSize() ,
