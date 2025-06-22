@@ -77,7 +77,7 @@ fun Post(
                 .background(LightGray)
         ) {
             Image(
-                painterResource(R.drawable.marvel),
+                post.image,
                 contentDescription = "Post image",
                 modifier = Modifier
             )

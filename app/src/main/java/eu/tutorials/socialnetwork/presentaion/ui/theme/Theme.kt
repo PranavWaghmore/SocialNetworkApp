@@ -8,8 +8,8 @@ private val DarkColorScheme = darkColorScheme(
     primary = GreenAccent,
     background = DarkGrey,
     onBackground = TextWhite,
-    onPrimary = DarkGrey ,
-    surface = MediumGrey ,
+    onPrimary = DarkGrey,
+    surface = MediumGrey,
     onSurface = LightGray
 )
 

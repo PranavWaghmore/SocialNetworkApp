@@ -4,8 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import eu.tutorials.socialnetwork.presentaion.activity.ActivityScreen
+import eu.tutorials.socialnetwork.presentaion.chat.ChatScreen
+import eu.tutorials.socialnetwork.presentaion.editProfileScreen.EditProfileScreen
 import eu.tutorials.socialnetwork.presentaion.main_feed.MainFeedScreen
 import eu.tutorials.socialnetwork.presentaion.login.LoginScreen
+import eu.tutorials.socialnetwork.presentaion.profile.ProfileScreen
 import eu.tutorials.socialnetwork.presentaion.register.RegisterScreen
 import eu.tutorials.socialnetwork.presentaion.splash.SplashScreen
 
@@ -29,6 +33,18 @@ fun Navigation(){
         }
         composable(Screen.MainFeedScreen.route){
             MainFeedScreen(navController=navController)
+        }
+        composable(Screen.ChatScreen.route){
+            ChatScreen(navController=navController)
+        }
+        composable(Screen.ActivityScreen.route){
+            ActivityScreen(navController=navController)
+        }
+        composable(Screen.ProfileScreen.route){
+            ProfileScreen(navController=navController)
+        }
+        composable(Screen.EditProfileScreen.route){
+            EditProfileScreen(navController=navController)
         }
     }
 }
