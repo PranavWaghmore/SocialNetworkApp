@@ -1,25 +1,30 @@
 package eu.tutorials.socialnetwork.presentaion.util
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import eu.tutorials.socialnetwork.presentaion.activity.ActivityScreen
-import eu.tutorials.socialnetwork.presentaion.chat.ChatScreen
-import eu.tutorials.socialnetwork.presentaion.editProfileScreen.EditProfileScreen
-import eu.tutorials.socialnetwork.presentaion.main_feed.MainFeedScreen
-import eu.tutorials.socialnetwork.presentaion.login.LoginScreen
-import eu.tutorials.socialnetwork.presentaion.profile.ProfileScreen
-import eu.tutorials.socialnetwork.presentaion.register.RegisterScreen
-import eu.tutorials.socialnetwork.presentaion.splash.SplashScreen
+ import androidx.compose.foundation.layout.fillMaxSize
+ import androidx.compose.runtime.Composable
+ import androidx.compose.ui.Modifier
+ import androidx.navigation.NavHostController
+ import androidx.navigation.compose.NavHost
+ import androidx.navigation.compose.composable
+ import eu.tutorials.socialnetwork.presentaion.activity.ActivityScreen
+ import eu.tutorials.socialnetwork.presentaion.chat.ChatScreen
+ import eu.tutorials.socialnetwork.presentaion.create_post.CreatePostScreen
+ import eu.tutorials.socialnetwork.presentaion.editProfileScreen.EditProfileScreen
+ import eu.tutorials.socialnetwork.presentaion.login.LoginScreen
+ import eu.tutorials.socialnetwork.presentaion.main_feed.MainFeedScreen
+ import eu.tutorials.socialnetwork.presentaion.profile.ProfileScreen
+ import eu.tutorials.socialnetwork.presentaion.register.RegisterScreen
+ import eu.tutorials.socialnetwork.presentaion.splash.SplashScreen
 
 
 @Composable
-fun Navigation(){
-    val navController= rememberNavController()
+fun Navigation(
+    navController: NavHostController,
+){
     NavHost(
-        navController = navController ,
-        startDestination = Screen.SplashScreen.route
+        navController = navController,
+        startDestination = Screen.SplashScreen.route ,
+        modifier = Modifier.fillMaxSize()
     )
     {
         composable(Screen.SplashScreen.route) {
@@ -45,6 +50,9 @@ fun Navigation(){
         }
         composable(Screen.EditProfileScreen.route){
             EditProfileScreen(navController=navController)
+        }
+        composable(Screen.CreatePostScreen.route){
+            CreatePostScreen(navController=navController)
         }
     }
 }

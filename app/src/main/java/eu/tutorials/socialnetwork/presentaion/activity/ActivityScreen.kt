@@ -1,19 +1,25 @@
 package eu.tutorials.socialnetwork.presentaion.activity
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
-import eu.tutorials.socialnetwork.presentaion.components.StandardScaffold
-import io.ktor.websocket.Frame.Text
 
 @Composable
 fun ActivityScreen(
     navController: NavController
 ){
-    StandardScaffold(
-        modifier = Modifier,
-        navController = navController
-    ) {
-        Text("ActivityScreen")
+    Box (
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ){
+        Text(
+            text = "Activity Screen",
+            color = Color.Green
+        )
     }
 }

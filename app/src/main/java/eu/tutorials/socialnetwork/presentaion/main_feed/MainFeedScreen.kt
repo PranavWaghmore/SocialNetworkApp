@@ -16,57 +16,18 @@ import eu.tutorials.socialnetwork.presentaion.components.StandardScaffold
 fun MainFeedScreen(
     navController: NavController
 ) {
-    StandardScaffold(
-        navController = navController,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column (
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ){
-            eu.tutorials.socialnetwork.presentaion.components.Post(
-                Post(
-                    image = painterResource(R.drawable.marvel),
-                    username = "Pranav Waghmore",
-                    imageUrl = "",
-                    postPictureUrl = "",
-                    description = "Lorem ipsum dolor sit amet, consecrate disciplining elite, sed" +
-                            "diam nonnull usermod temper invidious ut labor do lore " +
-                            "magna aliquot erat,sediment end...",
-                    likeCount = 17,
-                    commentCount = 7
-                ),
-                modifier = Modifier
-            )
-            eu.tutorials.socialnetwork.presentaion.components.Post(
-                Post(
-                    image = painterResource(R.drawable.spiderman),
-                    username = "Pranav Waghmore",
-                    imageUrl = "",
-                    postPictureUrl = "",
-                    description = "Lorem ipsum dolor sit amet, consecrate disciplining elite, sed" +
-                            "diam nonnull usermod temper invidious ut labor do lore " +
-                            "magna aliquot erat,sediment end...",
-                    likeCount = 17,
-                    commentCount = 7
-                ),
-                modifier = Modifier
-            )
-            eu.tutorials.socialnetwork.presentaion.components.Post(
-                Post(
-                    image = painterResource(R.drawable.naruto),
-                    username = "Pranav Waghmore",
-                    imageUrl = "",
-                    postPictureUrl = "",
-                    description = "Lorem ipsum dolor sit amet, consecrate disciplining elite, sed" +
-                            "diam nonnull usermod temper invidious ut labor do lore " +
-                            "magna aliquot erat,sediment end...",
-                    likeCount = 17,
-                    commentCount = 7
-                ),
-                modifier = Modifier
-            )
-        }
-    }
+    eu.tutorials.socialnetwork.presentaion.components.Post(
+        Post(
+            username = "Pranav Waghmore",
+            imageUrl = "",
+            postPictureUrl = "",
+            description = "Lorem ipsum dolor sit amet, consecrate disciplining elite, sed" +
+                    "diam nonnull usermod temper invidious ut labor do lore " +
+                    "magna aliquot erat,sediment end...",
+            likeCount = 17,
+            commentCount = 7
+        ),
+        modifier = Modifier
+    )
+
 }

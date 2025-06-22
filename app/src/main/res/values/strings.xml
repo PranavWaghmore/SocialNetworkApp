@@ -25,4 +25,6 @@
     <string name="add">Add</string>
     <string name="notification">Notifications</string>
     <string name="acitvity">Activity</string>
+    <string name="person">person</string>
+    <string name="make_post">make post</string>
 </resources>

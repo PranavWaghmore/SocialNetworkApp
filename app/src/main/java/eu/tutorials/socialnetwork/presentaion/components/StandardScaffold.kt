@@ -11,13 +11,11 @@ package eu.tutorials.socialnetwork.presentaion.components
  import androidx.compose.material.icons.outlined.Notifications
  import androidx.compose.material.icons.outlined.Person
  import androidx.compose.material3.BottomAppBar
- import androidx.compose.material3.MaterialTheme
  import androidx.compose.material3.Scaffold
  import androidx.compose.runtime.Composable
  import androidx.compose.ui.Modifier
  import androidx.compose.ui.res.stringResource
  import androidx.compose.ui.unit.dp
- import androidx.hilt.navigation.compose.hiltViewModel
  import androidx.navigation.NavController
  import eu.tutorials.socialnetwork.R
  import eu.tutorials.socialnetwork.domain.models.BottomNavItem
@@ -30,7 +28,7 @@ package eu.tutorials.socialnetwork.presentaion.components
 fun StandardScaffold(
     navController: NavController,
     modifier: Modifier= Modifier,
-    viewModel: StandardScaffoldViewModel= hiltViewModel(),
+    showBottomBar : Boolean = true,
     bottomNavItems : List<BottomNavItem> =listOf(
         BottomNavItem(
             route = Screen.MainFeedScreen.route,
@@ -41,60 +39,62 @@ fun StandardScaffold(
         BottomNavItem(
             route = Screen.ChatScreen.route,
             icon = Icons.Outlined.Message,
-            contentDescription = stringResource(R.string.home),
+            contentDescription = stringResource(R.string.chat),
             alertCount = 5,
         ),
         BottomNavItem(
-            route = Screen.MainFeedScreen.route,
+            route = Screen.CreatePostScreen.route,
             icon = Icons.Outlined.Add,
-            contentDescription = stringResource(R.string.chat)
+            contentDescription = stringResource(R.string.make_post),
         ),
         BottomNavItem(
             route = Screen.ActivityScreen.route,
             icon = Icons.Outlined.Notifications,
-            contentDescription = stringResource(R.string.add),
-            alertCount = null,
+            contentDescription = stringResource(R.string.notification),
+            alertCount = 9,
         ),
         BottomNavItem(
             route = Screen.ProfileScreen.route,
             icon = Icons.Outlined.Person,
-            contentDescription = stringResource(R.string.home),
+            contentDescription = stringResource(R.string.person),
             alertCount = null,
         )
 
     ),
     content:@Composable () -> Unit
 ) {
-    Scaffold(
-        bottomBar = {
-            Column {
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    color = LightGray,
-                    thickness = 1 .dp
-                )
-                BottomAppBar(
-                    containerColor = DarkGrey,
-                    tonalElevation = 8.dp,
-                ) {
-                    //BottomAppBar Icons here like home,chat
-                    bottomNavItems.forEachIndexed { i, bottomNavItem ->
-                        StandardBottomNavItem(
-                            icon = bottomNavItem.icon,
-                            contentDescription = bottomNavItem.contentDescription,
-                            selected =
-                                bottomNavItem.route == navController.currentDestination?.route,
-                            alertCount = bottomNavItem.alertCount
+        Scaffold(
+            bottomBar = {
+                if (showBottomBar) {
+                    Column {
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            color = LightGray,
+                            thickness = 1.dp
+                        )
+                        BottomAppBar(
+                            containerColor = DarkGrey,
+                            tonalElevation = 8.dp,
                         ) {
-                            navController.navigate(bottomNavItem.route)
+                            bottomNavItems.forEachIndexed { i, bottomNavItem ->
+                                StandardBottomNavItem(
+                                    icon = bottomNavItem.icon,
+                                    contentDescription = bottomNavItem.contentDescription,
+                                    selected =
+                                        bottomNavItem.route == navController.currentDestination?.route,
+                                    alertCount = bottomNavItem.alertCount
+                                ) {
+                                    if(navController.currentDestination?.route !=bottomNavItem.route){
+                                        navController.navigate(bottomNavItem.route)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-        },
-        modifier = Modifier
-    ) {
-       content()
+        ) {
+            content()
+        }
     }
-}
