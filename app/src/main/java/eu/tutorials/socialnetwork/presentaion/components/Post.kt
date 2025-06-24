@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import eu.tutorials.socialnetwork.R
 import eu.tutorials.socialnetwork.domain.models.Post
+import eu.tutorials.socialnetwork.presentaion.ui.theme.ExtraSmallSpace
 import eu.tutorials.socialnetwork.presentaion.ui.theme.HintGray
 import eu.tutorials.socialnetwork.presentaion.ui.theme.LightGray
 import eu.tutorials.socialnetwork.presentaion.ui.theme.MediumGrey
@@ -55,26 +56,25 @@ import eu.tutorials.socialnetwork.util.Constants
 @Composable
 fun Post(
     post: Post,
-    modifier: Modifier= Modifier,
     showProfileImage: Boolean =true,
-    profilePictureDpSize: Dp = 50.dp
+    modifier: Modifier= Modifier,
+    profilePictureDpSize: Dp = 40.dp,
+    onClick :() -> Unit ={}
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(MediumSpace)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(
-                    y = if(showProfileImage){
-                        profilePictureDpSize / 2f
-                    }else{ 0.dp }
-                )
                 .clip(MaterialTheme.shapes.medium)
                 .shadow(5.dp)
                 .background(LightGray)
+                .clickable(
+                    onClick = onClick
+                )
         ) {
             Image(
                 painter =painterResource(R.drawable.marvel),
@@ -84,22 +84,36 @@ fun Post(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(MediumSpace)
+                    .padding(ExtraSmallSpace)
             ){
-                ActionRow(
-                    username = "Pranav Waghmore",
-                    modifier = Modifier.fillMaxWidth(),
-                    onLikeClick = { isLiked ->
-                    },
-                    onCommentClick = {
-
-                    },
-                    onShareClick = {
-
-                    },
-                    onUsernameClick = { username ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if(showProfileImage){
+                        Image(
+                            painterResource(R.drawable.pranav),
+                            contentDescription = "Profile picture",
+                            modifier = Modifier
+                                .size(profilePictureDpSize)
+                                .clip(CircleShape)
+                        )
                     }
-                )
+                    Spacer(modifier = Modifier.width(2.dp))
+                    ActionRow(
+                        username = "Pranav Waghmore",
+                        modifier = Modifier.fillMaxWidth(),
+                        onLikeClick = { isLiked ->
+                        },
+                        onCommentClick = {
+
+                        },
+                        onShareClick = {
+
+                        },
+                        onUsernameClick = { username ->
+                        }
+                    )
+                }
                 Spacer(modifier = Modifier.height(SmallSpace))
                 Text(
                     text =
@@ -144,16 +158,6 @@ fun Post(
                     )
                 }
             }
-        }
-        if(showProfileImage){
-            Image(
-                painterResource(R.drawable.pranav),
-                contentDescription = "Profile picture",
-                modifier = Modifier
-                    .size(profilePictureDpSize)
-                    .clip(CircleShape)
-                    .align(Alignment.TopCenter)
-            )
         }
     }
 }
@@ -235,19 +239,24 @@ fun ActionRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text(
-            text = username,
-            style = TextStyle(
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            ),
-            modifier = Modifier
-                .clickable(
-                    onClick = {
-                        onUsernameClick(username)
-                    }
-                )
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = username,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                ),
+                modifier = Modifier
+                    .clickable(
+                        onClick = {
+                            onUsernameClick(username)
+                        }
+                    )
+            ) }
         EngagementButtons(
             modifier = Modifier,
             isLiked = isLiked,

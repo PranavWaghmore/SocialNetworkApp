@@ -3,6 +3,7 @@ package eu.tutorials.socialnetwork.presentaion
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,6 +23,7 @@ import eu.tutorials.socialnetwork.presentaion.util.Screen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             SocialNetworkTheme {
                 Surface(
@@ -29,6 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.Companion.fillMaxSize()
                 )
                 {
+
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route

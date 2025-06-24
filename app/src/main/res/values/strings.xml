@@ -27,4 +27,5 @@
     <string name="acitvity">Activity</string>
     <string name="person">person</string>
     <string name="make_post">make post</string>
+    <string name="back">back</string>
 </resources>

@@ -65,6 +65,7 @@ fun LoginScreen(
                     viewModel.setUserNameText(it)
                 },
                 hint = stringResource(id = R.string.username_email),
+                keyboardType = KeyboardType.Email,
                 error = viewModel.userNameError.value
             )
             Spacer(modifier = Modifier.height(MediumSpace))
