@@ -27,5 +27,9 @@
     <string name="acitvity">Activity</string>
     <string name="person">person</string>
     <string name="make_post">make post</string>
+    <string name="liked">liked</string>
+    <string name="commented_on">commented on</string>
+    <string name="followed_you">followed you</string>
     <string name="back">back</string>
+    <string name="you_post">your post</string>
 </resources>
