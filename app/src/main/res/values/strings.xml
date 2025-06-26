@@ -34,4 +34,11 @@
     <string name="you_post">your post</string>
     <string name="your_profile">Your Profile</string>
     <string name="banner">banner</string>
+    <string name="profile">profile</string>
+    <string name="edit">Edit</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="posts">Posts</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="follow">Follow</string>
 </resources>

@@ -3,6 +3,7 @@ package eu.tutorials.socialnetwork.presentaion.main_feed
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
@@ -45,17 +46,15 @@ fun MainFeedScreen(
             }
         )
         eu.tutorials.socialnetwork.presentaion.components.Post(
-            Post(
+           post =  Post(
                 username = "Pranav Waghmore",
                 imageUrl = "",
                 postPictureUrl = "",
-                description = "Lorem ipsum dolor sit amet, consecrate disciplining elite, sed" +
-                        "diam nonnull usermod temper invidious ut labor do lore " +
-                        "magna aliquot erat,sediment end...",
+                description = "Not just another post, but a piece of my journey...",
                 likeCount = 17,
                 commentCount = 7
             ),
-            modifier = Modifier ,
+            modifier = Modifier,
             onClick = {
                 navController.navigate(Screen.PostDetailScreen.route)
             }

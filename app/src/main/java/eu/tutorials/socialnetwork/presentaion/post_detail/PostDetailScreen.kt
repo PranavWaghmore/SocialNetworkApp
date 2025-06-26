@@ -131,8 +131,8 @@ fun PostDetailScreen(
                         .padding(vertical = SmallSpace),
                     comment = Comment(
                         username = "Pranav Waghmore $index",
-                        comment = "Lorem ipsum dolor sit amet, consecrate disciplining elite, sed " +
-                                "diam nonnull usermod temper invidious ut labor do lore magna aliquot erat, sediment end..."
+                        comment = "Not just another post — it's a reflection of moments, memories, and milestones."+
+                        "Every image holds a story, and this one is a piece of my journey."
                     ),
                     onLikeClick = { /* Handle like click */ }
                 )

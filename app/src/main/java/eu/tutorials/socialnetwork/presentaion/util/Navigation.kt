@@ -62,9 +62,8 @@ fun Navigation(
                         username = "Pranav Waghmore",
                         imageUrl = "",
                         postPictureUrl = "",
-                        description = "Lorem ipsum dolor sit amet, consecrate disciplining elite, sed" +
-                                "diam nonnull usermod temper invidious ut labor do lore " +
-                                "magna aliquot erat,sediment end...",
+                        description = "Not just another post — it's a reflection of moments, memories, and milestones."+
+                                      "Every image holds a story, and this one is a piece of my journey.",
                         likeCount = 17,
                         commentCount = 7
                     )
