@@ -1,4 +1,4 @@
-package eu.tutorials.socialnetwork.presentaion.activity
+package eu.tutorials.socialnetwork.presentaion.activity.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
