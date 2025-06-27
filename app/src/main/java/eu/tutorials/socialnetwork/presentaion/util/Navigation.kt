@@ -25,7 +25,7 @@ fun Navigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.MainFeedScreen.route,
+        startDestination = Screen.ProfileScreen.route,
         modifier = Modifier.fillMaxSize()
     )
     {
