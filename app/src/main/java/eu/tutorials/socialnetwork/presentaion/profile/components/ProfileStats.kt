@@ -31,20 +31,20 @@ fun ProfileStats(
     onFollowClick: () -> Unit = {},
 ) {
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Spacer(modifier = Modifier.width(SmallSpace))
         ProfileNumber(
             number = user.onFollowersCount,
             text = stringResource(R.string.followers)
         )
-        Spacer(Modifier.width(MediumSpace))
+        Spacer(Modifier.width(LargeSpace))
         ProfileNumber(
             number = user.onFollowingCount,
             text = stringResource(R.string.following)
         )
-        Spacer(Modifier.width(MediumSpace))
+        Spacer(Modifier.width(LargeSpace))
         ProfileNumber(
             number = user.onPostCount,
             text = stringResource(R.string.posts)

@@ -1,4 +1,4 @@
-package eu.tutorials.socialnetwork.presentaion.components
+ package eu.tutorials.socialnetwork.presentaion.components
 
 import android.graphics.drawable.Icon
 import androidx.compose.animation.core.animateFloatAsState

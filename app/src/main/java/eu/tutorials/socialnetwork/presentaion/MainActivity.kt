@@ -27,7 +27,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.Companion.fillMaxSize()
                 )
                 {
-
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route
@@ -38,7 +37,8 @@ class MainActivity : ComponentActivity() {
                             Screen.ChatScreen.route,
                             Screen.ActivityScreen.route,
                             Screen.ProfileScreen.route,
-                        ) ,
+                            Screen.EditProfileScreen.route
+                        ),
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Navigation(navController)

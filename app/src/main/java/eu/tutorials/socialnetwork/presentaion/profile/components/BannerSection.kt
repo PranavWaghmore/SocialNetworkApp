@@ -37,107 +37,97 @@ import eu.tutorials.socialnetwork.presentaion.util.toPx
 fun BannerSection(
     modifier: Modifier = Modifier,
     imageModifier: Modifier = Modifier,
-    iconSize : Dp =35.dp,
+    iconSize: Dp = 35.dp,
     leftIconModifier: Modifier = Modifier,
     rightIconModifier: Modifier = Modifier,
-    onGithubClick : ()-> Unit = {},
-    onInstagramClick : () -> Unit = {},
-    onLeetCodeClick : () -> Unit = {}
-){
-    BoxWithConstraints (
-        modifier= modifier
+    onGithubClick: () -> Unit = {},
+    onInstagramClick: () -> Unit = {},
+    onLeetCodeClick: () -> Unit = {}
+) {
+    BoxWithConstraints(
+        modifier = modifier
     ) {
         Image(
             painter = painterResource(R.drawable.channelart),
             contentDescription = stringResource(R.string.banner),
             contentScale = ContentScale.Crop,
-            modifier = Modifier
+            modifier = imageModifier
                 .fillMaxSize()
         )
         Box(
-            modifier= Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
                             Color.Black
-                        ) ,
-                        startY =constraints.maxHeight-iconSize.toPx() * 2f
+                        ),
+                        startY = constraints.maxHeight - iconSize.toPx() * 2f
                     )
                 )
         )
-            Row(
-                modifier = Modifier
-                    .height(iconSize)
-                    .fillMaxSize()
-                    .align(Alignment.BottomStart),
-                horizontalArrangement = Arrangement.SpaceBetween
+        Row(
+            modifier = leftIconModifier
+                .height(iconSize)
+                .align((Alignment.BottomStart))
+                .padding(SmallSpace),
+        ) {
+            Spacer(modifier = Modifier.width(SmallSpace))
+            Image(
+                painter = painterResource(R.drawable.c_),
+                contentDescription = "c#",
+                modifier = Modifier.height(iconSize),
+            )
+            Spacer(modifier = Modifier.width(MediumSpace))
+            Image(
+                painter = painterResource(R.drawable.android_logo_2),
+                contentDescription = "java",
+                modifier = Modifier.height(iconSize),
+            )
+            Spacer(modifier = Modifier.width(MediumSpace))
+            Image(
+                painter = painterResource(R.drawable.kotlin_1),
+                contentDescription = "kotlin",
+                modifier = Modifier.height(iconSize),
+            )
+        }
+        Row(
+            modifier = rightIconModifier
+                .height(iconSize)
+                .align(Alignment.BottomEnd)
+                .padding(SmallSpace)
+        ) {
+            IconButton(
+                onClick = onGithubClick,
+                modifier = Modifier.size(iconSize)
             ) {
-                Row(
-                    modifier = leftIconModifier
-                        .height(iconSize)
-//                        .align((Alignment.BottomStart))
-                        .padding(SmallSpace),
-                ) {
-                    Spacer(modifier= Modifier.width(SmallSpace))
-                    Image(
-                        painter = painterResource(R.drawable.c_),
-                        contentDescription = "c#",
-                        modifier = Modifier.height(iconSize),
-                    )
-                    Spacer(modifier= Modifier.width(MediumSpace))
-                    Image(
-                        painter = painterResource(R.drawable.android_logo_2),
-                        contentDescription = "java",
-                        modifier = Modifier.height(iconSize),
-                    )
-                    Spacer(modifier= Modifier.width(MediumSpace))
-                    Image(
-                        painter = painterResource(R.drawable.kotlin_1),
-                        contentDescription = "kotlin",
-                        modifier = Modifier.height(iconSize),
-                    )
-                }
-                Row(
-                    modifier = rightIconModifier
-                        .height(iconSize)
-//                        .align(Alignment.BottomEnd)
-                        .padding(SmallSpace)
-                ) {
-                    IconButton(
-                        onClick = onGithubClick,
-                        modifier = Modifier.size(iconSize)
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.github_icon_1),
-                            contentDescription = "github",
-                            modifier = Modifier.size(iconSize)
-                        )
-                    }
-                    IconButton(
-                        onClick = onLeetCodeClick,
-                        modifier = Modifier.size(iconSize)
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.instagram_2016_5),
-                            contentDescription = "instagram",
-                            modifier = Modifier.size(iconSize)
-                        )
-                    }
-                    IconButton(
-                        onClick = onInstagramClick,
-                        modifier = Modifier.size(iconSize)
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.leetcode_1),
-                            contentDescription = "leetcode",
-                            modifier = Modifier.size(iconSize)
-                        )
-                    }
-                }
+                Image(
+                    painter = painterResource(R.drawable.github_icon_1),
+                    contentDescription = "github",
+                    modifier = Modifier.size(iconSize)
+                )
             }
-
-
+            IconButton(
+                onClick = onLeetCodeClick,
+                modifier = Modifier.size(iconSize)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.instagram_2016_5),
+                    contentDescription = "instagram",
+                    modifier = Modifier.size(iconSize)
+                )
+            }
+            IconButton(
+                onClick = onInstagramClick,
+                modifier = Modifier.size(iconSize)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.leetcode_1),
+                    contentDescription = "leetcode",
+                    modifier = Modifier.size(iconSize)
+                )
+            }
+        }
     }
 }

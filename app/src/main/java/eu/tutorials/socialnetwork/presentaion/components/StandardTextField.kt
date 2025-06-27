@@ -1,5 +1,6 @@
 package eu.tutorials.socialnetwork.presentaion.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,13 +42,15 @@ fun StandardTextField(
     showPasswordToggle: Boolean = false,
     onPasswordToggleClick: (Boolean) -> Unit = {},
     keyboardType: KeyboardType = KeyboardType.Text,
-    isPasswordToggleDisplayed : Boolean = (keyboardType== KeyboardType.Password),
+    isPasswordToggleDisplayed : Boolean = (keyboardType == KeyboardType.Password),
     onValueChange: (String) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         TextField(
+            modifier = Modifier
+                .fillMaxWidth(),
             value = text,
             onValueChange = {
                 if (it.length <= maxLength) {
@@ -62,7 +65,7 @@ fun StandardTextField(
                     )
                 )
             },
-            isError = error != "",
+            isError = error.isNotEmpty(), // error != ""
             textStyle = LocalTextStyle.current.copy(color = Color.White),
             visualTransformation = if (!showPasswordToggle && isPasswordToggleDisplayed) {
                 PasswordVisualTransformation()
@@ -100,17 +103,16 @@ fun StandardTextField(
                     }
                 }
 
-            },
-            modifier = Modifier.fillMaxWidth()
+            }
         )
         if(error.isNotEmpty()){
-            Text(text=error ,
-                style = MaterialTheme.typography.bodySmall ,
-                color = MaterialTheme.colorScheme.error ,
+            Text(
+                text=error,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.End,
                 modifier = Modifier.fillMaxWidth()
             )
-
         }
     }
 }

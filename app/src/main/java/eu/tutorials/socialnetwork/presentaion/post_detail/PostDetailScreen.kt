@@ -123,7 +123,6 @@ fun PostDetailScreen(
                     Spacer(modifier = Modifier.height(LargeSpace))
                 }
             }
-
             items(20) { index ->
                 Comment(
                     modifier = Modifier

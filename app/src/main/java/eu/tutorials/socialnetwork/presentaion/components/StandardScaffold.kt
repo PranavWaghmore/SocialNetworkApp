@@ -59,7 +59,6 @@ fun StandardScaffold(
             contentDescription = stringResource(R.string.person),
             alertCount = null,
         )
-
     ),
     content:@Composable () -> Unit
 ) {
@@ -85,7 +84,7 @@ fun StandardScaffold(
                                         bottomNavItem.route == navController.currentDestination?.route,
                                     alertCount = bottomNavItem.alertCount
                                 ) {
-                                    if(navController.currentDestination?.route !=bottomNavItem.route){
+                                    if(navController.currentDestination?.route != bottomNavItem.route){
                                         navController.navigate(bottomNavItem.route)
                                     }
                                 }
