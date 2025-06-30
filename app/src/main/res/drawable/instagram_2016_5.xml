@@ -6,9 +6,9 @@
                   
             <gradient android:centerX="332.1" android:centerY="2511.8" android:gradientRadius="3263.5" android:type="radial">
                         
-                <item android:color="#FFFA8F21" android:offset="0.1"/>
+                <item android:color="#FFFFFF" android:offset="0.1"/>
                         
-                <item android:color="#FFD82D7E" android:offset="0.8"/>
+                <item android:color="#FFFFFF" android:offset="0.8"/>
                       
             </gradient>
                 
@@ -22,9 +22,9 @@
                   
             <gradient android:centerX="1516.1" android:centerY="2623.8" android:gradientRadius="2572.1" android:type="radial">
                         
-                <item android:color="#008C3AAA" android:offset="0.6"/>
+                <item android:color="#FFFFFF" android:offset="0.6"/>
                         
-                <item android:color="#FF8C3AAA" android:offset="1"/>
+                <item android:color="#FFFFFF" android:offset="1"/>
                       
             </gradient>
                 

@@ -59,35 +59,35 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
                 text = viewModel.emailText.value,
+                hint = stringResource(id = R.string.email),
+                error = viewModel.emailError.value,
+                keyboardType = KeyboardType.Email,
                 onValueChange = {
                     viewModel.setEmailText(it)
                 },
-                hint = stringResource(id = R.string.email),
-                keyboardType = KeyboardType.Email,
-                error = viewModel.emailError.value
             )
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
                 text = viewModel.username.value,
+                hint = stringResource(id = R.string.username),
+                error = viewModel.userNameError.value,
                 onValueChange = {
                     viewModel.setUserNameText(it)
                 },
-                hint = stringResource(id = R.string.username),
-                error = viewModel.userNameError.value
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             StandardTextField(
                 text = viewModel.passwordText.value,
-                onValueChange = {
-                    viewModel.setPasswordText(it)
-                },
                 hint = stringResource(id = R.string.password),
-                keyboardType = KeyboardType.Password,
                 error = viewModel.passwordError.value,
                 showPasswordToggle = viewModel.showPassword.value,
                 onPasswordToggleClick = {
                     viewModel.setShowPassword(it)
-                }
+                },
+                keyboardType = KeyboardType.Password,
+                onValueChange = {
+                    viewModel.setPasswordText(it)
+                },
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             Button(

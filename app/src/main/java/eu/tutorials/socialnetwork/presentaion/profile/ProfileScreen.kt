@@ -31,6 +31,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import eu.tutorials.socialnetwork.R
 import eu.tutorials.socialnetwork.domain.models.Post
@@ -45,11 +47,10 @@ import eu.tutorials.socialnetwork.presentaion.util.toPx
 @Composable
 fun ProfileScreen(
     navController: NavController,
+    viewModel: ProfileViewModel = hiltViewModel(),
     profilePictureSize: Dp = ProfilePictureDpSizeLarge,
 ) {
-    var toolbarOffsetY by remember {
-        mutableStateOf(0f)
-    }
+    val toolbarState = viewModel.toolbarState.value
     val iconHorizontalCentreLength =
         (LocalConfiguration.current.screenWidthDp.dp.toPx() / 4f -
                 (profilePictureSize / 4f).toPx() - SmallSpace.toPx()) / 2
@@ -70,9 +71,6 @@ fun ProfileScreen(
     val maxOffset = remember {
         toolbarExpandedHeight - toolbarHeightCollapsed
     }
-    var expandedRatio by remember {
-        mutableStateOf(1f)
-    }
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
@@ -80,12 +78,16 @@ fun ProfileScreen(
                 if (delta > 0f && lazyListState.firstVisibleItemIndex != 0) {
                     return Offset.Zero
                 }
-                val newOffset = toolbarOffsetY + delta
-                toolbarOffsetY = newOffset.coerceIn(
-                    minimumValue = -maxOffset.toPx(),
-                    maximumValue = 0f
+                val newOffset = viewModel.toolbarState.value.toolbarOffsetY + delta
+                viewModel.setToolbarOffset(
+                    newOffset.coerceIn(
+                        minimumValue = -maxOffset.toPx(),
+                        maximumValue = 0f
+                    )
                 )
-                expandedRatio = (toolbarOffsetY + maxOffset.toPx()) / maxOffset.toPx()
+                viewModel.setExpandedRatio(
+                    (viewModel.toolbarState.value.toolbarOffsetY + maxOffset.toPx()) / maxOffset.toPx()
+                )
                 return Offset.Zero
             }
         }
@@ -144,18 +146,18 @@ fun ProfileScreen(
         ) {
             BannerSection(
                 modifier = Modifier.height(
-                    (bannerHeight * expandedRatio).coerceIn(
+                    (bannerHeight * toolbarState.expandedRatio).coerceIn(
                         minimumValue = toolbarHeightCollapsed,
                         maximumValue = bannerHeight
                     )
                 ),
                 leftIconModifier = Modifier.graphicsLayer {
-                    translationY = (1f - expandedRatio) * -iconCollapsedOffsetY.toPx()
-                    translationX = (1f - expandedRatio) * iconHorizontalCentreLength
+                    translationY = (1f - toolbarState.expandedRatio) * -iconCollapsedOffsetY.toPx()
+                    translationX = (1f - toolbarState.expandedRatio) * iconHorizontalCentreLength
                 },
                 rightIconModifier = Modifier.graphicsLayer {
-                    translationY = (1f - expandedRatio) * -iconCollapsedOffsetY.toPx()
-                    translationX = (1f - expandedRatio) * -iconHorizontalCentreLength
+                    translationY = (1f - toolbarState.expandedRatio) * -iconCollapsedOffsetY.toPx()
+                    translationX = (1f - toolbarState.expandedRatio) * -iconHorizontalCentreLength
                 }
             )
             Image(
@@ -165,12 +167,12 @@ fun ProfileScreen(
                     .align(Alignment.CenterHorizontally)
                     .graphicsLayer {
                         translationY = (-profilePictureSize.toPx() / 2f -
-                                (1 - expandedRatio) * imageCollapsedOffset.toPx())
+                                (1 - toolbarState.expandedRatio) * imageCollapsedOffset.toPx())
                         transformOrigin = TransformOrigin(
                             pivotFractionX = 0.5f,
                             pivotFractionY = 0f
                         )
-                        val scale = 0.5f + expandedRatio * 0.5f
+                        val scale = 0.5f + toolbarState.expandedRatio * 0.5f
                         scaleX = scale
                         scaleY = scale
                     }

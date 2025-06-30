@@ -1,25 +1,21 @@
 package eu.tutorials.socialnetwork.presentaion.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -28,29 +24,37 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import eu.tutorials.socialnetwork.R
-import eu.tutorials.socialnetwork.presentaion.ui.theme.HintGray
 import eu.tutorials.socialnetwork.presentaion.util.TestTags
 
 
 @Composable
 fun StandardTextField(
+    modifier: Modifier = Modifier,
     text: String = "",
     hint: String = "",
     maxLength: Int = 40,
+    minLines : Int = 1,
+    maxLines : Int = 1,
+    style: TextStyle = TextStyle(
+        color = MaterialTheme.colorScheme.onBackground
+    ),
+    singleLine: Boolean = true,
     error: String = "",
+    leadingIcon: ImageVector? = null,
     showPasswordToggle: Boolean = false,
     onPasswordToggleClick: (Boolean) -> Unit = {},
     keyboardType: KeyboardType = KeyboardType.Text,
-    isPasswordToggleDisplayed : Boolean = (keyboardType == KeyboardType.Password),
-    onValueChange: (String) -> Unit
+    isPasswordToggleDisplayed: Boolean = (keyboardType == KeyboardType.Password),
+    onValueChange: (String) -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
     ) {
         TextField(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             value = text,
             onValueChange = {
                 if (it.length <= maxLength) {
@@ -61,12 +65,12 @@ fun StandardTextField(
                 Text(
                     hint,
                     style = MaterialTheme.typography.bodyMedium.copy(
-                        color = HintGray
+                        color = Color.Black
                     )
                 )
             },
             isError = error.isNotEmpty(), // error != ""
-            textStyle = LocalTextStyle.current.copy(color = Color.White),
+            textStyle = style,
             visualTransformation = if (!showPasswordToggle && isPasswordToggleDisplayed) {
                 PasswordVisualTransformation()
             } else {
@@ -75,9 +79,20 @@ fun StandardTextField(
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType
             ),
-            singleLine = true,
-            trailingIcon = {
-                if (isPasswordToggleDisplayed) {
+            singleLine = singleLine,
+            minLines = minLines,
+            maxLines = maxLines,
+            leadingIcon = if (leadingIcon != null) {
+                {
+                    Icon(
+                        imageVector = leadingIcon,
+                        contentDescription = null,
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
+            } else null,
+            trailingIcon = if (isPasswordToggleDisplayed) {
+                {
                     IconButton(
                         onClick = {
                             onPasswordToggleClick(!showPasswordToggle)
@@ -102,16 +117,15 @@ fun StandardTextField(
                         )
                     }
                 }
-
-            }
+            } else null,
         )
-        if(error.isNotEmpty()){
+        if (error.isNotEmpty()) {
             Text(
-                text=error,
+                text = error,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.End,
-                modifier = Modifier.fillMaxWidth()
+                modifier = modifier
             )
         }
     }

@@ -123,8 +123,8 @@ fun BannerSection(
                 modifier = Modifier.size(iconSize)
             ) {
                 Image(
-                    painter = painterResource(R.drawable.leetcode_1),
-                    contentDescription = "leetcode",
+                    painter = painterResource(R.drawable.linkedin_icon_1),
+                    contentDescription = "linkedin",
                     modifier = Modifier.size(iconSize)
                 )
             }

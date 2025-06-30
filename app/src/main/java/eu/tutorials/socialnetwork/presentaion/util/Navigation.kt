@@ -25,7 +25,7 @@ fun Navigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.SplashScreen.route,
+        startDestination = Screen.EditProfileScreen.route,
         modifier = Modifier.fillMaxSize()
     )
     {
@@ -50,9 +50,6 @@ fun Navigation(
         composable(Screen.ProfileScreen.route) {
             ProfileScreen(navController = navController)
         }
-        composable(Screen.EditProfileScreen.route) {
-            EditProfileScreen(navController = navController)
-        }
         composable(Screen.CreatePostScreen.route) {
             CreatePostScreen(navController = navController)
         }
@@ -68,6 +65,9 @@ fun Navigation(
                         commentCount = 7
                     )
                 )
+        }
+        composable(Screen.EditProfileScreen.route){
+            EditProfileScreen(navController = navController)
         }
     }
 }

@@ -36,8 +36,7 @@ class MainActivity : ComponentActivity() {
                             Screen.MainFeedScreen.route,
                             Screen.ChatScreen.route,
                             Screen.ActivityScreen.route,
-                            Screen.ProfileScreen.route,
-                            Screen.EditProfileScreen.route
+                            Screen.ProfileScreen.route
                         ),
                         modifier = Modifier.fillMaxSize()
                     ) {
