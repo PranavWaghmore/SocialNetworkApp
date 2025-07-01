@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "eu.tutorials.socialnetwork"
+    namespace = "pw.coding.konnecto"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "eu.tutorials.socialnetwork"
+        applicationId = "pw.coding.konnecto"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

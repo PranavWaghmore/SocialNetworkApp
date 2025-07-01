@@ -20,5 +20,5 @@ dependencyResolutionManagement {
 
 }
 
-rootProject.name = "SocialNetwork"
+rootProject.name = "konnecto"
 include(":app")
