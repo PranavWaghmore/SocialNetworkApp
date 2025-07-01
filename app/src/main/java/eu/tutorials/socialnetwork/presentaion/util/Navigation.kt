@@ -26,7 +26,7 @@ fun Navigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.CreatePostScreen.route,
+        startDestination = Screen.SplashScreen.route,
         modifier = Modifier.fillMaxSize()
     )
     {
