@@ -16,6 +16,7 @@ import eu.tutorials.socialnetwork.presentaion.main_feed.MainFeedScreen
 import eu.tutorials.socialnetwork.presentaion.post_detail.PostDetailScreen
 import eu.tutorials.socialnetwork.presentaion.profile.ProfileScreen
 import eu.tutorials.socialnetwork.presentaion.register.RegisterScreen
+import eu.tutorials.socialnetwork.presentaion.search.SearchScreen
 import eu.tutorials.socialnetwork.presentaion.splash.SplashScreen
 
 
@@ -25,7 +26,7 @@ fun Navigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.EditProfileScreen.route,
+        startDestination = Screen.CreatePostScreen.route,
         modifier = Modifier.fillMaxSize()
     )
     {
@@ -52,6 +53,9 @@ fun Navigation(
         }
         composable(Screen.CreatePostScreen.route) {
             CreatePostScreen(navController = navController)
+        }
+        composable(Screen.SearchScreen.route) {
+            SearchScreen(navController = navController)
         }
         composable(Screen.PostDetailScreen.route) {
             PostDetailScreen(navController = navController,
