@@ -53,8 +53,7 @@ fun ActivityItem(
                     stringResource(R.string.you_post)
                 is ActivityAction.CommentedOnPost ->
                     stringResource(R.string.you_post)
-                is ActivityAction.FollowedYou ->
-                    stringResource(R.string.you_post)
+                is ActivityAction.FollowedYou -> ""
             }
             Text(
                 text = buildAnnotatedString {

@@ -55,10 +55,10 @@ fun ProfileScreen(
     val lazyListState = rememberLazyListState()
     val bannerHeight = (LocalConfiguration.current.screenWidthDp / 2.5f).dp
     val toolbarHeightCollapsed = 75.dp
-    var imageCollapsedOffset = remember {
+    val imageCollapsedOffset = remember {
         (toolbarHeightCollapsed - profilePictureSize / 2f) / 2f
     }
-    var iconCollapsedOffsetY = remember {
+    val iconCollapsedOffsetY = remember {
         (toolbarHeightCollapsed - iconSizeExpanded) / 2f
     }
     val toolbarExpandedHeight = remember {

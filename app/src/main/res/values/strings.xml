@@ -52,4 +52,9 @@
     <string name="create_post">Create a new post</string>
     <string name="post">Post</string>
     <string name="like_by">Liked by</string>
+    <string name="this_field_cant_be_empty">this field cannot be empty</string>
+    <string name="not_a_valid_email">Email Not Valid</string>
+    <string name="input_too_short">InputTooShort</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="invalid_password">Invalid Password</string>
 </resources>

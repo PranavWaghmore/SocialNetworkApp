@@ -1,61 +1,104 @@
 package pw.coding.konnecto.presentaion.register
 
+import android.util.Patterns
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import pw.coding.konnecto.util.Constants
 import javax.inject.Inject
 
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor() : ViewModel()  {
-    private val _usernameText= mutableStateOf("")
-    val username : State<String> =_usernameText
+    private val _state= mutableStateOf(RegisterState())
+    val state : State<RegisterState> =_state
 
-    private val _emailText=mutableStateOf("")
-    val emailText: State<String> =_emailText
-
-    private val _passwordText=mutableStateOf("")
-    val passwordText: State<String> =_passwordText
-
-    private val _userNameError=mutableStateOf("")
-    val userNameError: State<String> = _userNameError
-
-    private val _emailError=mutableStateOf("")
-    val emailError: State<String> = _emailError
-
-    private val _passwordError=mutableStateOf("")
-    val passwordError: State<String> = _passwordError
-
-    private val _showPassword=mutableStateOf(false)
-    val showPassword: State<Boolean> = _showPassword
-
-    fun setUserNameText(username: String){
-        _usernameText.value=username
+    fun onEvent(event: RegisterEvent){
+        when(event){
+            is RegisterEvent.EnteredEmail -> {
+                _state.value = _state.value.copy(
+                    emailText = event.value
+                )
+            }
+            is RegisterEvent.EnteredUsername -> {
+                _state.value = _state.value.copy(
+                    usernameText = event.value
+                )
+            }
+            is RegisterEvent.EnteredPassword -> {
+                _state.value = _state.value.copy(
+                    passwordText = event.value
+                )
+            }
+            RegisterEvent.TogglePasswordVisibility -> {
+                _state.value = _state.value.copy(
+                    isPasswordVisible = !state.value.isPasswordVisible
+                )
+            }
+            RegisterEvent.Register ->{
+                validateUsername(state.value.usernameText)
+                validateEmail(state.value.emailText)
+                validatePassword(state.value.passwordText)
+            }
+        }
     }
 
-    fun setEmailText(email : String){
-        _emailText.value=email
+    private fun validateUsername(username: String){
+        val trimmedUsername = username.trim()
+        if(trimmedUsername.isBlank()){
+            _state.value = _state.value.copy(
+                usernameError = RegisterState.UsernameError.FieldEmpty
+            )
+            return
+        }
+        if(trimmedUsername.length < Constants.MIN_USERNAME_LENGTH) {
+            _state.value = _state.value.copy(
+                usernameError = RegisterState.UsernameError.InputTooShort
+            )
+            return
+        }
+        _state.value = _state.value.copy(usernameError = null)
     }
 
-    fun setPasswordText(password : String){
-        _passwordText.value=password
+    private fun validateEmail(email: String) {
+        val trimmedEmail = email.trim()
+        if(trimmedEmail.isBlank()) {
+            _state.value = _state.value.copy(
+                emailError = RegisterState.EmailError.FieldEmpty
+            )
+            return
+        }
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _state.value = _state.value.copy(
+                emailError = RegisterState.EmailError.InvalidEmail
+            )
+            return
+        }
+        _state.value = _state.value.copy(emailError = null)
     }
 
-    fun setIsUserNameError(error: String){
-        _userNameError.value= error
+    private fun validatePassword(password: String) {
+        if(password.isBlank()) {
+            _state.value = _state.value.copy(
+                passwordError = RegisterState.PasswordError.FieldEmpty
+            )
+            return
+        }
+        if(password.length < Constants.MIN_PASSWORD_LENGTH) {
+            _state.value = _state.value.copy(
+                passwordError = RegisterState.PasswordError.InputTooShort
+            )
+            return
+        }
+        val capitalLettersInPassword = password.any { it.isUpperCase() }
+        val numberInPassword = password.any { it.isDigit() }
+        if(!capitalLettersInPassword || !numberInPassword) {
+            _state.value = _state.value.copy(
+                passwordError = RegisterState.PasswordError.InvalidPassword
+            )
+            return
+        }
+        _state.value = _state.value.copy(passwordError = null)
     }
-
-    fun setIsEmailError(error: String){
-        _emailError.value= error
-    }
-
-    fun setIsPasswordError(error: String){
-        _passwordError.value= error
-    }
-
-    fun setShowPassword(showPassword: Boolean){
-        _showPassword.value= showPassword
-    }
-
 }

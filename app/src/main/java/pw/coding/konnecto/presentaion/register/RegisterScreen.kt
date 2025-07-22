@@ -34,6 +34,7 @@ fun RegisterScreen(
     navController: NavController,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
+    val state = viewModel.state.value
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -58,35 +59,62 @@ fun RegisterScreen(
             )
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
-                text = viewModel.emailText.value,
-                hint = stringResource(id = R.string.email),
-                error = viewModel.emailError.value,
-                keyboardType = KeyboardType.Email,
+                text = state.emailText,
                 onValueChange = {
-                    viewModel.setEmailText(it)
+                    viewModel.onEvent(RegisterEvent.EnteredEmail(it))
                 },
+                hint = stringResource(id = R.string.email),
+                error = when (state.emailError) {
+                    RegisterState.EmailError.FieldEmpty -> {
+                        stringResource(id = R.string.this_field_cant_be_empty)
+                    }
+                    RegisterState.EmailError.InvalidEmail -> {
+                        stringResource(id = R.string.not_a_valid_email)
+                    }
+                    null -> ""
+                },
+                keyboardType = KeyboardType.Email,
             )
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
-                text = viewModel.username.value,
-                hint = stringResource(id = R.string.username),
-                error = viewModel.userNameError.value,
+                text = state.usernameText,
                 onValueChange = {
-                    viewModel.setUserNameText(it)
+                    viewModel.onEvent(RegisterEvent.EnteredUsername(it))
                 },
+                error = when(state.usernameError){
+                    RegisterState.UsernameError.FieldEmpty -> {
+                        stringResource(R.string.this_field_cant_be_empty)
+                    }
+                    RegisterState.UsernameError.InputTooShort -> {
+                        stringResource(R.string.input_too_short)
+                    }
+                    null -> ""
+                },
+                hint = stringResource(id = R.string.username)
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             StandardTextField(
-                text = viewModel.passwordText.value,
-                hint = stringResource(id = R.string.password),
-                error = viewModel.passwordError.value,
-                showPasswordToggle = viewModel.showPassword.value,
-                onPasswordToggleClick = {
-                    viewModel.setShowPassword(it)
-                },
-                keyboardType = KeyboardType.Password,
+                text = state.passwordText,
                 onValueChange = {
-                    viewModel.setPasswordText(it)
+                    viewModel.onEvent(RegisterEvent.EnteredPassword(it))
+                },
+                hint = stringResource(id = R.string.password),
+                error = when(state.passwordError){
+                    RegisterState.PasswordError.FieldEmpty -> {
+                        stringResource(R.string.this_field_cant_be_empty)
+                    }
+                    RegisterState.PasswordError.InputTooShort -> {
+                        stringResource(R.string.input_too_short)
+                    }
+                    RegisterState.PasswordError.InvalidPassword -> {
+                        stringResource(R.string.invalid_password)
+                    }
+                    null -> ""
+                },
+                isPasswordToggle =  state.isPasswordVisible,
+                keyboardType = KeyboardType.Password,
+                onPasswordToggleClick = {
+                    viewModel.onEvent(RegisterEvent.TogglePasswordVisibility)
                 },
             )
             Spacer(modifier = Modifier.height(MediumSpace))
@@ -94,7 +122,7 @@ fun RegisterScreen(
                 modifier = Modifier
                     .align(Alignment.End),
                 onClick = {
-
+                    viewModel.onEvent(RegisterEvent.Register)
                 }
             ) {
                 Text(

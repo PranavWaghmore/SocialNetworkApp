@@ -43,7 +43,7 @@ fun StandardTextField(
     singleLine: Boolean = true,
     error: String = "",
     leadingIcon: ImageVector? = null,
-    showPasswordToggle: Boolean = false,
+    isPasswordToggle: Boolean = false,
     onPasswordToggleClick: (Boolean) -> Unit = {},
     keyboardType: KeyboardType = KeyboardType.Text,
     isPasswordToggleDisplayed: Boolean = (keyboardType == KeyboardType.Password),
@@ -71,7 +71,7 @@ fun StandardTextField(
             },
             isError = error.isNotEmpty(), // error != ""
             textStyle = style,
-            visualTransformation = if (!showPasswordToggle && isPasswordToggleDisplayed) {
+            visualTransformation = if (!isPasswordToggle && isPasswordToggleDisplayed) {
                 PasswordVisualTransformation()
             } else {
                 VisualTransformation.None
@@ -95,7 +95,7 @@ fun StandardTextField(
                 {
                     IconButton(
                         onClick = {
-                            onPasswordToggleClick(!showPasswordToggle)
+                            onPasswordToggleClick(!isPasswordToggle)
                         },
                         modifier = Modifier
                             .semantics {
@@ -103,13 +103,13 @@ fun StandardTextField(
                             }
                     ) {
                         Icon(
-                            imageVector = if (showPasswordToggle) {
+                            imageVector = if (isPasswordToggle) {
                                 Icons.Filled.VisibilityOff
                             } else {
                                 Icons.Filled.Visibility
                             },
                             tint = Color.White,
-                            contentDescription = if (showPasswordToggle) {
+                            contentDescription = if (isPasswordToggle) {
                                 stringResource(R.string.password_visible_content)
                             } else {
                                 stringResource(R.string.password_hidden_content)
