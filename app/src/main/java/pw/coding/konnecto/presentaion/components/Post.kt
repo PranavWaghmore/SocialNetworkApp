@@ -66,8 +66,6 @@ fun Post(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(MaterialTheme.shapes.medium)
-                .shadow(5.dp)
-                .background(LightGray)
                 .clickable(
                     onClick = onClick
                 )

@@ -57,4 +57,5 @@
     <string name="input_too_short">InputTooShort</string>
     <string name="invalid_email">Invalid Email</string>
     <string name="invalid_password">Invalid Password</string>
+    <string name="konnecto">Konnecto</string>
 </resources>

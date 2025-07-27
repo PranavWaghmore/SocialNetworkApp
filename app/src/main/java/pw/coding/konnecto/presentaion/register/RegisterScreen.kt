@@ -6,15 +6,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
@@ -27,6 +33,7 @@ import pw.coding.konnecto.presentaion.components.StandardTextField
 import pw.coding.konnecto.presentaion.ui.theme.LargeSpace
 import pw.coding.konnecto.presentaion.ui.theme.MediumSpace
 import pw.coding.konnecto.presentaion.ui.theme.SmallSpace
+import pw.coding.konnecto.presentaion.util.Screen
 
 
 @Composable
@@ -74,6 +81,7 @@ fun RegisterScreen(
                     null -> ""
                 },
                 keyboardType = KeyboardType.Email,
+                leadingIcon = Icons.Default.Email
             )
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
@@ -90,7 +98,8 @@ fun RegisterScreen(
                     }
                     null -> ""
                 },
-                hint = stringResource(id = R.string.username)
+                hint = stringResource(id = R.string.username),
+                leadingIcon = ImageVector.vectorResource(R.drawable.user)
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             StandardTextField(
@@ -116,21 +125,28 @@ fun RegisterScreen(
                 onPasswordToggleClick = {
                     viewModel.onEvent(RegisterEvent.TogglePasswordVisibility)
                 },
+                leadingIcon = ImageVector.vectorResource(R.drawable.password)
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             Button(
-                modifier = Modifier
-                    .align(Alignment.End),
                 onClick = {
-                    viewModel.onEvent(RegisterEvent.Register)
-                }
+                    navController.navigate(Screen.MainFeedScreen.route)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp), // consistent height
+                shape = MaterialTheme.shapes.medium, // rounded corners
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 6.dp,
+                    pressedElevation = 10.dp
+                )
             ) {
                 Text(
                     text = stringResource(R.string.Register),
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
-
         }
         Text(
             text = buildAnnotatedString {

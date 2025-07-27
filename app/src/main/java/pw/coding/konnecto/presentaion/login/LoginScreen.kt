@@ -1,5 +1,7 @@
 package pw.coding.konnecto.presentaion.login
 
+import android.content.res.Resources
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,13 +11,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
@@ -61,12 +70,13 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
                 text = viewModel.username.value,
-                hint = stringResource(id = R.string.username_email),
+                hint = stringResource(id = R.string.email),
                 error = viewModel.userNameError.value,
                 keyboardType = KeyboardType.Email,
                 onValueChange = {
                     viewModel.setUserNameText(it)
                 },
+                leadingIcon = Icons.Default.Email
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             StandardTextField(
@@ -81,20 +91,28 @@ fun LoginScreen(
                 onValueChange = {
                     viewModel.setPasswordText(it)
                 },
+                leadingIcon = ImageVector.vectorResource(R.drawable.password)
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             Button(
-                modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     navController.navigate(Screen.MainFeedScreen.route)
-                }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp), // consistent height
+                shape = MaterialTheme.shapes.medium, // rounded corners
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 6.dp,
+                    pressedElevation = 10.dp
+                )
             ) {
                 Text(
                     text = stringResource(R.string.login),
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
-
         }
         Text(
             text = buildAnnotatedString {

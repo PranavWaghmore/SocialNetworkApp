@@ -12,6 +12,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,11 +36,9 @@ fun StandardTextField(
     text: String = "",
     hint: String = "",
     maxLength: Int = 40,
-    minLines : Int = 1,
-    maxLines : Int = 1,
-    style: TextStyle = TextStyle(
-        color = MaterialTheme.colorScheme.onBackground
-    ),
+    minLines: Int = 1,
+    maxLines: Int = 1,
+    style: TextStyle = TextStyle(color = Color.Black),
     singleLine: Boolean = true,
     error: String = "",
     leadingIcon: ImageVector? = null,
@@ -49,58 +48,50 @@ fun StandardTextField(
     isPasswordToggleDisplayed: Boolean = (keyboardType == KeyboardType.Password),
     onValueChange: (String) -> Unit,
 ) {
+    val visualTransformation = if (isPasswordToggleDisplayed && !isPasswordToggle) {
+        PasswordVisualTransformation()
+    } else {
+        VisualTransformation.None
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
     ) {
         TextField(
-            modifier = Modifier.fillMaxWidth(),
             value = text,
             onValueChange = {
-                if (it.length <= maxLength) {
-                    onValueChange(it)
-                }
+                if (it.length <= maxLength) onValueChange(it)
             },
             placeholder = {
                 Text(
                     hint,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color.Black
-                    )
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)
                 )
             },
-            isError = error.isNotEmpty(), // error != ""
+            isError = error.isNotEmpty(),
             textStyle = style,
-            visualTransformation = if (!isPasswordToggle && isPasswordToggleDisplayed) {
-                PasswordVisualTransformation()
-            } else {
-                VisualTransformation.None
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = keyboardType
-            ),
+            visualTransformation = visualTransformation,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             singleLine = singleLine,
             minLines = minLines,
             maxLines = maxLines,
-            leadingIcon = if (leadingIcon != null) {
+            modifier = Modifier
+                .fillMaxWidth(),
+            leadingIcon = leadingIcon?.let {
                 {
                     Icon(
-                        imageVector = leadingIcon,
+                        imageVector = it,
                         contentDescription = null,
                         modifier = Modifier.size(25.dp)
                     )
                 }
-            } else null,
+            },
             trailingIcon = if (isPasswordToggleDisplayed) {
                 {
                     IconButton(
-                        onClick = {
-                            onPasswordToggleClick(!isPasswordToggle)
-                        },
-                        modifier = Modifier
-                            .semantics {
-                                testTag = TestTags.PASSWORD_TOGGLE
-                            }
+                        onClick = { onPasswordToggleClick(!isPasswordToggle) },
+                        modifier = Modifier.semantics { testTag = TestTags.PASSWORD_TOGGLE }
                     ) {
                         Icon(
                             imageVector = if (isPasswordToggle) {
@@ -108,7 +99,7 @@ fun StandardTextField(
                             } else {
                                 Icons.Filled.Visibility
                             },
-                            tint = Color.White,
+                            tint = Color.Gray,
                             contentDescription = if (isPasswordToggle) {
                                 stringResource(R.string.password_visible_content)
                             } else {
@@ -118,14 +109,29 @@ fun StandardTextField(
                     }
                 }
             } else null,
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White, // ✅ white background
+                focusedContainerColor = Color.White,
+                disabledContainerColor = Color.White,
+                errorContainerColor = Color.White,
+
+                unfocusedTextColor = Color.Black, // ✅ black text
+                focusedTextColor = Color.Black,
+                disabledTextColor = Color.Gray,
+                errorTextColor = Color.Black,
+
+                unfocusedPlaceholderColor = Color.Gray,
+                focusedPlaceholderColor = Color.Gray
+            )
         )
         if (error.isNotEmpty()) {
+            androidx.compose.foundation.layout.Spacer(modifier = Modifier.size(4.dp))
             Text(
                 text = error,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.End,
-                modifier = modifier
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
