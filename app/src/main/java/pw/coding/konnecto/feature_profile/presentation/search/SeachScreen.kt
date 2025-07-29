@@ -26,7 +26,7 @@ import pw.coding.konnecto.core.presentation.components.UserProfileItem
 import pw.coding.konnecto.core.presentation.ui.theme.IconSizeMedium
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
-import pw.coding.konnecto.core.util.state.StandardTextFieldState
+import pw.coding.konnecto.core.domain.state.StandardTextFieldState
 
 @Composable
 fun SearchScreen(
@@ -53,7 +53,6 @@ fun SearchScreen(
             StandardTextField(
                 text = searchViewModel.searchState.value.text,
                 hint = stringResource(id = R.string.search),
-                error = searchViewModel.searchState.value.error,
                 leadingIcon = Icons.Default.Search,
                 onValueChange = {
                     searchViewModel.setSearchState(

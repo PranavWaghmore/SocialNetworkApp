@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.Activity
-import pw.coding.konnecto.core.domain.util.ActivityAction
+import pw.coding.konnecto.core.presentation.util.ActivityAction
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.ui.theme.TextWhite
 

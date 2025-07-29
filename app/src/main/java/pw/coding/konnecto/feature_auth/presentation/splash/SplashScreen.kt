@@ -24,7 +24,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.util.Screen
-import pw.coding.konnecto.core.presentation.util.Constants
+import pw.coding.konnecto.core.util.Constants
 
 @Composable
 fun SplashScreen(

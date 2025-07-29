@@ -44,7 +44,7 @@ import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.ui.theme.TextGray
 import pw.coding.konnecto.core.presentation.ui.theme.TextWhite
-import pw.coding.konnecto.core.presentation.util.Constants
+import pw.coding.konnecto.core.util.Constants
 
 @Composable
 fun Post(

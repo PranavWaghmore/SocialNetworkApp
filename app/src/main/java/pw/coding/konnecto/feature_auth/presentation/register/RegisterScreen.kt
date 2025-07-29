@@ -33,7 +33,7 @@ import pw.coding.konnecto.core.presentation.components.StandardTextField
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
-import pw.coding.konnecto.core.util.Screen
+import pw.coding.konnecto.feature_auth.presentation.util.AuthError
 
 
 @Composable
@@ -41,7 +41,9 @@ fun RegisterScreen(
     navController: NavController,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state.value
+    val usernameState = viewModel.usernameState.value
+    val emailState = viewModel.emailState.value
+    val passwordState = viewModel.passwordState.value
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -61,66 +63,65 @@ fun RegisterScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.Register),
-                //color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.displayLarge
             )
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
-                text = state.emailText,
+                text = emailState.text,
                 onValueChange = {
                     viewModel.onEvent(RegisterEvent.EnteredEmail(it))
                 },
                 hint = stringResource(id = R.string.email),
-                error = when (state.emailError) {
-                    RegisterState.EmailError.FieldEmpty -> {
+                error = when (emailState.error) {
+                    is AuthError.FieldEmpty -> {
                         stringResource(id = R.string.this_field_cant_be_empty)
                     }
-                    RegisterState.EmailError.InvalidEmail -> {
+                    is AuthError.InvalidEmail -> {
                         stringResource(id = R.string.not_a_valid_email)
                     }
-                    null -> ""
+                    else -> ""
                 },
                 keyboardType = KeyboardType.Email,
                 leadingIcon = Icons.Default.Email
             )
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
-                text = state.usernameText,
+                text = usernameState.text,
                 onValueChange = {
                     viewModel.onEvent(RegisterEvent.EnteredUsername(it))
                 },
-                error = when(state.usernameError){
-                    RegisterState.UsernameError.FieldEmpty -> {
+                error = when(usernameState.error){
+                    is AuthError.FieldEmpty -> {
                         stringResource(R.string.this_field_cant_be_empty)
                     }
-                    RegisterState.UsernameError.InputTooShort -> {
+                    is AuthError.InputTooShort -> {
                         stringResource(R.string.input_too_short)
                     }
-                    null -> ""
+                    else -> ""
                 },
                 hint = stringResource(id = R.string.username),
                 leadingIcon = ImageVector.vectorResource(R.drawable.user)
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             StandardTextField(
-                text = state.passwordText,
+                text = passwordState.text,
                 onValueChange = {
                     viewModel.onEvent(RegisterEvent.EnteredPassword(it))
                 },
                 hint = stringResource(id = R.string.password),
-                error = when(state.passwordError){
-                    RegisterState.PasswordError.FieldEmpty -> {
+                error = when(passwordState.error){
+                    is AuthError.FieldEmpty -> {
                         stringResource(R.string.this_field_cant_be_empty)
                     }
-                    RegisterState.PasswordError.InputTooShort -> {
+                    is AuthError.InputTooShort -> {
                         stringResource(R.string.input_too_short)
                     }
-                    RegisterState.PasswordError.InvalidPassword -> {
+                    is AuthError.InvalidPassword -> {
                         stringResource(R.string.invalid_password)
                     }
-                    null -> ""
+                    else -> ""
                 },
-                isPasswordToggle =  state.isPasswordVisible,
+                isPasswordToggle =  passwordState.isPasswordVisible,
                 keyboardType = KeyboardType.Password,
                 onPasswordToggleClick = {
                     viewModel.onEvent(RegisterEvent.TogglePasswordVisibility)
@@ -130,8 +131,8 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(MediumSpace))
             Button(
                 onClick = {
-                    navController.navigate(Screen.MainFeedScreen.route)
-                },
+                    viewModel.onEvent(RegisterEvent.Register)
+                          },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp), // consistent height

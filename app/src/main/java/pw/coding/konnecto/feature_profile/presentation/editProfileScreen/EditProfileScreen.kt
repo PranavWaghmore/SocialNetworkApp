@@ -39,13 +39,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pw.coding.konnecto.R
+import pw.coding.konnecto.core.domain.state.StandardTextFieldState
 import pw.coding.konnecto.core.presentation.components.StandardTextField
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
-import pw.coding.konnecto.feature_profile.presentation.editProfileScreen.components.Chip
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.ProfilePictureDpSizeLarge
-import pw.coding.konnecto.core.util.state.StandardTextFieldState
+import pw.coding.konnecto.feature_profile.presentation.editProfileScreen.components.Chip
+import pw.coding.konnecto.feature_profile.presentation.util.EditProfileError
 import kotlin.random.Random
 
 @Composable
@@ -97,7 +98,10 @@ fun EditProfileScreen(
                         .fillMaxWidth(),
                     text = viewModel.usernameState.value.text,
                     hint = stringResource(id = R.string.username),
-                    error = viewModel.usernameState.value.error,
+                    error = when(viewModel.usernameState.value.error){
+                        EditProfileError.FieldEmpty -> stringResource(R.string.this_field_cant_be_empty)
+                        else -> ""
+                    },
                     leadingIcon = Icons.Default.Person,
                     onValueChange = {
                         viewModel.setUsernameState(
@@ -111,7 +115,10 @@ fun EditProfileScreen(
                         .fillMaxWidth(),
                     text = viewModel.githubTextFieldTextState.value.text,
                     hint = stringResource(id = R.string.github_profile_url),
-                    error = viewModel.githubTextFieldTextState.value.error,
+                    error = when(viewModel.githubTextFieldTextState.value.error){
+                        EditProfileError.FieldEmpty -> stringResource(R.string.this_field_cant_be_empty)
+                        else -> ""
+                    },
                     leadingIcon = ImageVector.vectorResource(R.drawable.github_icon_1),
                     onValueChange = {
                         viewModel.setGithubTextFieldState(
@@ -125,7 +132,10 @@ fun EditProfileScreen(
                         .fillMaxWidth(),
                     text = viewModel.instagramTextFieldState.value.text,
                     hint = stringResource(id = R.string.instagram_profile_url),
-                    error = viewModel.instagramTextFieldState.value.error,
+                    error = when(viewModel.instagramTextFieldState.value.error){
+                        EditProfileError.FieldEmpty -> stringResource(R.string.this_field_cant_be_empty)
+                        else -> ""
+                    },
                     leadingIcon = ImageVector.vectorResource(R.drawable.instagram_2016_5),
                     onValueChange = {
                         viewModel.steInstagramTextFieldState(
@@ -139,7 +149,10 @@ fun EditProfileScreen(
                         .fillMaxWidth(),
                     text = viewModel.LinkedinTextFieldState.value.text,
                     hint = stringResource(id = R.string.linkedin_profile_url),
-                    error = viewModel.LinkedinTextFieldState.value.error,
+                    error = when(viewModel.LinkedinTextFieldState.value.error){
+                        EditProfileError.FieldEmpty -> stringResource(R.string.this_field_cant_be_empty)
+                        else -> ""
+                    },
                     leadingIcon = ImageVector.vectorResource(R.drawable.linkedin_icon_1),
                     onValueChange = {
                         viewModel.setLeetcodeTExtFieldState(
@@ -156,7 +169,10 @@ fun EditProfileScreen(
                     singleLine = false,
                     minLines = 3,
                     maxLines = 3,
-                    error = viewModel.bioState.value.error,
+                    error = when(viewModel.bioState.value.error){
+                        EditProfileError.FieldEmpty -> stringResource(R.string.this_field_cant_be_empty)
+                        else -> ""
+                    },
                     leadingIcon = ImageVector.vectorResource(R.drawable.bio_description),
                     onValueChange = {
                         viewModel.setBioState(
@@ -185,7 +201,6 @@ fun EditProfileScreen(
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalArrangement = Arrangement.spacedBy(18.dp),
-                        // horizontalArrangement = Arrangement.Center,
                         maxItemsInEachRow = 3
                     ) {
                         listOf(

@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import pw.coding.konnecto.core.util.state.StandardTextFieldState
+import pw.coding.konnecto.core.domain.state.StandardTextFieldState
 import javax.inject.Inject
 
 @HiltViewModel()

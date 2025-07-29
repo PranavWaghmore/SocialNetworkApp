@@ -34,13 +34,15 @@ import pw.coding.konnecto.core.presentation.components.StandardToolBar
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
-import pw.coding.konnecto.core.util.state.StandardTextFieldState
+import pw.coding.konnecto.core.domain.state.StandardTextFieldState
+import pw.coding.konnecto.feature_post.util.PostDescriptionError
 
 @Composable
 fun CreatePostScreen(
     navController: NavController,
     viewModel: CreatePostViewModel = hiltViewModel()
 ) {
+    val descriptionState = viewModel.descriptionState.value
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -82,13 +84,17 @@ fun CreatePostScreen(
             StandardTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = viewModel.descriptionState.value.text,
+                text = descriptionState.text,
                 hint = stringResource(id = R.string.description),
                 singleLine = false,
                 minLines = 3,
                 maxLines = 7,
                 leadingIcon = (Icons.Default.PostAdd),
-                error = viewModel.descriptionState.value.error,
+                error = when(descriptionState.error){
+                     PostDescriptionError.FieldEmpty ->
+                        stringResource(R.string.this_field_cant_be_empty)
+                    else -> ""
+                },
                 onValueChange = {
                     viewModel.setDescriptionState(
                         StandardTextFieldState(text = it)

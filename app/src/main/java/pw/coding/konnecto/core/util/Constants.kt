@@ -1,4 +1,4 @@
-package pw.coding.konnecto.core.presentation.util
+package pw.coding.konnecto.core.util
 
 object Constants {
     const val MIN_PASSWORD_LENGTH = 3
