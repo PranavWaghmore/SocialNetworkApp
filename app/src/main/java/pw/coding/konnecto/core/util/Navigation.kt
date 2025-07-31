@@ -1,6 +1,7 @@
 package pw.coding.konnecto.core.util
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -24,6 +25,7 @@ import pw.coding.konnecto.feature_auth.presentation.splash.SplashScreen
 @Composable
 fun Navigation(
     navController: NavHostController,
+    snackbarHostState: SnackbarHostState
 ) {
     NavHost(
         navController = navController,
@@ -38,7 +40,8 @@ fun Navigation(
             LoginScreen(navController = navController)
         }
         composable(Screen.RegisterScreen.route) {
-            RegisterScreen(navController = navController)
+            RegisterScreen(navController = navController ,
+                snackbarHostState = snackbarHostState)
         }
         composable(Screen.MainFeedScreen.route) {
             MainFeedScreen(navController = navController)

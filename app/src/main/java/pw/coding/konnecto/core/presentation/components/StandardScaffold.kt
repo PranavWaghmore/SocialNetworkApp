@@ -4,6 +4,7 @@ package pw.coding.konnecto.core.presentation.components
  import androidx.compose.foundation.layout.Column
  import androidx.compose.foundation.layout.fillMaxWidth
  import androidx.compose.material.Divider
+ import androidx.compose.material.ScaffoldState
  import androidx.compose.material.icons.Icons
  import androidx.compose.material.icons.outlined.Add
  import androidx.compose.material.icons.outlined.Home
@@ -12,8 +13,12 @@ package pw.coding.konnecto.core.presentation.components
  import androidx.compose.material.icons.outlined.Person
  import androidx.compose.material3.BottomAppBar
  import androidx.compose.material3.Scaffold
+ import androidx.compose.material3.SnackbarHost
+ import androidx.compose.material3.SnackbarHostState
  import androidx.compose.runtime.Composable
+ import androidx.compose.runtime.remember
  import androidx.compose.ui.Modifier
+ import androidx.compose.ui.graphics.Color
  import androidx.compose.ui.res.stringResource
  import androidx.compose.ui.unit.dp
  import androidx.navigation.NavController
@@ -27,6 +32,7 @@ package pw.coding.konnecto.core.presentation.components
 @Composable
 fun StandardScaffold(
     navController: NavController,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier= Modifier,
     showBottomBar : Boolean = true,
     bottomNavItems : List<BottomNavItem> =listOf(
@@ -63,7 +69,17 @@ fun StandardScaffold(
     content:@Composable () -> Unit
 ) {
         Scaffold(
-            bottomBar = {
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState) { data ->
+                    androidx.compose.material3.Snackbar(
+                        snackbarData = data,
+                        containerColor = Color.Gray,
+                        contentColor = Color.Black,
+                        actionColor = Color.Yellow
+                    )
+                }
+            },
+                    bottomBar = {
                 if (showBottomBar) {
                     Column {
                         Divider(
