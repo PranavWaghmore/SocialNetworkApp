@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route
-                    val snackbarHostState = remember { SnackbarHostState() }
+                    val snackBarHostState = remember { SnackbarHostState() }
                     StandardScaffold(
                         navController = navController,
                         showBottomBar = currentRoute in listOf(
