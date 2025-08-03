@@ -100,7 +100,6 @@ fun StandardTextField(
                             } else {
                                 Icons.Filled.Visibility
                             },
-                            tint = Color.Gray,
                             contentDescription = if (isPasswordToggle) {
                                 stringResource(R.string.password_visible_content)
                             } else {
@@ -111,18 +110,27 @@ fun StandardTextField(
                 }
             } else null,
             colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.White, // ✅ white background
+                unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White,
-                disabledContainerColor = Color.White,
                 errorContainerColor = Color.White,
+                disabledContainerColor = Color.White,
 
-                unfocusedTextColor = Color.Black, // ✅ black text
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
+
+                unfocusedTextColor = Color.Black,
                 focusedTextColor = Color.Black,
-                disabledTextColor = Color.Gray,
-                errorTextColor = Color.Black,
 
                 unfocusedPlaceholderColor = Color.Gray,
-                focusedPlaceholderColor = Color.Gray
+                focusedPlaceholderColor = Color.Gray,
+
+                focusedLeadingIconColor = Color.Black,
+                unfocusedLeadingIconColor = Color.Black,
+
+                focusedTrailingIconColor = Color.Black,
+                unfocusedTrailingIconColor = Color.Black,
+                errorTrailingIconColor = Color.Black,
+                disabledTrailingIconColor = Color.Black
             )
         )
         if (error.isNotEmpty()) {

@@ -25,7 +25,7 @@ import pw.coding.konnecto.feature_auth.presentation.splash.SplashScreen
 @Composable
 fun Navigation(
     navController: NavHostController,
-    snackbarHostState: SnackbarHostState
+    snackBarHostState: SnackbarHostState
 ) {
     NavHost(
         navController = navController,
@@ -40,8 +40,7 @@ fun Navigation(
             LoginScreen(navController = navController)
         }
         composable(Screen.RegisterScreen.route) {
-            RegisterScreen(navController = navController ,
-                snackbarHostState = snackbarHostState)
+            RegisterScreen(navController = navController, snackBarHostState = snackBarHostState)
         }
         composable(Screen.MainFeedScreen.route) {
             MainFeedScreen(navController = navController)

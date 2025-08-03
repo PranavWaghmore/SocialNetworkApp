@@ -25,10 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -41,29 +43,38 @@ import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.util.asString
+import pw.coding.konnecto.core.util.Screen
 import pw.coding.konnecto.feature_auth.presentation.util.AuthError
 
 
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    snackbarHostState: SnackbarHostState,
+    snackBarHostState: SnackbarHostState ?= null,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
+
     val usernameState = viewModel.usernameState.value
     val emailState = viewModel.emailState.value
     val passwordState = viewModel.passwordState.value
     val registerState = viewModel.registerState.value
-    val context = LocalContext.current
 
+    val focusManager = LocalFocusManager.current
+
+    val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
-            when(event){
-                is RegisterViewModel.UiEvent.SnackbarEvent -> {
-                    snackbarHostState.showSnackbar(
-                        message = event.uiText.asString(context),
+            when (event) {
+                is RegisterViewModel.UiEvent.SnackBarEvent -> {
+                    snackBarHostState?.showSnackbar(
+                        message = event.snackBarUiText.asString(context),
                         duration = SnackbarDuration.Long
                     )
+                }
+                is RegisterViewModel.UiEvent.NavigateToLogin -> {
+                    navController.navigate(Screen.LoginScreen.route) {
+                        popUpTo(Screen.RegisterScreen.route) { inclusive = true }
+                    }
                 }
             }
         }
@@ -88,7 +99,8 @@ fun RegisterScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.Register),
-                style = MaterialTheme.typography.displayLarge
+                style = MaterialTheme.typography.displayLarge,
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
@@ -156,6 +168,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(MediumSpace))
             Button(
                 onClick = {
+                    focusManager.clearFocus(force= true)
                     viewModel.onEvent(RegisterEvent.Register)
                           },
                 enabled = !registerState.isLoading,
@@ -169,6 +182,7 @@ fun RegisterScreen(
                 ),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
+                    disabledContainerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {

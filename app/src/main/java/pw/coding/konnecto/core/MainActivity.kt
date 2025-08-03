@@ -1,5 +1,6 @@
 package pw.coding.konnecto.core
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,6 +21,7 @@ import pw.coding.konnecto.core.util.Screen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @SuppressLint("RememberReturnType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route
-                    val snackBarHostState = remember { SnackbarHostState() }
+                    val snackBarState = remember { SnackbarHostState() }
                     StandardScaffold(
                         navController = navController,
                         showBottomBar = currentRoute in listOf(
@@ -41,10 +43,10 @@ class MainActivity : ComponentActivity() {
                             Screen.ActivityScreen.route,
                             Screen.ProfileScreen.route
                         ),
-                        snackbarHostState = snackbarHostState,
+                        snackBarHostState = snackBarState,
                         modifier = Modifier.Companion.fillMaxSize()
                     ) {
-                        Navigation(navController, snackbarHostState)
+                        Navigation(navController, snackBarState )
                     }
                 }
             }
