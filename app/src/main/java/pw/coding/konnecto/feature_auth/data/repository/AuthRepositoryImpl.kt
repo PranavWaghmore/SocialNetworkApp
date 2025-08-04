@@ -5,6 +5,7 @@ import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
 import pw.coding.konnecto.core.util.UiText
 import pw.coding.konnecto.feature_auth.data.dto.request.CreateAccountRequest
+import pw.coding.konnecto.feature_auth.data.dto.request.LoginRequest
 import pw.coding.konnecto.feature_auth.data.remote.AuthApi
 import pw.coding.konnecto.feature_auth.domain.repository.AuthRepository
 import retrofit2.HttpException
@@ -29,9 +30,30 @@ class AuthRepositoryImpl(
                  } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
              }
         }catch (e : IOException){
-                 Resource.Error(UiText.DynamicString("Network error: ${e.localizedMessage}"))
+                 Resource.Error(UiText.StringResource(R.string.check_your_internet_connection))
          }catch (e: HttpException){
              Resource.Error( UiText.StringResource(R.string.something_went_wrong))
+        }
+    }
+
+    override suspend fun login(
+        email: String,
+        password: String
+    ): Resource<Unit> {
+        val request = LoginRequest(email,password)
+        return try {
+            val response = api.login(request)
+            if(response.successful){
+                Resource.Success(Unit)
+            }else{
+                response.message?.let { msg ->
+                    Resource.Error(UiText.DynamicString(msg))
+                } ?: Resource.Error(UiText.StringResource(R.string.unknown_error))
+            }
+        }catch (e : IOException){
+            Resource.Error(UiText.StringResource(R.string.check_your_internet_connection))
+        }catch (e: HttpException){
+            Resource.Error( UiText.StringResource(R.string.something_went_wrong))
         }
     }
 }
