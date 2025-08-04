@@ -43,14 +43,13 @@ import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.util.asString
-import pw.coding.konnecto.core.util.Screen
 import pw.coding.konnecto.feature_auth.presentation.util.AuthError
 
 
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    snackBarHostState: SnackbarHostState ?= null,
+    snackBarHostState: SnackbarHostState,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
 
@@ -66,15 +65,10 @@ fun RegisterScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is RegisterViewModel.UiEvent.SnackBarEvent -> {
-                    snackBarHostState?.showSnackbar(
+                    snackBarHostState.showSnackbar(
                         message = event.snackBarUiText.asString(context),
                         duration = SnackbarDuration.Long
                     )
-                }
-                is RegisterViewModel.UiEvent.NavigateToLogin -> {
-                    navController.navigate(Screen.LoginScreen.route) {
-                        popUpTo(Screen.RegisterScreen.route) { inclusive = true }
-                    }
                 }
             }
         }

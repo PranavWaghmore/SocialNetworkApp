@@ -20,18 +20,18 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val registerUseCase: RegisterUseCase
-) : ViewModel()  {
-    private val _emailState= mutableStateOf(StandardTextFieldState())
-    val emailState : State<StandardTextFieldState> = _emailState
+) : ViewModel() {
+    private val _emailState = mutableStateOf(StandardTextFieldState())
+    val emailState: State<StandardTextFieldState> = _emailState
 
-    private val _usernameState= mutableStateOf(StandardTextFieldState())
-    val usernameState : State<StandardTextFieldState> = _usernameState
+    private val _usernameState = mutableStateOf(StandardTextFieldState())
+    val usernameState: State<StandardTextFieldState> = _usernameState
 
-    private val _passwordState= mutableStateOf(PasswordTextFieldState())
-    val passwordState : State<PasswordTextFieldState> = _passwordState
+    private val _passwordState = mutableStateOf(PasswordTextFieldState())
+    val passwordState: State<PasswordTextFieldState> = _passwordState
 
     private val _registerState = mutableStateOf(RegisterState())
-    val registerState : State<RegisterState> = _registerState
+    val registerState: State<RegisterState> = _registerState
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -39,29 +39,33 @@ class RegisterViewModel @Inject constructor(
     private val _onRegister = MutableSharedFlow<Unit>(replay = 1)
     val onRegister = _onRegister.asSharedFlow()
 
-    fun onEvent(event: RegisterEvent){
-        when(event){
+    fun onEvent(event: RegisterEvent) {
+        when (event) {
             is RegisterEvent.EnteredEmail -> {
                 _emailState.value = _emailState.value.copy(
                     text = event.value
                 )
             }
+
             is RegisterEvent.EnteredUsername -> {
                 _usernameState.value = _usernameState.value.copy(
                     text = event.value
                 )
             }
+
             is RegisterEvent.EnteredPassword -> {
                 _passwordState.value = _passwordState.value.copy(
                     text = event.value
                 )
             }
+
             RegisterEvent.TogglePasswordVisibility -> {
                 _passwordState.value = _passwordState.value.copy(
                     isPasswordVisible = !passwordState.value.isPasswordVisible
                 )
             }
-            RegisterEvent.Register ->{
+
+            RegisterEvent.Register -> {
                 register()
             }
         }
@@ -82,18 +86,25 @@ class RegisterViewModel @Inject constructor(
 
             // ✅ Check for validation errors
             if (registerResult.emailError != null || registerResult.usernameError != null ||
-                registerResult.passwordError != null) {
+                registerResult.passwordError != null
+            ) {
                 _emailState.value = emailState.value.copy(error = registerResult.emailError)
-                _usernameState.value = usernameState.value.copy(error = registerResult.usernameError)
-                _passwordState.value = passwordState.value.copy(error = registerResult.passwordError)
+                _usernameState.value =
+                    usernameState.value.copy(error = registerResult.usernameError)
+                _passwordState.value =
+                    passwordState.value.copy(error = registerResult.passwordError)
                 _registerState.value = RegisterState(isLoading = false)
                 return@launch
             }
 
             when (registerResult.result) {
                 is Resource.Success -> {
-                    _eventFlow.emit(  UiEvent.NavigateToLogin(
-                        snackBarMessage = UiText.StringResource(R.string.successfully_registered))
+                    _eventFlow.emit(
+                        UiEvent.SnackBarEvent(
+                            snackBarUiText = UiText.StringResource(
+                                R.string.account_created_succesfully_you_can_login_now
+                            )
+                        )
                     )
                     _onRegister.emit(Unit)
                     _registerState.value = RegisterState(isLoading = false)
@@ -105,7 +116,8 @@ class RegisterViewModel @Inject constructor(
                 is Resource.Error -> {
                     _eventFlow.emit(
                         UiEvent.SnackBarEvent(
-                            snackBarUiText = registerResult.result.uiText ?: UiText.unknownError())
+                            snackBarUiText = registerResult.result.uiText ?: UiText.unknownError()
+                        )
                     )
                     _registerState.value = RegisterState(isLoading = false)
                 }
@@ -118,8 +130,7 @@ class RegisterViewModel @Inject constructor(
     }
 
 
-    sealed class UiEvent{
-        data class SnackBarEvent(val snackBarUiText: UiText): UiEvent()
-        data class NavigateToLogin(val snackBarMessage: UiText? = null) : UiEvent()
+    sealed class UiEvent {
+        data class SnackBarEvent(val snackBarUiText: UiText) : UiEvent()
     }
 }
