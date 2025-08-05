@@ -2,6 +2,7 @@ package pw.coding.konnecto.feature_auth.domain.repository
 
 import android.content.SharedPreferences
 import pw.coding.konnecto.core.util.Resource
+import pw.coding.konnecto.core.util.SimpleResource
 
 interface AuthRepository {
 
@@ -9,10 +10,10 @@ interface AuthRepository {
         email: String,
         username: String,
         password: String
-    ): Resource<Unit>
+    ): SimpleResource
 
     suspend fun login(
         email: String,
         password: String
-    ): Resource<Unit>
+    ): SimpleResource
 }

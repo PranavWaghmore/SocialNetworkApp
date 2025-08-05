@@ -9,21 +9,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
@@ -34,20 +35,43 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.flow.collectLatest
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.components.StandardTextField
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
+import pw.coding.konnecto.core.presentation.util.asString
 import pw.coding.konnecto.core.util.Screen
+import pw.coding.konnecto.feature_auth.presentation.util.AuthError
 
 
 @Composable
 fun LoginScreen(
     navController: NavController,
+    snackBarHostState: SnackbarHostState,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val emailState = viewModel.emailState.value
+    val passwordState = viewModel.passwordState.value
+    val loginState = viewModel.loginState.value
 
+    val context = LocalContext.current
+    LaunchedEffect( key1=true) {
+        viewModel.evenFlow.collectLatest { event ->
+            when(event){
+                LoginViewModel.UiEvent.OnLogin -> {
+                    navController.navigate(Screen.MainFeedScreen.route)
+                }
+                is LoginViewModel.UiEvent.SnackBarEvent -> {
+                    snackBarHostState.showSnackbar(
+                        message = event.snackBarUiText.asString(context),
+                        duration = SnackbarDuration.Long
+                    )
+                }
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -73,34 +97,44 @@ fun LoginScreen(
             )
             Spacer(modifier = Modifier.height(SmallSpace))
             StandardTextField(
-                text = viewModel.username.value,
-                hint = stringResource(id = R.string.email),
-                error = viewModel.userNameError.value,
-                keyboardType = KeyboardType.Email,
+                text = emailState.text,
                 onValueChange = {
-                    viewModel.setUserNameText(it)
+                    viewModel.onEvent(LoginEvent.EnteredEmail(it))
                 },
+                hint = stringResource(id = R.string.email),
+                error = when(emailState.error){
+                    is AuthError.FieldEmpty ->{
+                        stringResource(R.string.this_field_cant_be_empty)
+                    }
+                    else -> ""
+                },
+                keyboardType = KeyboardType.Email,
                 leadingIcon = Icons.Default.Email
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             StandardTextField(
-                text = viewModel.passwordText.value,
+                text = passwordState.text,
+                onValueChange = {
+                    viewModel.onEvent(LoginEvent.EnteredPassword(it))
+                },
                 hint = stringResource(id = R.string.password),
-                error = viewModel.passwordError.value,
-                isPasswordToggle = viewModel.showPassword.value,
+                error = when(passwordState.error){
+                    is AuthError.FieldEmpty ->{
+                        stringResource(R.string.this_field_cant_be_empty)
+                    }
+                    else -> ""
+                },
+                isPasswordToggle = loginState.isPasswordVisible,
                 onPasswordToggleClick = {
-                    viewModel.setShowPassword(it)
+                    viewModel.onEvent(LoginEvent.TogglePasswordVisibility)
                 },
                 keyboardType = KeyboardType.Password,
-                onValueChange = {
-                    viewModel.setPasswordText(it)
-                },
                 leadingIcon = ImageVector.vectorResource(R.drawable.password)
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             Button(
                 onClick = {
-                    navController.navigate(Screen.MainFeedScreen.route)
+                    viewModel.onEvent(LoginEvent.Login)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -111,11 +145,21 @@ fun LoginScreen(
                     pressedElevation = 10.dp
                 )
             ) {
-                Text(
-                    text = stringResource(R.string.login),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+                if(loginState.isLoading){
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier
+                            .height(24.dp)
+                            .width(24.dp)
+                    )
+                }else{
+                    Text(
+                        text = stringResource(R.string.login),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
         }
         Text(

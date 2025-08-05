@@ -37,7 +37,7 @@ fun Navigation(
             SplashScreen(navController = navController)
         }
         composable(Screen.LoginScreen.route) {
-            LoginScreen(navController = navController)
+            LoginScreen(navController = navController,snackBarHostState)
         }
         composable(Screen.RegisterScreen.route) {
             RegisterScreen(navController = navController, snackBarHostState = snackBarHostState)

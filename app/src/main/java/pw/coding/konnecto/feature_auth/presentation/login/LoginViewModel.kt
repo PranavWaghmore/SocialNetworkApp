@@ -4,18 +4,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import pw.coding.konnecto.core.domain.state.StandardTextFieldState
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.UiText
-import pw.coding.konnecto.feature_auth.domain.models.LoginResult
 import pw.coding.konnecto.feature_auth.domain.use_case.LoginUseCase
-import pw.coding.konnecto.feature_auth.presentation.register.RegisterState
+import pw.coding.konnecto.feature_auth.presentation.login.LoginViewModel.UiEvent.SnackBarEvent
 import javax.inject.Inject
 
 
@@ -49,45 +46,49 @@ class LoginViewModel @Inject constructor(
             }
             LoginEvent.TogglePasswordVisibility -> {
                 _loginState.value = _loginState.value.copy(
-                    isPasswordToggle = !loginState.value.isPasswordToggle
+                    isPasswordVisible = !loginState.value.isPasswordVisible
                 )
             }
             LoginEvent.Login -> {
+                viewModelScope.launch {
+                    if (loginState.value.isLoading) {return@launch}
+                    _emailState.value = emailState.value.copy(error = null)
+                    _passwordState.value = passwordState.value.copy(error = null)
+                    _loginState.value = LoginState(isLoading = true)
+                    val loginResult = loginUseCase(
+                        email = _emailState.value.text,
+                        password = _passwordState.value.text
+                    )
+                    if (loginResult.emailError != null || loginResult.passwordError != null) {
+                        _emailState.value = emailState.value.copy(error = loginResult.emailError)
+                        _passwordState.value = passwordState.value.copy(error = loginResult.passwordError)
+                        _loginState.value = LoginState(isLoading = false)
+                        return@launch
+                    }
 
-            }
-        }
-    }
-    fun login(){
-        viewModelScope.launch {
-            _emailState.value = emailState.value.copy(error = null)
-            _passwordState.value = passwordState.value.copy(error = null)
-            _loginState.value = LoginState(isLoading = true)
-
-            val loginResult = loginUseCase(
-                email = _emailState.value.text,
-                password = _passwordState.value.text
-            )
-            // ✅ Check for validation errors
-            if (loginResult.emailError != null || loginResult.passwordError != null) {
-                _emailState.value = emailState.value.copy(error = loginResult.emailError)
-                _passwordState.value = passwordState.value.copy(error = loginResult.passwordError)
-                _loginState.value = LoginState(isLoading = false)
-                return@launch
-            }
-
-            when(loginResult.result){
-                is Resource.Error<Unit> -> {
-
+                    when(loginResult.result){
+                        is Resource.Success -> {
+                            _eventFlow.emit(
+                                UiEvent.OnLogin
+                            )
+                            _loginState.value = LoginState(isLoading = false)
+                        }
+                        is Resource.Error -> {
+                            _eventFlow.emit(
+                                SnackBarEvent(snackBarUiText = loginResult.result.uiText ?: UiText.unknownError())
+                            )
+                            _loginState.value = LoginState(isLoading = false)
+                        }
+                        null -> {
+                            print("null")
+                        }
+                    }
                 }
-                is Resource.Success<Unit> -> {
-
-                }
-
-                null -> null
             }
         }
     }
     sealed class UiEvent {
         data class SnackBarEvent(val snackBarUiText: UiText) : UiEvent()
+        object OnLogin: UiEvent()
     }
 }
