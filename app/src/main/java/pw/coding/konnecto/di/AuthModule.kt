@@ -5,9 +5,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import pw.coding.konnecto.feature_auth.data.remote.AuthApi
 import pw.coding.konnecto.feature_auth.data.repository.AuthRepositoryImpl
 import pw.coding.konnecto.feature_auth.domain.repository.AuthRepository
+import pw.coding.konnecto.feature_auth.domain.use_case.AuthenticateUseCase
 import pw.coding.konnecto.feature_auth.domain.use_case.LoginUseCase
 import pw.coding.konnecto.feature_auth.domain.use_case.RegisterUseCase
 import retrofit2.Retrofit
@@ -21,9 +23,10 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideAuthApi(): AuthApi{
+    fun provideAuthApi(client: OkHttpClient): AuthApi {
         return Retrofit.Builder()
             .baseUrl(AuthApi.BASE_URL)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AuthApi::class.java)
@@ -31,19 +34,25 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(api: AuthApi , sharedPreferences: SharedPreferences): AuthRepository{
-        return AuthRepositoryImpl(api,sharedPreferences)
+    fun provideAuthRepository(api: AuthApi, sharedPreferences: SharedPreferences): AuthRepository {
+        return AuthRepositoryImpl(api, sharedPreferences)
     }
 
     @Provides
     @Singleton
-    fun provideRegisterUSeCase(repository: AuthRepository): RegisterUseCase{
+    fun provideRegisterUseCase(repository: AuthRepository): RegisterUseCase {
         return RegisterUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideLoginUSeCase(repository: AuthRepository): LoginUseCase{
+    fun provideLoginUseCase(repository: AuthRepository): LoginUseCase {
         return LoginUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthenticationUseCase(repository: AuthRepository): AuthenticateUseCase {
+        return AuthenticateUseCase(repository)
     }
 }

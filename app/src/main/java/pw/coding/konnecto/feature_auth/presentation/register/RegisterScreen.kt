@@ -42,7 +42,9 @@ import pw.coding.konnecto.core.presentation.components.StandardTextField
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
+import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.presentation.util.asString
+import pw.coding.konnecto.core.util.Screen
 import pw.coding.konnecto.feature_auth.presentation.util.AuthError
 
 
@@ -64,12 +66,18 @@ fun RegisterScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is RegisterViewModel.UiEvent.SnackBarEvent -> {
+                is UiEvent.Navigate -> {
+                    navController.navigate(event.route) {
+                        popUpTo(Screen.RegisterScreen.route) { inclusive = true }
+                    }
+                }
+                is UiEvent.SnackBarEvent -> {
                     snackBarHostState.showSnackbar(
                         message = event.snackBarUiText.asString(context),
                         duration = SnackbarDuration.Long
                     )
                 }
+                else -> null
             }
         }
     }

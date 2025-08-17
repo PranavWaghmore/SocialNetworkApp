@@ -41,6 +41,7 @@ import pw.coding.konnecto.core.presentation.components.StandardTextField
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
+import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.presentation.util.asString
 import pw.coding.konnecto.core.util.Screen
 import pw.coding.konnecto.feature_auth.presentation.util.AuthError
@@ -60,15 +61,18 @@ fun LoginScreen(
     LaunchedEffect( key1=true) {
         viewModel.evenFlow.collectLatest { event ->
             when(event){
-                LoginViewModel.UiEvent.OnLogin -> {
-                    navController.navigate(Screen.MainFeedScreen.route)
-                }
-                is LoginViewModel.UiEvent.SnackBarEvent -> {
+                is UiEvent.SnackBarEvent -> {
                     snackBarHostState.showSnackbar(
                         message = event.snackBarUiText.asString(context),
                         duration = SnackbarDuration.Long
                     )
                 }
+                is UiEvent.Navigate -> {
+                    navController.navigate(event.route){
+                        popUpTo(Screen.LoginScreen.route) { inclusive = true }
+                    }
+                }
+               else -> null
             }
         }
     }

@@ -64,4 +64,6 @@
     <string name="successfully_registered">Registered Successfully</string>
     <string name="account_created_succesfully_you_can_login_now">Account created successfully.You can login Now</string>
     <string name="check_your_internet_connection">Coldn\'t reach to the server. Check your internet connection.</string>
+    <string name="login_successfully">Login Successfully.. Enjoy</string>
+    <string name="coudnt_reach_server">Coudn\'t reach server. try again</string>
 </resources>

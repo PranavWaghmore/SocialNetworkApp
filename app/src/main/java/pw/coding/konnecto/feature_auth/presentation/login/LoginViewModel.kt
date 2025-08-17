@@ -1,18 +1,21 @@
 package pw.coding.konnecto.feature_auth.presentation.login
 
+import pw.coding.konnecto.core.presentation.util.UiEvent
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.state.StandardTextFieldState
 import pw.coding.konnecto.core.util.Resource
+import pw.coding.konnecto.core.util.Screen
 import pw.coding.konnecto.core.util.UiText
 import pw.coding.konnecto.feature_auth.domain.use_case.LoginUseCase
-import pw.coding.konnecto.feature_auth.presentation.login.LoginViewModel.UiEvent.SnackBarEvent
 import javax.inject.Inject
 
 
@@ -69,13 +72,22 @@ class LoginViewModel @Inject constructor(
                     when(loginResult.result){
                         is Resource.Success -> {
                             _eventFlow.emit(
-                                UiEvent.OnLogin
+                                UiEvent.SnackBarEvent(
+                                    snackBarUiText = UiText.StringResource(R.string.login_successfully)
+                                )
+                            )
+                            delay(1000)
+                            _eventFlow.emit(
+                                UiEvent.Navigate(Screen.MainFeedScreen.route)
                             )
                             _loginState.value = LoginState(isLoading = false)
                         }
                         is Resource.Error -> {
                             _eventFlow.emit(
-                                SnackBarEvent(snackBarUiText = loginResult.result.uiText ?: UiText.unknownError())
+                                UiEvent.SnackBarEvent(
+                                    snackBarUiText = loginResult.result.uiText
+                                        ?: UiText.unknownError()
+                                )
                             )
                             _loginState.value = LoginState(isLoading = false)
                         }
@@ -86,9 +98,5 @@ class LoginViewModel @Inject constructor(
                 }
             }
         }
-    }
-    sealed class UiEvent {
-        data class SnackBarEvent(val snackBarUiText: UiText) : UiEvent()
-        object OnLogin: UiEvent()
     }
 }

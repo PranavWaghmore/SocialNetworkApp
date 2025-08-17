@@ -1,10 +1,12 @@
 package pw.coding.konnecto.feature_auth.presentation.register
 
+import pw.coding.konnecto.core.presentation.util.UiEvent
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -12,6 +14,7 @@ import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.state.PasswordTextFieldState
 import pw.coding.konnecto.core.domain.state.StandardTextFieldState
 import pw.coding.konnecto.core.util.Resource
+import pw.coding.konnecto.core.util.Screen
 import pw.coding.konnecto.core.util.UiText
 import pw.coding.konnecto.feature_auth.domain.use_case.RegisterUseCase
 import javax.inject.Inject
@@ -36,8 +39,6 @@ class RegisterViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private val _onRegister = MutableSharedFlow<Unit>(replay = 1)
-    val onRegister = _onRegister.asSharedFlow()
 
     fun onEvent(event: RegisterEvent) {
         when (event) {
@@ -101,12 +102,13 @@ class RegisterViewModel @Inject constructor(
                 is Resource.Success -> {
                     _eventFlow.emit(
                         UiEvent.SnackBarEvent(
-                            snackBarUiText = UiText.StringResource(
-                                R.string.account_created_succesfully_you_can_login_now
-                            )
+                            snackBarUiText = UiText.StringResource(R.string.account_created_succesfully_you_can_login_now)
                         )
                     )
-                    _onRegister.emit(Unit)
+                    delay(1500)
+                    _eventFlow.emit(
+                        UiEvent.Navigate(Screen.LoginScreen.route)
+                    )
                     _registerState.value = RegisterState(isLoading = false)
                     _usernameState.value = StandardTextFieldState()
                     _emailState.value = StandardTextFieldState()
@@ -121,16 +123,10 @@ class RegisterViewModel @Inject constructor(
                     )
                     _registerState.value = RegisterState(isLoading = false)
                 }
-
                 null -> {
                     _registerState.value = RegisterState(isLoading = false)
                 }
             }
         }
-    }
-
-
-    sealed class UiEvent {
-        data class SnackBarEvent(val snackBarUiText: UiText) : UiEvent()
     }
 }
