@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
+    implementation("androidx.paging:paging-compose:3.3.6")
 
     // Compose Additional Dependencies
     implementation(libs.androidx.lifecycle.viewmodel.compose)

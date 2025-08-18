@@ -1,4 +1,4 @@
-package pw.coding.konnecto.feature_auth.data.remote
+package pw.coding.konnecto.feature_auth.data.data_source.remote
 
 import pw.coding.konnecto.core.data.dto.BasicApiResponse
 import pw.coding.konnecto.feature_auth.data.dto.request.CreateAccountRequest

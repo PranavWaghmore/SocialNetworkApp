@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import pw.coding.konnecto.feature_auth.data.remote.AuthApi
+import pw.coding.konnecto.feature_auth.data.data_source.remote.AuthApi
 import pw.coding.konnecto.feature_auth.data.repository.AuthRepositoryImpl
 import pw.coding.konnecto.feature_auth.domain.repository.AuthRepository
 import pw.coding.konnecto.feature_auth.domain.use_case.AuthenticateUseCase
