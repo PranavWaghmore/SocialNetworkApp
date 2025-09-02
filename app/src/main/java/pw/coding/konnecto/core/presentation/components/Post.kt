@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.Post
 import pw.coding.konnecto.core.presentation.ui.theme.ExtraSmallSpace
@@ -67,10 +68,10 @@ fun Post(
                     onClick = onClick
                 )
         ) {
-            Image(
-                painter =painterResource(R.drawable.marvel),
+            AsyncImage(
+                model = post.imageUrl,
                 contentDescription = "Post image",
-                modifier = Modifier
+                modifier = Modifier.fillMaxWidth()
             )
             Column(
                 modifier = Modifier
@@ -91,7 +92,7 @@ fun Post(
                     }
                     Spacer(modifier = Modifier.width(2.dp))
                     ActionRow(
-                        username = "Pranav Waghmore",
+                        username = post.username,
                         modifier = Modifier.fillMaxWidth(),
                         onLikeClick = { isLiked ->
                         },

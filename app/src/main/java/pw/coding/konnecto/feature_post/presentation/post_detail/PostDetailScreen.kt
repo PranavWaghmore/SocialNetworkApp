@@ -77,7 +77,7 @@ fun PostDetailScreen(
                         .background(MaterialTheme.colorScheme.background)
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.marvel),
+                        painter = painterResource(R.drawable.spiderman),
                         contentDescription = "Post image",
                         modifier = Modifier.fillMaxWidth()
                     )

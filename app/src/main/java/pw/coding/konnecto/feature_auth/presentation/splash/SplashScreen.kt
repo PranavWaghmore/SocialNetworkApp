@@ -44,33 +44,20 @@ fun SplashScreen(
     dispatcher: CoroutineDispatcher = Dispatchers.Main,
     onPopBackStack: () -> Unit = {},
     onNavigate: (String) -> Unit = {},
-    navController: NavController,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
-    // Rotation animation for the logo
-    val rotation = remember { Animatable(0f) }
-
-    // Scale animation for the Konnecto text
-    val textScale = remember { Animatable(0.5f) }
-
-    val overshootInterpolator = remember { OvershootInterpolator(2f) }
-
-    LaunchedEffect(Unit) {
+    val scale = remember {
+        Animatable(0f)
+    }
+    val overshootInterpolator = remember {
+        OvershootInterpolator(2f)
+    }
+    LaunchedEffect(key1 = true) {
         withContext(dispatcher) {
-            // Animate logo rotation
-            rotation.animateTo(
-                targetValue = 360f,
+            scale.animateTo(
+                targetValue = 0.5f,
                 animationSpec = tween(
-                    durationMillis = 1000,
-                    easing = FastOutSlowInEasing
-                )
-            )
-
-            // Animate Konnecto text scale
-            textScale.animateTo(
-                targetValue = 1f,
-                animationSpec = tween(
-                    durationMillis = 800,
+                    durationMillis = 500,
                     easing = {
                         overshootInterpolator.getInterpolation(it)
                     }
@@ -82,53 +69,21 @@ fun SplashScreen(
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
                 is UiEvent.Navigate -> {
-                    navController.navigate(event.route) {
-                        // clear Splash from backstack
-                        popUpTo(Screen.SplashScreen.route) { inclusive = true }
-                        launchSingleTop = true
-                    }
+                    onPopBackStack()
+                    onNavigate(event.route)
                 }
                 else -> Unit
             }
         }
     }
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "logo",
-                modifier = Modifier
-                    .size(120.dp)
-                    .rotate(rotation.value)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = stringResource(R.string.konnecto),
-                modifier = Modifier.scale(textScale.value),
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Where everyone can connect",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
-                    textAlign = TextAlign.Center
-                )
-            )
-        }
+        Image(
+            painter = painterResource(id = R.drawable.github_icon_1),
+            contentDescription = "Logo",
+            modifier = Modifier.scale(scale.value)
+        )
     }
 }

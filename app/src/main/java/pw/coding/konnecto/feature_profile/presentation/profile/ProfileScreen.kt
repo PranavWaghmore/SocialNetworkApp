@@ -125,11 +125,15 @@ fun ProfileScreen(
                     Post(
                         username = "Pranav Waghmore",
                         imageUrl = "",
-                        postPictureUrl = "",
                         description = "Not just another post, but a piece of my journey...",
                         likeCount = 17,
-                        commentCount = 7
-                    ),
+                        commentCount = 7,
+                        isLiked = false,
+                        isOwnPost = true,
+                        id = "",
+                        profilePictureUrl = "",
+                        userId = ""
+                        ),
                     onClick = {
                         navController.navigate(Screen.PostDetailScreen.route)
                     }

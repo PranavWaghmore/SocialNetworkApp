@@ -34,16 +34,19 @@ fun Navigation(
     )
     {
         composable(Screen.SplashScreen.route) {
-            SplashScreen(navController = navController)
+            SplashScreen(
+                onPopBackStack = navController::popBackStack,
+                onNavigate = navController::navigate,
+            )
         }
         composable(Screen.LoginScreen.route) {
-            LoginScreen(navController = navController,snackBarHostState)
+            LoginScreen(navController = navController, snackBarHostState)
         }
         composable(Screen.RegisterScreen.route) {
             RegisterScreen(navController = navController, snackBarHostState = snackBarHostState)
         }
         composable(Screen.MainFeedScreen.route) {
-            MainFeedScreen(navController = navController)
+            MainFeedScreen(navController = navController , snackBarHostState)
         }
         composable(Screen.ChatScreen.route) {
             ChatScreen(navController = navController)
@@ -61,22 +64,27 @@ fun Navigation(
             SearchScreen(navController = navController)
         }
         composable(Screen.PostDetailScreen.route) {
-            PostDetailScreen(navController = navController,
+            PostDetailScreen(
+                navController = navController,
                 post = Post(
-                        username = "Pranav Waghmore",
-                        imageUrl = "",
-                        postPictureUrl = "",
-                        description = "Not just another post — it's a reflection of moments, memories, and milestones."+
-                                      "Every image holds a story, and this one is a piece of my journey.",
-                        likeCount = 17,
-                        commentCount = 7
-                    )
+                    username = "Pranav Waghmore",
+                    imageUrl = "",
+                    description = "Not just another post — it's a reflection of moments, memories, and milestones." +
+                            "Every image holds a story, and this one is a piece of my journey.",
+                    likeCount = 17,
+                    commentCount = 7,
+                    userId = "",
+                    profilePictureUrl = "",
+                    isLiked = true,
+                    isOwnPost = true,
+                    id = "",
                 )
+            )
         }
-        composable(Screen.EditProfileScreen.route){
+        composable(Screen.EditProfileScreen.route) {
             EditProfileScreen(navController = navController)
         }
-        composable(Screen.PersonListScreen.route){
+        composable(Screen.PersonListScreen.route) {
             PersonListScreen(navController = navController)
         }
     }
