@@ -47,6 +47,7 @@ airbnbLottieCompose = "6.6.1"
 junitKtx = "1.2.1"
 uiTestJunit4Android = "1.8.3"
 pagingCommon = "3.3.6"
+roomKtx = "2.8.0"
 
 [libraries]
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanistFlowlayout" }
@@ -112,6 +113,7 @@ androidx-credentials-compat = { group = "androidx.credentials", name = "credenti
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
 androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "pagingCommon" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

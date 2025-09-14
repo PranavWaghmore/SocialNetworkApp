@@ -1,9 +1,9 @@
 package pw.coding.konnecto.feature_auth.data.data_source.remote
 
 import pw.coding.konnecto.core.data.dto.BasicApiResponse
-import pw.coding.konnecto.feature_auth.data.dto.request.CreateAccountRequest
-import pw.coding.konnecto.feature_auth.data.dto.request.LoginRequest
-import pw.coding.konnecto.feature_auth.data.dto.response.AuthResponse
+import pw.coding.konnecto.feature_auth.data.data_source.remote.request.CreateAccountRequest
+import pw.coding.konnecto.feature_auth.data.data_source.remote.request.LoginRequest
+import pw.coding.konnecto.feature_auth.data.data_source.remote.response.AuthResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

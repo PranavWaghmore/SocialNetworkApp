@@ -1,5 +1,7 @@
 package pw.coding.konnecto.feature_post.presentation.create_post
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -43,6 +45,11 @@ fun CreatePostScreen(
     viewModel: CreatePostViewModel = hiltViewModel()
 ) {
     val descriptionState = viewModel.descriptionState.value
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ){
+        viewModel.onEvent(CreatePostEvent.PickImage(it))
+    }
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -70,7 +77,7 @@ fun CreatePostScreen(
                         shape = RoundedCornerShape(SmallSpace)
                     )
                     .clickable{
-
+                        galleryLauncher.launch("image/*")
                     },
                 contentAlignment = Alignment.Center
             ) {
@@ -96,14 +103,14 @@ fun CreatePostScreen(
                     else -> ""
                 },
                 onValueChange = {
-                    viewModel.setDescriptionState(
-                        StandardTextFieldState(text = it)
-                    )
+                    viewModel.onEvent(CreatePostEvent.EnterDescription(it))
                 }
             )
             Spacer(modifier = Modifier.height(MediumSpace))
             IconButton(
-                onClick = {},
+                onClick = {
+                    viewModel.onEvent(CreatePostEvent.PostImage)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(

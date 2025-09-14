@@ -6,8 +6,8 @@ import pw.coding.konnecto.core.util.Constants
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
 import pw.coding.konnecto.core.util.UiText
-import pw.coding.konnecto.feature_auth.data.dto.request.CreateAccountRequest
-import pw.coding.konnecto.feature_auth.data.dto.request.LoginRequest
+import pw.coding.konnecto.feature_auth.data.data_source.remote.request.CreateAccountRequest
+import pw.coding.konnecto.feature_auth.data.data_source.remote.request.LoginRequest
 import pw.coding.konnecto.feature_auth.data.data_source.remote.AuthApi
 import pw.coding.konnecto.feature_auth.domain.repository.AuthRepository
 import retrofit2.HttpException
