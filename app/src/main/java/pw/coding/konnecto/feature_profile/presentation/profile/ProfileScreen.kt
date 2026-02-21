@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.Post
 import pw.coding.konnecto.core.domain.models.User
+import pw.coding.konnecto.core.presentation.components.Post
 import pw.coding.konnecto.feature_profile.presentation.profile.components.BannerSection
 import pw.coding.konnecto.feature_profile.presentation.profile.components.ProfileHeaderSection
 import pw.coding.konnecto.core.presentation.ui.theme.ProfilePictureDpSizeLarge
@@ -121,8 +122,8 @@ fun ProfileScreen(
             }
             items(20) {
                 Spacer(modifier = Modifier.height(SmallSpace))
-                pw.coding.konnecto.core.presentation.components.Post(
-                    Post(
+               Post(
+                    post = Post(
                         username = "Pranav Waghmore",
                         imageUrl = "",
                         description = "Not just another post, but a piece of my journey...",

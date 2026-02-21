@@ -40,13 +40,13 @@ fun Navigation(
             )
         }
         composable(Screen.LoginScreen.route) {
-            LoginScreen(navController = navController, snackBarHostState)
+            LoginScreen(navController = navController, snackBarHostState = snackBarHostState)
         }
         composable(Screen.RegisterScreen.route) {
             RegisterScreen(navController = navController, snackBarHostState = snackBarHostState)
         }
         composable(Screen.MainFeedScreen.route) {
-            MainFeedScreen(navController = navController , snackBarHostState)
+            MainFeedScreen(navController = navController , snackBarHostState = snackBarHostState)
         }
         composable(Screen.ChatScreen.route) {
             ChatScreen(navController = navController)

@@ -1,11 +1,8 @@
 package pw.coding.konnecto.feature_post.data.dat_source
 
-import io.ktor.http.content.PartData
 import okhttp3.MultipartBody
-import pw.coding.konnecto.feature_post.data.dat_source.request.CreatePostRequest
 import pw.coding.konnecto.core.data.dto.BasicApiResponse
 import pw.coding.konnecto.core.domain.models.Post
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -28,6 +25,6 @@ interface PostApi {
     ): BasicApiResponse<Unit>
 
     companion object{
-        const val BASE_URL = "http://10.0.2.2:8001/"
+        const val BASE_URL = "http://192.168.1.37:8001/"
     }
 }

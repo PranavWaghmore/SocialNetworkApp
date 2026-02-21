@@ -1,7 +1,6 @@
 package pw.coding.konnecto.feature_auth.domain.use_case
 
 import pw.coding.konnecto.core.domain.util.ValidationUtil
-import pw.coding.konnecto.core.util.SimpleResource
 import pw.coding.konnecto.feature_auth.domain.models.RegisterResult
 import pw.coding.konnecto.feature_auth.domain.repository.AuthRepository
 

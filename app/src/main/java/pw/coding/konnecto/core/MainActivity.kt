@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
             SocialNetworkTheme {
                 Surface(
                     color = MaterialTheme.colorScheme.surface,
-                    modifier = Modifier.Companion.fillMaxSize()
+                    modifier = Modifier.fillMaxSize()
                 )
                 {
                     val navController = rememberNavController()
@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                             Screen.ProfileScreen.route
                         ),
                         snackBarHostState = snackBarState,
-                        modifier = Modifier.Companion.fillMaxSize()
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         Navigation(navController, snackBarState )
                     }

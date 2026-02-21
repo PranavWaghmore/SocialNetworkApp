@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import pw.coding.konnecto.core.domain.models.Activity
-import pw.coding.konnecto.core.presentation.util.ActivityAction
-import pw.coding.konnecto.core.presentation.util.DateFormatUtil
-import pw.coding.konnecto.feature_activity.presentation.components.ActivityItem
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
 import pw.coding.konnecto.core.presentation.ui.theme.DarkGrey
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
+import pw.coding.konnecto.core.presentation.util.ActivityAction
+import pw.coding.konnecto.core.presentation.util.DateFormatUtil
+import pw.coding.konnecto.feature_activity.presentation.components.ActivityItem
 import kotlin.random.Random
 
 @Composable
@@ -33,7 +33,7 @@ fun ActivityScreen(
             navController = navController,
             title = {
                 Text(
-                    text = "Your Activity",
+                    text = "Activity Screen",
                     color = Color.White
                 )
             },

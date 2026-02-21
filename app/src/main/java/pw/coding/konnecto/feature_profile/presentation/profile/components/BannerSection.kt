@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.IconButton
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,8 +47,7 @@ fun BannerSection(
             painter = painterResource(R.drawable.channelart),
             contentDescription = stringResource(R.string.banner),
             contentScale = ContentScale.Crop,
-            modifier = imageModifier
-                .fillMaxSize()
+            modifier = imageModifier.fillMaxSize()
         )
         Box(
             modifier = Modifier
@@ -56,10 +55,8 @@ fun BannerSection(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            Color.Transparent,
-                            Color.Black
-                        ),
-                        startY = constraints.maxHeight - iconSize.toPx() * 2f
+                            Color.Transparent, Color.Black
+                        ), startY = constraints.maxHeight - iconSize.toPx() * 2f
                     )
                 )
         )
@@ -95,8 +92,7 @@ fun BannerSection(
                 .padding(SmallSpace)
         ) {
             IconButton(
-                onClick = onGithubClick,
-                modifier = Modifier.size(iconSize)
+                onClick = onGithubClick, modifier = Modifier.size(iconSize)
             ) {
                 Image(
                     painter = painterResource(R.drawable.github_icon_1),
@@ -105,8 +101,7 @@ fun BannerSection(
                 )
             }
             IconButton(
-                onClick = onLeetCodeClick,
-                modifier = Modifier.size(iconSize)
+                onClick = onLeetCodeClick, modifier = Modifier.size(iconSize)
             ) {
                 Image(
                     painter = painterResource(R.drawable.instagram_2016_5),
@@ -115,8 +110,7 @@ fun BannerSection(
                 )
             }
             IconButton(
-                onClick = onInstagramClick,
-                modifier = Modifier.size(iconSize)
+                onClick = onInstagramClick, modifier = Modifier.size(iconSize)
             ) {
                 Image(
                     painter = painterResource(R.drawable.linkedin_icon_1),
@@ -126,4 +120,6 @@ fun BannerSection(
             }
         }
     }
+
 }
+

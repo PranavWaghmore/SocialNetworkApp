@@ -1,18 +1,17 @@
 package pw.coding.konnecto.feature_auth.presentation.register
 
-import pw.coding.konnecto.core.presentation.util.UiEvent
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.state.PasswordTextFieldState
 import pw.coding.konnecto.core.domain.state.StandardTextFieldState
+import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.Screen
 import pw.coding.konnecto.core.util.UiText
@@ -77,7 +76,7 @@ class RegisterViewModel @Inject constructor(
             _usernameState.value = usernameState.value.copy(error = null)
             _emailState.value = emailState.value.copy(error = null)
             _passwordState.value = passwordState.value.copy(error = null)
-            _registerState.value = RegisterState(isLoading = true)
+            _registerState.value = _registerState.value.copy(isLoading = true)
 
             val registerResult = registerUseCase(
                 email = emailState.value.text,
@@ -89,7 +88,8 @@ class RegisterViewModel @Inject constructor(
             if (registerResult.emailError != null || registerResult.usernameError != null ||
                 registerResult.passwordError != null
             ) {
-                _emailState.value = emailState.value.copy(error = registerResult.emailError)
+                _emailState.value =
+                    emailState.value.copy(error = registerResult.emailError)
                 _usernameState.value =
                     usernameState.value.copy(error = registerResult.usernameError)
                 _passwordState.value =
@@ -102,10 +102,11 @@ class RegisterViewModel @Inject constructor(
                 is Resource.Success -> {
                     _eventFlow.emit(
                         UiEvent.SnackBarEvent(
-                            snackBarUiText = UiText.StringResource(R.string.account_created_succesfully_you_can_login_now)
+                            snackBarUiText = UiText.StringResource(
+                                R.string.account_created_succesfully_you_can_login_now
+                            )
                         )
                     )
-                    delay(1500)
                     _eventFlow.emit(
                         UiEvent.Navigate(Screen.LoginScreen.route)
                     )
@@ -123,7 +124,7 @@ class RegisterViewModel @Inject constructor(
                     )
                     _registerState.value = RegisterState(isLoading = false)
                 }
-                null -> {
+                else -> {
                     _registerState.value = RegisterState(isLoading = false)
                 }
             }

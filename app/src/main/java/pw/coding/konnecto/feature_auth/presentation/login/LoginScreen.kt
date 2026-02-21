@@ -72,7 +72,7 @@ fun LoginScreen(
                         popUpTo(Screen.LoginScreen.route) { inclusive = true }
                     }
                 }
-               else -> null
+                else -> {}
             }
         }
     }

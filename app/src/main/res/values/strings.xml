@@ -67,4 +67,6 @@
     <string name="login_successfully">Login Successfully.. Enjoy</string>
     <string name="coudnt_reach_server">Coudn\'t reach server. try again</string>
     <string name="error_file_not_found">File Not Founnd</string>
+    <string name="post_image">Post Image</string>
+    <string name="Activity_Screen">Activity Screen</string>
 </resources>

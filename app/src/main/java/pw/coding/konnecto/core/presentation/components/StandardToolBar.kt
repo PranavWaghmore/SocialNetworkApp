@@ -39,7 +39,7 @@ fun StandardToolBar(
                         tint = TextWhite
                     )
                 }
-            }else null
+            }
         } ,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = DarkGrey,

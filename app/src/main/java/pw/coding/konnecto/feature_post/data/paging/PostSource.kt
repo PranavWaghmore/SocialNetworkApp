@@ -12,11 +12,10 @@ class PostSource(
     private val api: PostApi
 ) : PagingSource<Int, Post>() {
 
-    private var currentPage = 0
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Post> {
         return try {
-            val nextPage = params.key ?: currentPage
+            val nextPage = params.key ?: 0
             val posts = api.getPostsForFollows(
                 page = nextPage,
                 pageSize = Constants.DEFAULT_PAGE_SIZE
@@ -24,8 +23,8 @@ class PostSource(
             LoadResult.Page(
                 data = posts,
                 prevKey = if (nextPage == 0) null else nextPage - 1,
-                nextKey = if (posts.isEmpty()) null else currentPage + 1
-            ).also { currentPage++ }
+                nextKey = if (posts.isEmpty()) null else nextPage + 1
+            )
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
         } catch (exception: HttpException) {

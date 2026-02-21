@@ -49,9 +49,9 @@ import pw.coding.konnecto.core.util.Constants
 
 @Composable
 fun Post(
+    modifier: Modifier= Modifier,
     post: Post,
     showProfileImage: Boolean =true,
-    modifier: Modifier= Modifier,
     profilePictureDpSize: Dp = 40.dp,
     onClick :() -> Unit ={}
 ) {
@@ -92,7 +92,7 @@ fun Post(
                     }
                     Spacer(modifier = Modifier.width(2.dp))
                     ActionRow(
-                        username = post.username,
+                        username = post.username ?: "Praav",
                         modifier = Modifier.fillMaxWidth(),
                         onLikeClick = { isLiked ->
                         },

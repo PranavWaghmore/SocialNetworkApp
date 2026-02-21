@@ -1,17 +1,16 @@
 package pw.coding.konnecto.feature_auth.presentation.login
 
-import pw.coding.konnecto.core.presentation.util.UiEvent
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.state.StandardTextFieldState
+import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.Screen
 import pw.coding.konnecto.core.util.UiText
@@ -76,7 +75,6 @@ class LoginViewModel @Inject constructor(
                                     snackBarUiText = UiText.StringResource(R.string.login_successfully)
                                 )
                             )
-                            delay(1000)
                             _eventFlow.emit(
                                 UiEvent.Navigate(Screen.MainFeedScreen.route)
                             )

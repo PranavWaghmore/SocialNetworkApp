@@ -77,7 +77,7 @@ fun RegisterScreen(
                         duration = SnackbarDuration.Long
                     )
                 }
-                else -> null
+                else -> {}
             }
         }
     }

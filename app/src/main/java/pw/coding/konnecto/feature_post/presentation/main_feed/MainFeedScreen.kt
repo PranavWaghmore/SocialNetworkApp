@@ -23,6 +23,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
 import pw.coding.konnecto.core.presentation.components.Post
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
+import pw.coding.konnecto.core.util.Screen
 
 @Composable
 fun MainFeedScreen(
@@ -66,14 +67,11 @@ fun MainFeedScreen(
                     val post = posts[i]
                     if (post != null) {
                         Post(
-                            post = post.copy(
-                                username = post.username ?: "Unknown" ,
-                                likeCount = post.likeCount ?: 0 ,
-                                commentCount = post.commentCount ?: 0,
-                                profilePictureUrl = post.profilePictureUrl ?: "",
-                                isLiked = true
-                                ),
-                            showProfileImage = false
+                            post = post,
+                            showProfileImage = false,
+                            onClick = {
+                                navController.navigate(Screen.PostDetailScreen.route)
+                            }
                         )
                     }
                 }

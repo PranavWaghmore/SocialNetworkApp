@@ -4,22 +4,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.PagingState
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import pw.coding.konnecto.core.domain.models.Post
-import pw.coding.konnecto.core.util.Constants
-import pw.coding.konnecto.feature_post.data.paging.PostSource
 import pw.coding.konnecto.feature_post.domain.use_case.PostUseCases
 import javax.inject.Inject
 
-@HiltViewModel()
+@HiltViewModel
 class MainFeedViewModel @Inject constructor(
-    private val postUseCases: PostUseCases
+      postUseCases: PostUseCases
 ): ViewModel(){
 
     private val _state = mutableStateOf(MainFeedState())

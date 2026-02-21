@@ -2,6 +2,7 @@ package pw.coding.konnecto.feature_post.presentation.create_post
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,18 +26,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.components.StandardTextField
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
-import pw.coding.konnecto.core.domain.state.StandardTextFieldState
 import pw.coding.konnecto.feature_post.util.PostDescriptionError
 
 @Composable
@@ -44,6 +47,7 @@ fun CreatePostScreen(
     navController: NavController,
     viewModel: CreatePostViewModel = hiltViewModel()
 ) {
+    val imageUri = viewModel.chosenImageUri.value
     val descriptionState = viewModel.descriptionState.value
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -86,6 +90,18 @@ fun CreatePostScreen(
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onBackground
                 )
+
+                imageUri?.let { uri ->
+                    Image(
+                        painter = rememberImagePainter(
+                            request = ImageRequest.Builder(LocalContext.current)
+                                .data(uri)
+                                .build()
+                        ),
+                        contentDescription = stringResource(R.string.post_image),
+                        modifier = Modifier.matchParentSize()
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(MediumSpace))
             StandardTextField(
