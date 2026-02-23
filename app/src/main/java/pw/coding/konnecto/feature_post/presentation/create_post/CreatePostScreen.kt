@@ -14,45 +14,85 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.PostAdd
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import kotlinx.coroutines.flow.collectLatest
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.components.StandardTextField
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
+import pw.coding.konnecto.core.presentation.util.CropActivityResultContract
+import pw.coding.konnecto.core.presentation.util.UiEvent
+import pw.coding.konnecto.core.presentation.util.asString
 import pw.coding.konnecto.feature_post.util.PostDescriptionError
 
 @Composable
 fun CreatePostScreen(
     navController: NavController,
-    viewModel: CreatePostViewModel = hiltViewModel()
+    viewModel: CreatePostViewModel = hiltViewModel(),
+    snackBarHostState: SnackbarHostState
 ) {
     val imageUri = viewModel.chosenImageUri.value
     val descriptionState = viewModel.descriptionState.value
+
+    val cropActivityLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(16f,9f)
+    ) {
+        viewModel.onEvent(CreatePostEvent.CropImage(it))
+    }
+
+   // Gallery Launcher
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
-    ){
-        viewModel.onEvent(CreatePostEvent.PickImage(it))
+    ) { uri->
+        uri?.let {
+            cropActivityLauncher.launch(it)
+        }
+    }
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when(event){
+                is UiEvent.SnackBarEvent -> {
+                    snackBarHostState.showSnackbar(
+                        message = event.snackBarUiText.asString(context)
+                    )
+                }
+                is UiEvent.NavigateUp -> {
+                    navController.navigateUp()
+                }
+                else -> {}
+            }
+        }
     }
     Column(
         modifier = Modifier.fillMaxSize()
@@ -75,12 +115,13 @@ fun CreatePostScreen(
                 modifier = Modifier
                     .aspectRatio(16f / 9f)
                     .fillMaxWidth()
+                    .clip(RoundedCornerShape(SmallSpace))
                     .border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.onSurface,
                         shape = RoundedCornerShape(SmallSpace)
                     )
-                    .clickable{
+                    .clickable {
                         galleryLauncher.launch("image/*")
                     },
                 contentAlignment = Alignment.Center
@@ -93,10 +134,10 @@ fun CreatePostScreen(
 
                 imageUri?.let { uri ->
                     Image(
-                        painter = rememberImagePainter(
-                            request = ImageRequest.Builder(LocalContext.current)
+                        painter = rememberAsyncImagePainter(
+                            model = ImageRequest.Builder(context)
                                 .data(uri)
-                                .build()
+                                .build(),
                         ),
                         contentDescription = stringResource(R.string.post_image),
                         modifier = Modifier.matchParentSize()
@@ -119,7 +160,9 @@ fun CreatePostScreen(
                     else -> ""
                 },
                 onValueChange = {
-                    viewModel.onEvent(CreatePostEvent.EnterDescription(it))
+                    viewModel.onEvent(
+                        CreatePostEvent.EnterDescription(it)
+                    )
                 }
             )
             Spacer(modifier = Modifier.height(MediumSpace))
@@ -127,6 +170,7 @@ fun CreatePostScreen(
                 onClick = {
                     viewModel.onEvent(CreatePostEvent.PostImage)
                 },
+                enabled = !viewModel.isLoading.value,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
@@ -138,10 +182,21 @@ fun CreatePostScreen(
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
-                Text(
-                    text = stringResource(R.string.post),
-                    fontWeight = FontWeight.Bold,
-                )
+
+                Spacer(modifier = Modifier.width(SmallSpace))
+                if(viewModel.isLoading.value){
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier
+                            .size(20.dp),
+                        strokeWidth = 2.dp
+                    )
+                }else{
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.Send,
+                        contentDescription = null
+                    )
+                }
             }
         }
     }

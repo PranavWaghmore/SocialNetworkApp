@@ -1,19 +1,16 @@
 package pw.coding.konnecto.feature_post.data.repository
 
-import android.content.Context
 import android.net.Uri
+import androidx.core.net.toFile
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.Post
-import pw.coding.konnecto.core.domain.util.getFileName
 import pw.coding.konnecto.core.util.Constants
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
@@ -23,14 +20,10 @@ import pw.coding.konnecto.feature_post.data.dat_source.request.CreatePostRequest
 import pw.coding.konnecto.feature_post.data.paging.PostSource
 import pw.coding.konnecto.feature_post.domain.repository.PostRepository
 import retrofit2.HttpException
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 
 class PostRepositoryImpl(
     private val api: PostApi,
-    private val gson: Gson,
-    private val appContext : Context
+    private val gson: Gson
 ) : PostRepository {
     override val posts: Flow<PagingData<Post>>
         get() = Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)){
@@ -39,21 +32,7 @@ class PostRepositoryImpl(
 
     override suspend fun createPost(description: String, imageUri: Uri): SimpleResource {
         val request = CreatePostRequest(description,imageUri)
-        val file = withContext(Dispatchers.IO){
-            appContext.contentResolver.openFileDescriptor(imageUri,"r") ?.let { fd ->
-                val inputStream = FileInputStream(fd.fileDescriptor)
-                val file = File(
-                    appContext.cacheDir,
-                    appContext.contentResolver.getFileName(imageUri)
-                )
-                val outputStream = FileOutputStream(file)
-                inputStream.copyTo(outputStream)
-                file
-            }
-        }?:
-        return Resource.Error(
-            uiText = UiText.StringResource(R.string.error_file_not_found)
-        )
+        val file = imageUri.toFile()
         return try {
             val response = api.createPost(
                 postData = MultipartBody.Part.createFormData(

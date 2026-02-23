@@ -58,7 +58,8 @@ fun Navigation(
             ProfileScreen(navController = navController)
         }
         composable(Screen.CreatePostScreen.route) {
-            CreatePostScreen(navController = navController)
+            CreatePostScreen(
+                navController = navController, snackBarHostState = snackBarHostState)
         }
         composable(Screen.SearchScreen.route) {
             SearchScreen(navController = navController)

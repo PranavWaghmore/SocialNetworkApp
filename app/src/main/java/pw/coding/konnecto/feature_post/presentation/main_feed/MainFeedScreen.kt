@@ -3,6 +3,7 @@ package pw.coding.konnecto.feature_post.presentation.main_feed
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
@@ -23,6 +24,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
 import pw.coding.konnecto.core.presentation.components.Post
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
+import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.util.Screen
 
 @Composable
@@ -58,7 +60,11 @@ fun MainFeedScreen(
                 }
             }
         )
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = MediumSpace)
+        ) {
             if(state.isLoadingFirstTime){
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }

@@ -6,13 +6,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.state.StandardTextFieldState
-import pw.coding.konnecto.feature_post.domain.use_case.CreatePostUseCase
+import pw.coding.konnecto.core.presentation.util.UiEvent
+import pw.coding.konnecto.core.util.Resource
+import pw.coding.konnecto.core.util.UiText
 import pw.coding.konnecto.feature_post.domain.use_case.PostUseCases
 import javax.inject.Inject
 
-@HiltViewModel()
+@HiltViewModel
 class CreatePostViewModel @Inject constructor(
     private val postUseCases: PostUseCases
 ) : ViewModel(){
@@ -22,6 +27,12 @@ class CreatePostViewModel @Inject constructor(
 
     private val _chosenImageUri = mutableStateOf<Uri?>(null)
     val chosenImageUri : State<Uri?> = _chosenImageUri
+
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
+
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
     fun onEvent(event: CreatePostEvent){
         when(event){
@@ -33,14 +44,32 @@ class CreatePostViewModel @Inject constructor(
             is CreatePostEvent.PickImage -> {
                 _chosenImageUri.value = event.uri
             }
+
+            is CreatePostEvent.CropImage -> {
+                _chosenImageUri.value = event.uri
+            }
+
             is CreatePostEvent.PostImage -> {
                 viewModelScope.launch {
-                    chosenImageUri.value?.let { uri ->
-                        postUseCases.createPostUseCase(
-                            description = descriptionState.value.text,
-                            imageUri = uri
-                        )
+                    _isLoading.value = true
+                    val result = postUseCases.createPostUseCase(
+                        description = descriptionState.value.text,
+                        imageUri = chosenImageUri.value
+                    )
+                    when(result) {
+                        is Resource.Success ->{
+                            _eventFlow.emit(UiEvent.SnackBarEvent(
+                                snackBarUiText = UiText.StringResource(R.string.post_created))
+                            )
+                            _eventFlow.emit(UiEvent.NavigateUp)
+                        }
+                        is Resource.Error -> {
+                            _eventFlow.emit(UiEvent.SnackBarEvent(
+                                snackBarUiText = result.uiText ?: UiText.unknownError())
+                            )
+                        }
                     }
+                    _isLoading.value = false
                 }
             }
         }

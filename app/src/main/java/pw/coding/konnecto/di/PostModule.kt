@@ -1,11 +1,9 @@
 package pw.coding.konnecto.di
 
-import android.content.Context
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import pw.coding.konnecto.feature_post.data.dat_source.PostApi
@@ -36,10 +34,9 @@ object PostModule {
     @Singleton
     fun providePostRepository(
         api: PostApi,
-        gson: Gson,
-        @ApplicationContext  appContext: Context
+        gson: Gson
     ): PostRepository{
-        return PostRepositoryImpl(api,gson,appContext)
+        return PostRepositoryImpl(api, gson)
     }
     @Provides
     @Singleton
