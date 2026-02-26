@@ -72,4 +72,5 @@
     <string name="error_no_image_picked">Error no image picked</string>
     <string name="error_description_blank">Error Description Blank</string>
     <string name="post_created">Post Created</string>
+    <string name="skill">Skill</string>
 </resources>

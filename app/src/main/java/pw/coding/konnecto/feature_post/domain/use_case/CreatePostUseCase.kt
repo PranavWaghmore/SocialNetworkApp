@@ -9,7 +9,7 @@ import pw.coding.konnecto.feature_post.domain.repository.PostRepository
 
 class CreatePostUseCase(
     private val repository: PostRepository
-) {
+){
     suspend operator fun invoke(
         description: String,
         imageUri: Uri?

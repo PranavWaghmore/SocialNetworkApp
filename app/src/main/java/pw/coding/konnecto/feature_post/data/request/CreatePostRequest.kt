@@ -1,4 +1,4 @@
-package pw.coding.konnecto.feature_post.data.dat_source.request
+package pw.coding.konnecto.feature_post.data.request
 
 import android.net.Uri
 

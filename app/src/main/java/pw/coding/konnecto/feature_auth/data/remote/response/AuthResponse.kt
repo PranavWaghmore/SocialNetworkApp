@@ -1,4 +1,4 @@
-package pw.coding.konnecto.feature_auth.data.data_source.remote.response
+package pw.coding.konnecto.feature_auth.data.remote.response
 
 data class AuthResponse(
     val token: String,

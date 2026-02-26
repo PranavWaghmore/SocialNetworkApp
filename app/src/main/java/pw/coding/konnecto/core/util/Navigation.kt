@@ -5,8 +5,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import pw.coding.konnecto.core.domain.models.Post
 import pw.coding.konnecto.feature_activity.presentation.ActivityScreen
 import pw.coding.konnecto.feature_chat.chat.ChatScreen
@@ -54,14 +56,25 @@ fun Navigation(
         composable(Screen.ActivityScreen.route) {
             ActivityScreen(navController = navController)
         }
-        composable(Screen.ProfileScreen.route) {
-            ProfileScreen(navController = navController)
+        composable(Screen.ProfileScreen.route + "?userId={userId}",
+            arguments = listOf(
+                navArgument(name = "userId"){
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) {
+            ProfileScreen(
+                navController = navController, snackBarHostState = snackBarHostState)
         }
         composable(Screen.CreatePostScreen.route) {
             CreatePostScreen(
                 navController = navController, snackBarHostState = snackBarHostState)
         }
-        composable(Screen.SearchScreen.route) {
+        composable(
+            route = Screen.SearchScreen.route
+        ) {
             SearchScreen(navController = navController)
         }
         composable(Screen.PostDetailScreen.route) {

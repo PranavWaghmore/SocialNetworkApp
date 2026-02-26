@@ -46,6 +46,7 @@ fun PersonListScreen(
             items(15) {
                 UserProfileItem(
                     user = User(
+                        userId = "699005470ad3504f1d60cd0a",
                         profilePictureUrl = "",
                         username = "Pranav Waghmore",
                         description = "Passionate Android developer crafting intuitive and" +

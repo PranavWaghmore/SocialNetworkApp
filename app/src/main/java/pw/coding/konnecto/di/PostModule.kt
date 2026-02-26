@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import pw.coding.konnecto.feature_post.data.dat_source.PostApi
+import pw.coding.konnecto.feature_post.data.remote.PostApi
 import pw.coding.konnecto.feature_post.data.repository.PostRepositoryImpl
 import pw.coding.konnecto.feature_post.domain.repository.PostRepository
 import pw.coding.konnecto.feature_post.domain.use_case.CreatePostUseCase

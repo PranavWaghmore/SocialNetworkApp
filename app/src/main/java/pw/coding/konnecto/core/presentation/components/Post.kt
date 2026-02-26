@@ -92,7 +92,7 @@ fun Post(
                     }
                     Spacer(modifier = Modifier.width(2.dp))
                     ActionRow(
-                        username = post.username ?: "Praav",
+                        username = post.username ?: "Pranav",
                         modifier = Modifier.fillMaxWidth(),
                         onLikeClick = { isLiked ->
                         },
@@ -117,7 +117,7 @@ fun Post(
                                 )
                             ){
                                 append(
-                                    LocalContext.current.getString(
+                                    stringResource(
                                         R.string.read_more
                                     )
                                 )

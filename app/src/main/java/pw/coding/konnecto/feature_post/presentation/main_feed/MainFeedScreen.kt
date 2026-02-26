@@ -50,7 +50,9 @@ fun MainFeedScreen(
             navController = navController,
             navActions = {
                 IconButton(
-                    onClick = {}
+                    onClick = {
+                        navController.navigate(Screen.SearchScreen.route)
+                    }
                 ) {
                     Icon(
                         Icons.Outlined.Search,

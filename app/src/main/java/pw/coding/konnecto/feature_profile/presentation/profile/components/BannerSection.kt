@@ -19,14 +19,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.util.toPx
+import pw.coding.konnecto.feature_auth.presentation.login.LoginScreen
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -36,15 +40,20 @@ fun BannerSection(
     iconSize: Dp = 35.dp,
     leftIconModifier: Modifier = Modifier,
     rightIconModifier: Modifier = Modifier,
+    topSkillsUrl: List<String> = emptyList(),
+    showGitHub: Boolean,
+    showInstagram: Boolean,
+    showLinkedIn: Boolean,
     onGithubClick: () -> Unit = {},
     onInstagramClick: () -> Unit = {},
-    onLeetCodeClick: () -> Unit = {}
+    onLeetCodeClick: () -> Unit = {},
+    bannerUrl : String ?= null
 ) {
     BoxWithConstraints(
         modifier = modifier
     ) {
-        Image(
-            painter = painterResource(R.drawable.channelart),
+        AsyncImage(
+            model = bannerUrl,
             contentDescription = stringResource(R.string.banner),
             contentScale = ContentScale.Crop,
             modifier = imageModifier.fillMaxSize()
@@ -67,23 +76,18 @@ fun BannerSection(
                 .padding(SmallSpace),
         ) {
             Spacer(modifier = Modifier.width(SmallSpace))
-            Image(
-                painter = painterResource(R.drawable.c_),
-                contentDescription = "c#",
-                modifier = Modifier.height(iconSize),
-            )
-            Spacer(modifier = Modifier.width(MediumSpace))
-            Image(
-                painter = painterResource(R.drawable.android_logo_2),
-                contentDescription = "java",
-                modifier = Modifier.height(iconSize),
-            )
-            Spacer(modifier = Modifier.width(MediumSpace))
-            Image(
-                painter = painterResource(R.drawable.kotlin_1),
-                contentDescription = "kotlin",
-                modifier = Modifier.height(iconSize),
-            )
+            topSkillsUrl.forEach { topSkillsUrl ->
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(topSkillsUrl)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = stringResource(R.string.skill),
+                    contentScale = ContentScale.Crop,
+                    modifier = imageModifier.fillMaxSize()
+                )
+                Spacer(modifier = Modifier.width(MediumSpace))
+            }
         }
         Row(
             modifier = rightIconModifier
@@ -91,32 +95,38 @@ fun BannerSection(
                 .align(Alignment.BottomEnd)
                 .padding(SmallSpace)
         ) {
-            IconButton(
-                onClick = onGithubClick, modifier = Modifier.size(iconSize)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.github_icon_1),
-                    contentDescription = "github",
-                    modifier = Modifier.size(iconSize)
-                )
+            if(showGitHub){
+                IconButton(
+                    onClick = onGithubClick, modifier = Modifier.size(iconSize)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.github_icon_1),
+                        contentDescription = "github",
+                        modifier = Modifier.size(iconSize)
+                    )
+                }
             }
-            IconButton(
-                onClick = onLeetCodeClick, modifier = Modifier.size(iconSize)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.instagram_2016_5),
-                    contentDescription = "instagram",
-                    modifier = Modifier.size(iconSize)
-                )
+           if(showInstagram){
+               IconButton(
+                   onClick = onLeetCodeClick, modifier = Modifier.size(iconSize)
+               ) {
+                   Image(
+                       painter = painterResource(R.drawable.instagram_2016_5),
+                       contentDescription = "instagram",
+                       modifier = Modifier.size(iconSize)
+                   )
+               }
             }
-            IconButton(
-                onClick = onInstagramClick, modifier = Modifier.size(iconSize)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.linkedin_icon_1),
-                    contentDescription = "linkedin",
-                    modifier = Modifier.size(iconSize)
-                )
+            if(showLinkedIn){
+                IconButton(
+                    onClick = onInstagramClick, modifier = Modifier.size(iconSize)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.linkedin_icon_1),
+                        contentDescription = "linkedin",
+                        modifier = Modifier.size(iconSize)
+                    )
+                }
             }
         }
     }

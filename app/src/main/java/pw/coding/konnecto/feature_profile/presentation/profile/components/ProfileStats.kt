@@ -33,17 +33,17 @@ fun ProfileStats(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         ProfileNumber(
-            number = user.onFollowersCount,
+            number = user.followersCount,
             text = stringResource(R.string.followers)
         )
         Spacer(Modifier.width(LargeSpace))
         ProfileNumber(
-            number = user.onFollowingCount,
+            number = user.followingCount,
             text = stringResource(R.string.following)
         )
         Spacer(Modifier.width(LargeSpace))
         ProfileNumber(
-            number = user.onPostCount,
+            number = user.postCount,
             text = stringResource(R.string.posts)
         )
         if (isOwnProfile) {

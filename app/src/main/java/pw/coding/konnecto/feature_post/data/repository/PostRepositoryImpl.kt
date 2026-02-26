@@ -15,8 +15,8 @@ import pw.coding.konnecto.core.util.Constants
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
 import pw.coding.konnecto.core.util.UiText
-import pw.coding.konnecto.feature_post.data.dat_source.PostApi
-import pw.coding.konnecto.feature_post.data.dat_source.request.CreatePostRequest
+import pw.coding.konnecto.feature_post.data.remote.PostApi
+import pw.coding.konnecto.feature_post.data.request.CreatePostRequest
 import pw.coding.konnecto.feature_post.data.paging.PostSource
 import pw.coding.konnecto.feature_post.domain.repository.PostRepository
 import retrofit2.HttpException

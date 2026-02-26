@@ -1,4 +1,4 @@
-package pw.coding.konnecto.feature_post.data.dat_source
+package pw.coding.konnecto.feature_post.data.remote
 
 import okhttp3.MultipartBody
 import pw.coding.konnecto.core.data.dto.BasicApiResponse
@@ -25,6 +25,6 @@ interface PostApi {
     ): BasicApiResponse<Unit>
 
     companion object{
-        const val BASE_URL = "http://192.168.1.37:8001/"
+        const val BASE_URL = "http://192.168.1.38:8001/"
     }
 }

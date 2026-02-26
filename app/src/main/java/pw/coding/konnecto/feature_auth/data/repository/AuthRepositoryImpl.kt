@@ -6,12 +6,13 @@ import pw.coding.konnecto.core.util.Constants
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
 import pw.coding.konnecto.core.util.UiText
-import pw.coding.konnecto.feature_auth.data.data_source.remote.request.CreateAccountRequest
-import pw.coding.konnecto.feature_auth.data.data_source.remote.request.LoginRequest
-import pw.coding.konnecto.feature_auth.data.data_source.remote.AuthApi
+import pw.coding.konnecto.feature_auth.data.remote.request.CreateAccountRequest
+import pw.coding.konnecto.feature_auth.data.remote.request.LoginRequest
+import pw.coding.konnecto.feature_auth.data.remote.AuthApi
 import pw.coding.konnecto.feature_auth.domain.repository.AuthRepository
 import retrofit2.HttpException
 import java.io.IOException
+import androidx.core.content.edit
 
 class AuthRepositoryImpl(
     private val api: AuthApi,
@@ -50,11 +51,10 @@ class AuthRepositoryImpl(
             val response = api.login(request)
             if(response.successful) {
                 response.data?.let { authResponse ->
-                    println("Overriding token with ${authResponse.token}")
-                    sharedPreferences.edit()
-                        .putString(Constants.KEY_JWT_TOKEN, authResponse.token)
-                        .putString(Constants.KEY_USER_ID, authResponse.userId)
-                        .apply()
+                    sharedPreferences.edit {
+                        putString(Constants.KEY_JWT_TOKEN, authResponse.token)
+                            .putString(Constants.KEY_USER_ID, authResponse.userId)
+                    }
                 }
                 Resource.Success(Unit)
             } else {

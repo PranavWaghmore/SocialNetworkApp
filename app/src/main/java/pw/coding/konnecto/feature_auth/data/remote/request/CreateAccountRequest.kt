@@ -1,4 +1,4 @@
-package pw.coding.konnecto.feature_auth.data.data_source.remote.request
+package pw.coding.konnecto.feature_auth.data.remote.request
 
 data class CreateAccountRequest(
     val email: String,

@@ -27,6 +27,7 @@ import pw.coding.konnecto.core.presentation.ui.theme.IconSizeMedium
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.domain.state.StandardTextFieldState
+import pw.coding.konnecto.core.util.Screen
 
 @Composable
 fun SearchScreen(
@@ -65,6 +66,7 @@ fun SearchScreen(
                 items(10){
                     UserProfileItem(
                         user = User(
+                            userId = "699005470ad3504f1d60cd0a",
                             profilePictureUrl = "",
                             username = "Pranav Waghmore",
                             description = "Passionate Android developer crafting intuitive and" +
@@ -76,6 +78,11 @@ fun SearchScreen(
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.size(IconSizeMedium)
+                            )
+                        },
+                        onItemClick = {
+                            navController.navigate(Screen.ProfileScreen.route
+                                    + "?userId=699005470ad3504f1d60cd0a"
                             )
                         }
                     )

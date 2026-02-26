@@ -84,7 +84,7 @@ class RegisterViewModel @Inject constructor(
                 password = passwordState.value.text
             )
 
-            // ✅ Check for validation errors
+            // Check for validation errors
             if (registerResult.emailError != null || registerResult.usernameError != null ||
                 registerResult.passwordError != null
             ) {

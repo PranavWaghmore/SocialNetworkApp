@@ -6,7 +6,7 @@ import coil.network.HttpException
 import kotlinx.io.IOException
 import pw.coding.konnecto.core.domain.models.Post
 import pw.coding.konnecto.core.util.Constants
-import pw.coding.konnecto.feature_post.data.dat_source.PostApi
+import pw.coding.konnecto.feature_post.data.remote.PostApi
 
 class PostSource(
     private val api: PostApi

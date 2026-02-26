@@ -38,21 +38,8 @@ fun ProfileHeaderSection(
     Column(
         modifier = Modifier
             .fillMaxWidth(),
-           // .offset( y=-(ProfilePictureDpSizeLarge/2f)),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-//        Image(
-//            painter = painterResource(R.drawable.pranav),
-//            contentDescription = stringResource(R.string.profile),
-//            modifier = Modifier
-//                .clip(CircleShape)
-//                .size(ProfilePictureDpSizeLarge)
-//                .border(
-//                    width = 1.dp,
-//                    color = Color.LightGray,
-//                    shape = CircleShape
-//                )
-//        )
         Spacer(modifier = Modifier.height(SmallSpace))
         Row(
             verticalAlignment = Alignment.CenterVertically,

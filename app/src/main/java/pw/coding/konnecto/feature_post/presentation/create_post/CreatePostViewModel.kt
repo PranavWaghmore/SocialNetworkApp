@@ -62,6 +62,7 @@ class CreatePostViewModel @Inject constructor(
                                 snackBarUiText = UiText.StringResource(R.string.post_created))
                             )
                             _eventFlow.emit(UiEvent.NavigateUp)
+
                         }
                         is Resource.Error -> {
                             _eventFlow.emit(UiEvent.SnackBarEvent(

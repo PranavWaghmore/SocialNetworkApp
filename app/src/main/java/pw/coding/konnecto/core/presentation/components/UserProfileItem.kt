@@ -1,6 +1,7 @@
 package pw.coding.konnecto.core.presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,7 +41,11 @@ fun UserProfileItem(
     onActionItemClick: ()-> Unit = {},
     ) {
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .clickable(
+                enabled = true,
+                onClick = onItemClick
+            ),
         elevation = CardDefaults.cardElevation(5.dp),
     ) {
         Row(

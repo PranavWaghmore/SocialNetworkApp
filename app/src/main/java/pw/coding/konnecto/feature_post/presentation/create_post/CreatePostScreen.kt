@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -51,6 +50,7 @@ import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.util.CropActivityResultContract
 import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.presentation.util.asString
+import pw.coding.konnecto.feature_post.util.PostConstants
 import pw.coding.konnecto.feature_post.util.PostDescriptionError
 
 @Composable
@@ -153,6 +153,7 @@ fun CreatePostScreen(
                 singleLine = false,
                 minLines = 3,
                 maxLines = 7,
+                maxLength = PostConstants.MAX_POST_DESCRIPTION_LENGTH,
                 leadingIcon = (Icons.Default.PostAdd),
                 error = when(descriptionState.error){
                      PostDescriptionError.FieldEmpty ->
