@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -31,8 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import kotlinx.coroutines.flow.collectLatest
 import pw.coding.konnecto.R
@@ -50,7 +48,8 @@ import pw.coding.konnecto.feature_profile.presentation.profile.components.Profil
 
 @Composable
 fun ProfileScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     viewModel: ProfileViewModel = hiltViewModel(),
     profilePictureSize: Dp = ProfilePictureDpSizeLarge,
     snackBarHostState: SnackbarHostState
@@ -102,38 +101,24 @@ fun ProfileScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-
                 is UiEvent.SnackBarEvent -> {
                     snackBarHostState.showSnackbar(
                         message = event.snackBarUiText.asString(context)
                     )
                 }
-
                 else -> {}
             }
         }
     }
-
-    when {
-        state.isLoading -> {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .fillMaxSize(),
-                color = Color.Red
-            )
-            Text("IsLoading")
-            return
-        }
-
-        state.profile == null -> {
-            CircularProgressIndicator(
-                modifier = Modifier
+    if(state.isLoading || state.profile == null){
+        Box(
+            modifier = Modifier
                 .fillMaxSize(),
-                color = Color.Red
-            )
-            Text("Profile null")
-            return
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = Color.Red)
         }
+        return
     }
     Box(
         modifier = Modifier
@@ -167,7 +152,7 @@ fun ProfileScreen(
                         isOwnProfile = profile.isOwnProfile,
                         modifier = Modifier.fillMaxSize(),
                         onEditClick = {
-                            navController.navigate(Screen.EditProfileScreen.route)
+                            onNavigate(Screen.EditProfileScreen.route)
                         }
                     )
 
@@ -189,7 +174,7 @@ fun ProfileScreen(
                         userId = ""
                     ),
                     onClick = {
-                        navController.navigate(Screen.PostDetailScreen.route)
+                        onNavigate(Screen.PostDetailScreen.route)
                     }
                 )
             }

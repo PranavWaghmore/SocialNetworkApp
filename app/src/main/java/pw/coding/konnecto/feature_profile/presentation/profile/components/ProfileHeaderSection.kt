@@ -71,13 +71,15 @@ fun ProfileHeaderSection(
             }
         }
         Spacer(modifier = Modifier.height(MediumSpace))
-        Text(
-            text = user.description,
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(MediumSpace)
-        )
-        Spacer(modifier = Modifier.height(MediumSpace))
+        if(user.description.isNotEmpty()){
+            Text(
+                text = user.description,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(MediumSpace)
+            )
+            Spacer(modifier = Modifier.height(MediumSpace))
+        }
         ProfileStats(
             user ,
             isOwnProfile = isOwnProfile

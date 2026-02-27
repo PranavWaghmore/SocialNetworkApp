@@ -16,7 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.User
@@ -31,14 +31,15 @@ import pw.coding.konnecto.core.util.Screen
 
 @Composable
 fun SearchScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     searchViewModel: SearchViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         StandardToolBar(
-            navController = navController,
+           onNavigateUp = onNavigateUp,
             showBackArrow = true,
             title = {
                 Text(
@@ -81,7 +82,7 @@ fun SearchScreen(
                             )
                         },
                         onItemClick = {
-                            navController.navigate(Screen.ProfileScreen.route
+                           onNavigate(Screen.ProfileScreen.route
                                     + "?userId=699005470ad3504f1d60cd0a"
                             )
                         }

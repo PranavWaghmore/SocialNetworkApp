@@ -17,8 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
@@ -29,7 +28,8 @@ import pw.coding.konnecto.core.util.Screen
 
 @Composable
 fun MainFeedScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     snackBarHostState: SnackbarHostState,
     viewModel: MainFeedViewModel = hiltViewModel()
 ) {
@@ -47,11 +47,11 @@ fun MainFeedScreen(
                 )
             },
             showBackArrow = false,
-            navController = navController,
+            onNavigateUp = onNavigateUp,
             navActions = {
                 IconButton(
                     onClick = {
-                        navController.navigate(Screen.SearchScreen.route)
+                        onNavigate(Screen.SearchScreen.route)
                     }
                 ) {
                     Icon(
@@ -78,7 +78,7 @@ fun MainFeedScreen(
                             post = post,
                             showProfileImage = false,
                             onClick = {
-                                navController.navigate(Screen.PostDetailScreen.route)
+                               onNavigate(Screen.PostDetailScreen.route)
                             }
                         )
                     }

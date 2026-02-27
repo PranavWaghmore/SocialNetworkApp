@@ -47,14 +47,15 @@ import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 
 @Composable
 fun PostDetailScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     post: Post
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         StandardToolBar(
-            navController = navController,
+            onNavigateUp = onNavigateUp,
             title = {
                 Text(
                     text = "Post Detail Screen",

@@ -25,13 +25,14 @@ import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 
 @Composable
 fun PersonListScreen(
-    navController: NavController
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         StandardToolBar(
-            navController = navController,
+           onNavigateUp = onNavigateUp,
             showBackArrow = true,
             title = {
                 Text(

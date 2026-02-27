@@ -11,7 +11,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.ui.theme.DarkGrey
 import pw.coding.konnecto.core.presentation.ui.theme.TextWhite
@@ -19,7 +18,7 @@ import pw.coding.konnecto.core.presentation.ui.theme.TextWhite
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StandardToolBar(
-    navController: NavController,
+    onNavigateUp: () -> Unit = {},
     modifier: Modifier = Modifier,
     showBackArrow: Boolean = false,
     title: @Composable () -> Unit = {},
@@ -31,7 +30,7 @@ fun StandardToolBar(
         navigationIcon ={
             if (showBackArrow){
             IconButton(onClick = {
-                    navController.navigateUp()
+                   onNavigateUp()
                 }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,

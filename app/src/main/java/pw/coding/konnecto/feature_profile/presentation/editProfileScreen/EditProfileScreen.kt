@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.state.StandardTextFieldState
@@ -51,7 +51,8 @@ import kotlin.random.Random
 
 @Composable
 fun EditProfileScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     viewModel: EditProfileViewModel = hiltViewModel(),
 ) {
     Column(
@@ -60,7 +61,7 @@ fun EditProfileScreen(
 
     ) {
         StandardToolBar(
-            navController = navController,
+            onNavigateUp = onNavigateUp,
             showBackArrow = true,
             title = {
                 Text("Edit your profile")

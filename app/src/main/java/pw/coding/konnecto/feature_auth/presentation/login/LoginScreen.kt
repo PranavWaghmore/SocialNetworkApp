@@ -33,7 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collectLatest
 import pw.coding.konnecto.R
@@ -46,10 +46,9 @@ import pw.coding.konnecto.core.presentation.util.asString
 import pw.coding.konnecto.core.util.Screen
 import pw.coding.konnecto.feature_auth.presentation.util.AuthError
 
-
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
     snackBarHostState: SnackbarHostState,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
@@ -68,9 +67,7 @@ fun LoginScreen(
                     )
                 }
                 is UiEvent.Navigate -> {
-                    navController.navigate(event.route){
-                        popUpTo(Screen.LoginScreen.route) { inclusive = true }
-                    }
+                    onNavigate(event.route)
                 }
                 else -> {}
             }
@@ -184,7 +181,7 @@ fun LoginScreen(
                 .align(Alignment.BottomCenter)
                 .clickable(
                     onClick = {
-                        navController.navigate(Screen.RegisterScreen.route)
+                        onNavigate(Screen.RegisterScreen.route)
                     }
                 ),
             softWrap = true

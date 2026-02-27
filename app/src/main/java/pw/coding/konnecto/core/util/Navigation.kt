@@ -42,21 +42,35 @@ fun Navigation(
             )
         }
         composable(Screen.LoginScreen.route) {
-            LoginScreen(navController = navController, snackBarHostState = snackBarHostState)
+            LoginScreen(
+                onNavigate = navController::navigate,
+                snackBarHostState = snackBarHostState
+            )
         }
         composable(Screen.RegisterScreen.route) {
             RegisterScreen(navController = navController, snackBarHostState = snackBarHostState)
         }
         composable(Screen.MainFeedScreen.route) {
-            MainFeedScreen(navController = navController , snackBarHostState = snackBarHostState)
+            MainFeedScreen(
+                onNavigate = navController::navigate,
+                onNavigateUp = navController::navigateUp,
+                snackBarHostState = snackBarHostState
+            )
         }
         composable(Screen.ChatScreen.route) {
-            ChatScreen(navController = navController)
+            ChatScreen(
+                onNavigate = navController::navigate,
+                onNavigateUp = navController::navigateUp
+            )
         }
         composable(Screen.ActivityScreen.route) {
-            ActivityScreen(navController = navController)
+            ActivityScreen(
+                onNavigate = navController::navigate,
+                onNavigateUp = navController::navigateUp
+            )
         }
-        composable(Screen.ProfileScreen.route + "?userId={userId}",
+        composable(
+            route = Screen.ProfileScreen.route + "?userId={userId}",
             arguments = listOf(
                 navArgument(name = "userId"){
                     type = NavType.StringType
@@ -66,20 +80,28 @@ fun Navigation(
             )
         ) {
             ProfileScreen(
-                navController = navController, snackBarHostState = snackBarHostState)
+                onNavigate = navController::navigate,
+                onNavigateUp = navController::navigateUp,
+                snackBarHostState = snackBarHostState
+            )
         }
         composable(Screen.CreatePostScreen.route) {
             CreatePostScreen(
-                navController = navController, snackBarHostState = snackBarHostState)
+                onNavigate = navController::navigate,
+                onNavigateUp = navController::navigateUp,
+                snackBarHostState = snackBarHostState
+            )
         }
-        composable(
-            route = Screen.SearchScreen.route
-        ) {
-            SearchScreen(navController = navController)
+        composable(route = Screen.SearchScreen.route) {
+            SearchScreen(
+                onNavigate = navController::navigate,
+                onNavigateUp = navController::navigateUp
+            )
         }
         composable(Screen.PostDetailScreen.route) {
             PostDetailScreen(
-                navController = navController,
+                onNavigate = navController::navigate,
+                onNavigateUp = navController::navigateUp,
                 post = Post(
                     username = "Pranav Waghmore",
                     imageUrl = "",
@@ -96,10 +118,16 @@ fun Navigation(
             )
         }
         composable(Screen.EditProfileScreen.route) {
-            EditProfileScreen(navController = navController)
+            EditProfileScreen(
+                onNavigate = navController::navigate,
+                onNavigateUp = navController::navigateUp
+            )
         }
         composable(Screen.PersonListScreen.route) {
-            PersonListScreen(navController = navController)
+            PersonListScreen(
+                onNavigate = navController::navigate,
+                onNavigateUp = navController::navigateUp
+            )
         }
     }
 }

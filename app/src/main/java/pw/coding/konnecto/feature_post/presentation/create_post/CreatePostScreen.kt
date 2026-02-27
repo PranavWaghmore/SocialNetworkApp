@@ -36,8 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import kotlinx.coroutines.flow.collectLatest
@@ -55,7 +54,8 @@ import pw.coding.konnecto.feature_post.util.PostDescriptionError
 
 @Composable
 fun CreatePostScreen(
-    navController: NavController,
+    onNavigate: (String) -> Unit = {},
+    onNavigateUp: () -> Unit = {},
     viewModel: CreatePostViewModel = hiltViewModel(),
     snackBarHostState: SnackbarHostState
 ) {
@@ -68,7 +68,6 @@ fun CreatePostScreen(
         viewModel.onEvent(CreatePostEvent.CropImage(it))
     }
 
-   // Gallery Launcher
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri->
@@ -88,7 +87,7 @@ fun CreatePostScreen(
                     )
                 }
                 is UiEvent.NavigateUp -> {
-                    navController.navigateUp()
+                    onNavigateUp()
                 }
                 else -> {}
             }
@@ -98,7 +97,7 @@ fun CreatePostScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         StandardToolBar(
-            navController = navController,
+           onNavigateUp =  onNavigateUp,
             showBackArrow = true,
             title = {
                 Text(
