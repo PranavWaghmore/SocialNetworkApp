@@ -1,6 +1,7 @@
 package pw.coding.konnecto.feature_profile.data.response
 
 import pw.coding.konnecto.feature_profile.domain.model.Profile
+import pw.coding.konnecto.feature_profile.domain.model.Skill
 
 data class ProfileResponse(
     val userId: String,
@@ -11,7 +12,7 @@ data class ProfileResponse(
     val postCount: Int,
     val profilePictureUrl: String,
     val bannerUrl: String,
-    val topSkillUrls: List<String>,
+    val topSkills: List<SkillDto>,
     val gitHubUrl: String?,
     val instagramUrl: String?,
     val linkedInUrl: String?,
@@ -28,7 +29,7 @@ data class ProfileResponse(
             postCount = postCount,
             profilePictureUrl = profilePictureUrl,
             bannerUrl = bannerUrl,
-            topSkillUrls = topSkillUrls,
+            topSkills = topSkills.map { it.toSkill() },
             gitHubUrl = gitHubUrl,
             instagramUrl = instagramUrl,
             linkedInUrl = linkedInUrl,

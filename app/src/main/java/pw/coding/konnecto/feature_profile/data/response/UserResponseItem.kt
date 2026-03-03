@@ -1,6 +1,6 @@
 package pw.coding.konnecto.feature_profile.data.response
 
-import pw.coding.konnecto.feature_profile.data.domain.model.UserItem
+import pw.coding.konnecto.feature_profile.domain.model.UserItem
 
 data class UserResponseItem(
     val userId: String,

@@ -101,9 +101,9 @@ fun ProfileScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is UiEvent.SnackBarEvent -> {
+                is UiEvent.ShowSnackbar -> {
                     snackBarHostState.showSnackbar(
-                        message = event.snackBarUiText.asString(context)
+                        message = event.uiText.asString(context)
                     )
                 }
                 else -> {}
@@ -152,7 +152,7 @@ fun ProfileScreen(
                         isOwnProfile = profile.isOwnProfile,
                         modifier = Modifier.fillMaxSize(),
                         onEditClick = {
-                            onNavigate(Screen.EditProfileScreen.route)
+                            onNavigate(Screen.EditProfileScreen.route + "/${profile.userId}")
                         }
                     )
 
@@ -204,11 +204,11 @@ fun ProfileScreen(
                         translationX =
                             (1f - toolbarState.expandedRatio) * -iconHorizontalCentreLength
                     },
-                    showGitHub = profile.gitHubUrl != null,
-                    showInstagram = profile.instagramUrl != null,
-                    showLinkedIn = profile.linkedInUrl != null,
-                    bannerUrl = profile.bannerUrl
-
+                    showGitHub = !profile.gitHubUrl.isNullOrEmpty(),
+                    showInstagram = !profile.instagramUrl.isNullOrEmpty(),
+                    showLinkedIn = !profile.linkedInUrl.isNullOrEmpty(),
+                    bannerUrl = profile.bannerUrl,
+                    topSkills = profile.topSkills
                 )
                 AsyncImage(
                     model = profile.profilePictureUrl,

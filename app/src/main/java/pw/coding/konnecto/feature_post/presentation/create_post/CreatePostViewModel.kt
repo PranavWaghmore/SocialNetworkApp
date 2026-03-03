@@ -58,15 +58,15 @@ class CreatePostViewModel @Inject constructor(
                     )
                     when(result) {
                         is Resource.Success ->{
-                            _eventFlow.emit(UiEvent.SnackBarEvent(
-                                snackBarUiText = UiText.StringResource(R.string.post_created))
+                            _eventFlow.emit(UiEvent.ShowSnackbar(
+                                uiText = UiText.StringResource(R.string.post_created))
                             )
                             _eventFlow.emit(UiEvent.NavigateUp)
 
                         }
                         is Resource.Error -> {
-                            _eventFlow.emit(UiEvent.SnackBarEvent(
-                                snackBarUiText = result.uiText ?: UiText.unknownError())
+                            _eventFlow.emit(UiEvent.ShowSnackbar(
+                                uiText = result.uiText ?: UiText.unknownError())
                             )
                         }
                     }

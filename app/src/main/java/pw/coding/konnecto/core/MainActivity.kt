@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
                         snackBarHostState = snackBarState,
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        Navigation(navController, snackBarState )
+                        Navigation(navController, snackBarHostState = snackBarState )
                     }
                 }
             }

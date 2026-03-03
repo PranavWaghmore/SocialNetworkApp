@@ -30,7 +30,7 @@ import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.util.toPx
-import pw.coding.konnecto.feature_auth.presentation.login.LoginScreen
+import pw.coding.konnecto.feature_profile.domain.model.Skill
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -40,7 +40,7 @@ fun BannerSection(
     iconSize: Dp = 35.dp,
     leftIconModifier: Modifier = Modifier,
     rightIconModifier: Modifier = Modifier,
-    topSkillsUrl: List<String> = emptyList(),
+    topSkills: List<Skill> = emptyList(),
     showGitHub: Boolean,
     showInstagram: Boolean,
     showLinkedIn: Boolean,
@@ -76,12 +76,9 @@ fun BannerSection(
                 .padding(SmallSpace),
         ) {
             Spacer(modifier = Modifier.width(SmallSpace))
-            topSkillsUrl.forEach { topSkillsUrl ->
+            topSkills.forEach { topSkill ->
                 AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(topSkillsUrl)
-                        .crossfade(true)
-                        .build(),
+                    model = topSkill.imageUrl,
                     contentDescription = stringResource(R.string.skill),
                     contentScale = ContentScale.Crop,
                     modifier = imageModifier.fillMaxSize()

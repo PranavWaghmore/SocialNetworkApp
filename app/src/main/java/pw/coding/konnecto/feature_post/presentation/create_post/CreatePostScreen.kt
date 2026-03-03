@@ -81,9 +81,9 @@ fun CreatePostScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when(event){
-                is UiEvent.SnackBarEvent -> {
+                is UiEvent.ShowSnackbar -> {
                     snackBarHostState.showSnackbar(
-                        message = event.snackBarUiText.asString(context)
+                        message = event.uiText.asString(context)
                     )
                 }
                 is UiEvent.NavigateUp -> {

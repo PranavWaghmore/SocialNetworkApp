@@ -1,7 +1,9 @@
 package pw.coding.konnecto.feature_profile.presentation.editProfileScreen
 
-import androidx.compose.foundation.Image
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,15 +23,17 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,24 +41,70 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import kotlinx.coroutines.flow.collectLatest
 import pw.coding.konnecto.R
-import pw.coding.konnecto.core.domain.state.StandardTextFieldState
 import pw.coding.konnecto.core.presentation.components.StandardTextField
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.ProfilePictureDpSizeLarge
+import pw.coding.konnecto.core.presentation.util.CropActivityResultContract
+import pw.coding.konnecto.core.presentation.util.UiEvent
+import pw.coding.konnecto.core.presentation.util.asString
 import pw.coding.konnecto.feature_profile.presentation.editProfileScreen.components.Chip
 import pw.coding.konnecto.feature_profile.presentation.util.EditProfileError
-import kotlin.random.Random
 
 @Composable
 fun EditProfileScreen(
+    snackBarHostState: SnackbarHostState,
     onNavigate: (String) -> Unit = {},
     onNavigateUp: () -> Unit = {},
     viewModel: EditProfileViewModel = hiltViewModel(),
 ) {
+
+    val profileState = viewModel.profileState.value
+
+    val profilePictureCropActivityLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(1f, 1f)
+    ) {
+        viewModel.onEvent(EditProfileEvent.CropProfileImage(uri = it))
+    }
+    val profilePictureGalleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            profilePictureCropActivityLauncher.launch(it)
+        }
+    }
+
+    val bannerImageCropActivityLauncher = rememberLauncherForActivityResult(
+        contract = CropActivityResultContract(5f, 2f)
+    ) {
+        viewModel.onEvent(EditProfileEvent.CropBannerImage(uri = it))
+    }
+    val bannerImageGalleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            bannerImageCropActivityLauncher.launch(it)
+        }
+    }
+
+    val context = LocalContext.current
+    LaunchedEffect(true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is UiEvent.ShowSnackbar -> {
+                    snackBarHostState.showSnackbar(
+                        message = event.uiText.asString(context)
+                    )
+                }
+
+                else -> {}
+            }
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,11 +114,13 @@ fun EditProfileScreen(
             onNavigateUp = onNavigateUp,
             showBackArrow = true,
             title = {
-                Text("Edit your profile")
+                Text(stringResource(R.string.edit_your_profile))
             },
             navActions = {
                 IconButton(
-                    onClick = {}
+                    onClick = {
+                        viewModel.onEvent(EditProfileEvent.UpdateProfile)
+                    }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Check,
@@ -82,11 +134,21 @@ fun EditProfileScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
+
             EditBannerSection(
-                bannerImage = painterResource(R.drawable.channelart),
-                profileImage = painterResource((R.drawable.pranav)),
-                profilePictureSize = ProfilePictureDpSizeLarge
+                bannerImageUrl = viewModel.bannerUri.value?.toString()
+                    ?: (profileState.profile?.bannerUrl ?: ""),
+                profileImageUrl = viewModel.profilePictureUri.value?.toString()
+                    ?: (profileState.profile?.profilePictureUrl ?: ""),
+                profilePictureSize = ProfilePictureDpSizeLarge,
+                onBannerClick = {
+                    bannerImageGalleryLauncher.launch("image/*")
+                },
+                onProfilePictureClick = {
+                    profilePictureGalleryLauncher.launch("image/*")
+                }
             )
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -99,14 +161,14 @@ fun EditProfileScreen(
                         .fillMaxWidth(),
                     text = viewModel.usernameState.value.text,
                     hint = stringResource(id = R.string.username),
-                    error = when(viewModel.usernameState.value.error){
+                    error = when (viewModel.usernameState.value.error) {
                         EditProfileError.FieldEmpty -> stringResource(R.string.this_field_cant_be_empty)
                         else -> ""
                     },
                     leadingIcon = Icons.Default.Person,
                     onValueChange = {
-                        viewModel.setUsernameState(
-                            StandardTextFieldState(text = it)
+                        viewModel.onEvent(
+                            EditProfileEvent.EnteredUsername(it)
                         )
                     }
                 )
@@ -116,14 +178,14 @@ fun EditProfileScreen(
                         .fillMaxWidth(),
                     text = viewModel.githubTextFieldTextState.value.text,
                     hint = stringResource(id = R.string.github_profile_url),
-                    error = when(viewModel.githubTextFieldTextState.value.error){
+                    error = when (viewModel.githubTextFieldTextState.value.error) {
                         EditProfileError.FieldEmpty -> stringResource(R.string.this_field_cant_be_empty)
                         else -> ""
                     },
                     leadingIcon = ImageVector.vectorResource(R.drawable.github_icon_1),
                     onValueChange = {
-                        viewModel.setGithubTextFieldState(
-                            StandardTextFieldState(text = it)
+                        viewModel.onEvent(
+                            EditProfileEvent.EnteredGitHubUrl(it)
                         )
                     }
                 )
@@ -133,14 +195,14 @@ fun EditProfileScreen(
                         .fillMaxWidth(),
                     text = viewModel.instagramTextFieldState.value.text,
                     hint = stringResource(id = R.string.instagram_profile_url),
-                    error = when(viewModel.instagramTextFieldState.value.error){
+                    error = when (viewModel.instagramTextFieldState.value.error) {
                         EditProfileError.FieldEmpty -> stringResource(R.string.this_field_cant_be_empty)
                         else -> ""
                     },
                     leadingIcon = ImageVector.vectorResource(R.drawable.instagram_2016_5),
                     onValueChange = {
-                        viewModel.steInstagramTextFieldState(
-                            StandardTextFieldState(text = it)
+                        viewModel.onEvent(
+                            EditProfileEvent.EnteredInstagramUrl(it)
                         )
                     }
                 )
@@ -148,16 +210,16 @@ fun EditProfileScreen(
                 StandardTextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    text = viewModel.LinkedinTextFieldState.value.text,
+                    text = viewModel.linkedinTextFieldState.value.text,
                     hint = stringResource(id = R.string.linkedin_profile_url),
-                    error = when(viewModel.LinkedinTextFieldState.value.error){
+                    error = when (viewModel.linkedinTextFieldState.value.error) {
                         EditProfileError.FieldEmpty -> stringResource(R.string.this_field_cant_be_empty)
                         else -> ""
                     },
                     leadingIcon = ImageVector.vectorResource(R.drawable.linkedin_icon_1),
                     onValueChange = {
-                        viewModel.setLeetcodeTExtFieldState(
-                            StandardTextFieldState(text = it)
+                        viewModel.onEvent(
+                            EditProfileEvent.EnteredLinkedInUrl(it)
                         )
                     }
                 )
@@ -170,14 +232,14 @@ fun EditProfileScreen(
                     singleLine = false,
                     minLines = 3,
                     maxLines = 3,
-                    error = when(viewModel.bioState.value.error){
+                    error = when (viewModel.bioState.value.error) {
                         EditProfileError.FieldEmpty -> stringResource(R.string.this_field_cant_be_empty)
                         else -> ""
                     },
                     leadingIcon = ImageVector.vectorResource(R.drawable.bio_description),
                     onValueChange = {
-                        viewModel.setBioState(
-                            StandardTextFieldState(text = it)
+                        viewModel.onEvent(
+                            EditProfileEvent.EnteredBio(it)
                         )
                     }
                 )
@@ -204,16 +266,10 @@ fun EditProfileScreen(
                         verticalArrangement = Arrangement.spacedBy(18.dp),
                         maxItemsInEachRow = 3
                     ) {
-                        listOf(
-                            "Kotlin",
-                            "Java",
-                            "Python",
-                            "Javascript",
-                            "Dart"
-                        ).forEach {
+                        viewModel.skills.value.skills.forEach {
                             Chip(
-                                text = it,
-                                selected = Random.nextInt(2) == 0
+                                text = it.name,
+                                selected = it in viewModel.skills.value.selectedSkills
                             )
                         }
                     }
@@ -226,8 +282,8 @@ fun EditProfileScreen(
 
 @Composable
 fun EditBannerSection(
-    bannerImage: Painter,
-    profileImage: Painter,
+    bannerImageUrl: String,
+    profileImageUrl: String,
     profilePictureSize: Dp = ProfilePictureDpSizeLarge,
     onBannerClick: () -> Unit = {},
     onProfilePictureClick: () -> Unit = {}
@@ -239,13 +295,17 @@ fun EditBannerSection(
             .fillMaxWidth()
             .height(bannerHeight + profilePictureSize / 2f),
     ) {
-        Image(
-            painter = bannerImage,
-            contentDescription = null,
-            modifier = Modifier.fillMaxWidth()
+        AsyncImage(
+            model = bannerImageUrl,
+            contentDescription = stringResource(R.string.banner),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(bannerHeight)
+                .clickable { onBannerClick() }
         )
-        Image(
-            painter = profileImage,
+        AsyncImage(
+            model = profileImageUrl,
             contentDescription = null,
             modifier = Modifier
                 .size(profilePictureSize)
@@ -256,6 +316,7 @@ fun EditBannerSection(
                     shape = CircleShape
                 )
                 .align(Alignment.BottomCenter)
+                .clickable { onProfilePictureClick() }
         )
     }
 }

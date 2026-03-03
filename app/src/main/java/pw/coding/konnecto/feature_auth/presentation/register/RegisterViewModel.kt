@@ -101,8 +101,8 @@ class RegisterViewModel @Inject constructor(
             when (registerResult.result) {
                 is Resource.Success -> {
                     _eventFlow.emit(
-                        UiEvent.SnackBarEvent(
-                            snackBarUiText = UiText.StringResource(
+                        UiEvent.ShowSnackbar(
+                            uiText = UiText.StringResource(
                                 R.string.account_created_succesfully_you_can_login_now
                             )
                         )
@@ -118,8 +118,8 @@ class RegisterViewModel @Inject constructor(
 
                 is Resource.Error -> {
                     _eventFlow.emit(
-                        UiEvent.SnackBarEvent(
-                            snackBarUiText = registerResult.result.uiText ?: UiText.unknownError()
+                        UiEvent.ShowSnackbar(
+                            uiText = registerResult.result.uiText ?: UiText.unknownError()
                         )
                     )
                     _registerState.value = RegisterState(isLoading = false)

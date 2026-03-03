@@ -1,4 +1,4 @@
-package pw.coding.konnecto.feature_profile.data.domain.model
+package pw.coding.konnecto.feature_profile.domain.model
 
 data class UserItem(
     val userId: String,

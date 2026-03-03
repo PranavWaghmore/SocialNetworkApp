@@ -36,8 +36,8 @@ class PostRepositoryImpl(
         return try {
             val response = api.createPost(
                 postData = MultipartBody.Part.createFormData(
-                    "post_data",
-                    gson.toJson(request)
+                    name = "post_data",
+                    value = gson.toJson(request)
                 ),
                 postImage = MultipartBody.Part.createFormData(
                     name = "post_image",

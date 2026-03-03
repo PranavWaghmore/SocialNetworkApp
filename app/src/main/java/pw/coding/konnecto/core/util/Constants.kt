@@ -16,4 +16,7 @@ object Constants {
     const val SHARED_PREF_NAME = "shared_pref"
 
     const val RECONNECT_INTERVAL = 5000L
+
+    const val BASE_URL = " http://192.168.1.39:8001/default"
+
 }

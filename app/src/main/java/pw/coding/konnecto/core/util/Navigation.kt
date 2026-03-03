@@ -117,10 +117,18 @@ fun Navigation(
                 )
             )
         }
-        composable(Screen.EditProfileScreen.route) {
+        composable(
+            Screen.EditProfileScreen.route + "/{userId}",
+            arguments = listOf(
+                navArgument(name = "userId"){
+                    type = NavType.StringType
+                }
+            )
+        ) {
             EditProfileScreen(
                 onNavigate = navController::navigate,
-                onNavigateUp = navController::navigateUp
+                onNavigateUp = navController::navigateUp,
+                snackBarHostState = snackBarHostState
             )
         }
         composable(Screen.PersonListScreen.route) {

@@ -17,16 +17,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavController
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.User
+import pw.coding.konnecto.core.domain.state.StandardTextFieldState
 import pw.coding.konnecto.core.presentation.components.StandardTextField
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
 import pw.coding.konnecto.core.presentation.components.UserProfileItem
 import pw.coding.konnecto.core.presentation.ui.theme.IconSizeMedium
 import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
-import pw.coding.konnecto.core.domain.state.StandardTextFieldState
 import pw.coding.konnecto.core.util.Screen
 
 @Composable
@@ -82,7 +81,8 @@ fun SearchScreen(
                             )
                         },
                         onItemClick = {
-                           onNavigate(Screen.ProfileScreen.route
+                           onNavigate(
+                               Screen.ProfileScreen.route
                                     + "?userId=699005470ad3504f1d60cd0a"
                             )
                         }

@@ -71,9 +71,9 @@ fun RegisterScreen(
                         popUpTo(Screen.RegisterScreen.route) { inclusive = true }
                     }
                 }
-                is UiEvent.SnackBarEvent -> {
+                is UiEvent.ShowSnackbar -> {
                     snackBarHostState.showSnackbar(
-                        message = event.snackBarUiText.asString(context),
+                        message = event.uiText.asString(context),
                         duration = SnackbarDuration.Long
                     )
                 }

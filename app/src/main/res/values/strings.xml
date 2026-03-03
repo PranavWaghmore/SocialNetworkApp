@@ -73,4 +73,9 @@
     <string name="error_description_blank">Error Description Blank</string>
     <string name="post_created">Post Created</string>
     <string name="skill">Skill</string>
+    <string name="edit_your_profile">Edit your profile</string>
+    <string name="couldnt_load_the_profile">Couldn\'t load the Profile</string>
+    <string name="couldnt_load_the_skills">Couldn\'t load the skills</string>
+    <string name="error_username_field_empty">Username must not be empty</string>
+    <string name="profile_updated_successfully">Profile updated successfully</string>
 </resources>

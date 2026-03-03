@@ -1,15 +1,20 @@
 package pw.coding.konnecto.di
 
+import android.content.Context
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import pw.coding.konnecto.feature_profile.data.remote.ProfileApi
 import pw.coding.konnecto.feature_profile.data.repository.ProfileRepositoryImpl
 import pw.coding.konnecto.feature_profile.domain.repository.ProfileRepository
 import pw.coding.konnecto.feature_profile.domain.use_case.GetProfileUseCase
+import pw.coding.konnecto.feature_profile.domain.use_case.GetSkillsUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.ProfileUseCases
+import pw.coding.konnecto.feature_profile.domain.use_case.UpdateProfileUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -31,15 +36,21 @@ object ProfileModule {
 
     @Provides
     @Singleton
-    fun provideProfileRepository(api: ProfileApi): ProfileRepository {
-        return ProfileRepositoryImpl(api)
+    fun provideProfileRepository(
+        api: ProfileApi,
+        gson: Gson,
+        @ApplicationContext context: Context
+    ): ProfileRepository {
+        return ProfileRepositoryImpl(api,gson,context)
     }
 
     @Provides
     @Singleton
     fun provideProfileUseCases(repository: ProfileRepository): ProfileUseCases{
         return ProfileUseCases(
-            getProfileUseCase = GetProfileUseCase(repository)
+            getProfile = GetProfileUseCase(repository),
+            getSkills = GetSkillsUseCase(repository),
+            updateProfile = UpdateProfileUseCase(repository)
         )
     }
 }

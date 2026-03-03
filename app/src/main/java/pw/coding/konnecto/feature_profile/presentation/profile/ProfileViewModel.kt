@@ -47,7 +47,7 @@ import javax.inject.Inject
     fun getProfile(userId: String){
         viewModelScope.launch {
             _state.value = state.value.copy(isLoading = true)
-            when(val result = profileUseCases.getProfileUseCase(userId)){
+            when(val result = profileUseCases.getProfile(userId)){
                 is Resource.Success -> {
                     _state.value = state.value.copy(
                         isLoading = false,
@@ -57,8 +57,8 @@ import javax.inject.Inject
                 is Resource.Error -> {
                     _state.value= state.value.copy(isLoading = false)
                     _eventFlow.emit(
-                        UiEvent.SnackBarEvent(
-                            snackBarUiText = result.uiText ?: UiText.unknownError()
+                        UiEvent.ShowSnackbar(
+                            uiText = result.uiText ?: UiText.unknownError()
                         )
                     )
                 }

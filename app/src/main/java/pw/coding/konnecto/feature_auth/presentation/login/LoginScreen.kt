@@ -34,7 +34,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collectLatest
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.components.StandardTextField
@@ -60,9 +59,9 @@ fun LoginScreen(
     LaunchedEffect( key1=true) {
         viewModel.evenFlow.collectLatest { event ->
             when(event){
-                is UiEvent.SnackBarEvent -> {
+                is UiEvent.ShowSnackbar -> {
                     snackBarHostState.showSnackbar(
-                        message = event.snackBarUiText.asString(context),
+                        message = event.uiText.asString(context),
                         duration = SnackbarDuration.Long
                     )
                 }
