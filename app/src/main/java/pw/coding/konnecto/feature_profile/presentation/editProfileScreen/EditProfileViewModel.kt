@@ -3,8 +3,6 @@ package pw.coding.konnecto.feature_profile.presentation.editProfileScreen
 import android.net.Uri
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.geometry.Rect
-import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -97,7 +95,6 @@ class EditProfileViewModel @Inject constructor(
 
 
     private fun getProfile(userId: String) {
-        println("userId $userId")
         viewModelScope.launch {
             _profileState.value = profileState.value.copy(
                 isLoading = true
@@ -140,7 +137,6 @@ class EditProfileViewModel @Inject constructor(
                 }
 
                 is Resource.Error -> {
-                    println("Error${result.data}")
                     _eventFlow.emit(
                         UiEvent.ShowSnackbar(uiText = result.uiText ?: UiText.unknownError())
                     )
@@ -176,6 +172,7 @@ class EditProfileViewModel @Inject constructor(
                             uiText = UiText.StringResource(R.string.profile_updated_successfully)
                         )
                     )
+                    _eventFlow.emit(UiEvent.NavigateUp)
                 }
 
                 is Resource.Error -> {
@@ -230,11 +227,38 @@ class EditProfileViewModel @Inject constructor(
             }
 
             is EditProfileEvent.SetSkillSelected -> {
+                val result = profileUseCases.setSkillSelected(
+                    selectedSkills = skills.value.selectedSkills,
+                    skillToToggle = event.skill
+                )
+                viewModelScope.launch {
+                    when (result) {
+                        is Resource.Success -> {
+                            result.data?.let { skills ->
+                                _skills.value = _skills.value.copy(
+                                    selectedSkills = skills
+                                )
+                            } ?: _eventFlow.emit(
+                                UiEvent.ShowSnackbar(
+                                    uiText = UiText.StringResource(R.string.error_skill_not_found)
+                                )
+                            )
+                        }
 
+                        is Resource.Error -> {
+                            _eventFlow.emit(
+                                UiEvent.ShowSnackbar(
+                                    uiText = result.uiText ?: UiText.unknownError()
+                                )
+                            )
+                        }
+                    }
+                }
             }
 
             is EditProfileEvent.UpdateProfile -> {
                 updateProfile()
+
             }
         }
     }

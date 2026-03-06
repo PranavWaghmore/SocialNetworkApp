@@ -1,6 +1,7 @@
 package pw.coding.konnecto.feature_profile.presentation.editProfileScreen
 
 import android.net.Uri
+import pw.coding.konnecto.feature_profile.domain.model.Skill
 
 
 sealed class EditProfileEvent {
@@ -13,7 +14,7 @@ sealed class EditProfileEvent {
     data class CropProfileImage(val uri: Uri?): EditProfileEvent()
     data class CropBannerImage(val uri: Uri?): EditProfileEvent()
 
-    data class SetSkillSelected(val skill: String,  val selected: Boolean): EditProfileEvent()
+    data class SetSkillSelected(val skill: Skill): EditProfileEvent()
 
     object UpdateProfile: EditProfileEvent()
 

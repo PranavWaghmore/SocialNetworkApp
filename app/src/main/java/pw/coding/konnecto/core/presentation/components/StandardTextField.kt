@@ -36,7 +36,7 @@ fun StandardTextField(
     modifier: Modifier = Modifier,
     text: String = "",
     hint: String = "",
-    maxLength: Int = 40,
+    maxLength: Int = 400,
     minLines: Int = 1,
     maxLines: Int = 1,
     style: TextStyle = TextStyle(color = Color.Black),

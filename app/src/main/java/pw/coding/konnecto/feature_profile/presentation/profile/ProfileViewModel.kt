@@ -28,11 +28,6 @@ import javax.inject.Inject
     private val _state = mutableStateOf(ProfileState())
     val state: State<ProfileState> = _state
 
-    init {
-        savedStateHandle.get<String>("userId")?.let { userId ->
-            getProfile(userId)
-        }
-    }
     fun setExpandedRatio( ratio: Float){
         _toolbarState.value = _toolbarState.value.copy(expandedRatio = ratio)
     }
@@ -44,10 +39,10 @@ import javax.inject.Inject
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun getProfile(userId: String){
+    fun getProfile(userId: String?){
         viewModelScope.launch {
             _state.value = state.value.copy(isLoading = true)
-            when(val result = profileUseCases.getProfile(userId)){
+            when(val result = profileUseCases.getProfile(userId ?: "699005470ad3504f1d60cd0a")){
                 is Resource.Success -> {
                     _state.value = state.value.copy(
                         isLoading = false,

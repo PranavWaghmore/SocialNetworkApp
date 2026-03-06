@@ -100,7 +100,9 @@ fun EditProfileScreen(
                         message = event.uiText.asString(context)
                     )
                 }
-
+                is UiEvent.NavigateUp ->{
+                    onNavigateUp()
+                }
                 else -> {}
             }
         }
@@ -266,10 +268,17 @@ fun EditProfileScreen(
                         verticalArrangement = Arrangement.spacedBy(18.dp),
                         maxItemsInEachRow = 3
                     ) {
-                        viewModel.skills.value.skills.forEach {
+                        viewModel.skills.value.skills.forEach { skill ->
                             Chip(
-                                text = it.name,
-                                selected = it in viewModel.skills.value.selectedSkills
+                                text = skill.name,
+                                selected = viewModel.skills.value.selectedSkills.any {
+                                    it.name == skill.name
+                                },
+                                onChipClick = {
+                                    viewModel.onEvent(
+                                        EditProfileEvent.SetSkillSelected(skill)
+                                    )
+                                }
                             )
                         }
                     }

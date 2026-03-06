@@ -1,6 +1,7 @@
 package pw.coding.konnecto.feature_profile.presentation.profile
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +12,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -48,6 +51,7 @@ import pw.coding.konnecto.feature_profile.presentation.profile.components.Profil
 
 @Composable
 fun ProfileScreen(
+    userId: String ?= null,
     onNavigate: (String) -> Unit = {},
     onNavigateUp: () -> Unit = {},
     viewModel: ProfileViewModel = hiltViewModel(),
@@ -99,6 +103,7 @@ fun ProfileScreen(
     val state = viewModel.state.value
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
+        viewModel.getProfile(userId)
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is UiEvent.ShowSnackbar -> {
@@ -116,7 +121,20 @@ fun ProfileScreen(
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(color = Color.Red)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .align(Alignment.Center),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator(color = Color.Red)
+                Text(
+                    text = "Loading...",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.Red
+                )
+            }
         }
         return
     }

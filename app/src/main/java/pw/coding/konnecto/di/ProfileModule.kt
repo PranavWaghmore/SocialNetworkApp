@@ -14,6 +14,7 @@ import pw.coding.konnecto.feature_profile.domain.repository.ProfileRepository
 import pw.coding.konnecto.feature_profile.domain.use_case.GetProfileUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.GetSkillsUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.ProfileUseCases
+import pw.coding.konnecto.feature_profile.domain.use_case.SetSkillSelectedUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.UpdateProfileUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -50,7 +51,8 @@ object ProfileModule {
         return ProfileUseCases(
             getProfile = GetProfileUseCase(repository),
             getSkills = GetSkillsUseCase(repository),
-            updateProfile = UpdateProfileUseCase(repository)
+            updateProfile = UpdateProfileUseCase(repository),
+            setSkillSelected = SetSkillSelectedUseCase()
         )
     }
 }
