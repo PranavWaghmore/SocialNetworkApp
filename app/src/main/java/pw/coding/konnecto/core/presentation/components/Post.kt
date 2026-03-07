@@ -1,6 +1,5 @@
 package pw.coding.konnecto.core.presentation.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Comment
 import androidx.compose.material.icons.filled.Favorite
@@ -26,8 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -82,9 +80,9 @@ fun Post(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if(showProfileImage){
-                        Image(
-                            painterResource(R.drawable.pranav),
-                            contentDescription = "Profile picture",
+                        AsyncImage(
+                            model = post.profilePictureUrl,
+                            contentDescription = stringResource(R.string.profile_picture),
                             modifier = Modifier
                                 .size(profilePictureDpSize)
                                 .clip(CircleShape)
@@ -92,7 +90,7 @@ fun Post(
                     }
                     Spacer(modifier = Modifier.width(2.dp))
                     ActionRow(
-                        username = post.username ?: "Pranav",
+                        username = post.username,
                         modifier = Modifier.fillMaxWidth(),
                         onLikeClick = { isLiked ->
                         },

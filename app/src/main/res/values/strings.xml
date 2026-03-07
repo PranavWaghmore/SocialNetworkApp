@@ -80,4 +80,6 @@
     <string name="profile_updated_successfully">Profile updated successfully</string>
     <string name="cannot_select_more_than_max_selected">Cannot select more than 3.Please unselect first</string>
     <string name="error_skill_not_found">Invalid Skill</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="main_feed">Main Feed</string>
 </resources>

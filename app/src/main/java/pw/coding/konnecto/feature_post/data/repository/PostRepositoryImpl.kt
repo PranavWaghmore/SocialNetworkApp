@@ -15,9 +15,9 @@ import pw.coding.konnecto.core.util.Constants
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
 import pw.coding.konnecto.core.util.UiText
-import pw.coding.konnecto.feature_post.data.remote.PostApi
+import pw.coding.konnecto.core.data.remote.PostApi
 import pw.coding.konnecto.feature_post.data.request.CreatePostRequest
-import pw.coding.konnecto.feature_post.data.paging.PostSource
+import pw.coding.konnecto.core.data.paging.PostSource
 import pw.coding.konnecto.feature_post.domain.repository.PostRepository
 import retrofit2.HttpException
 
@@ -27,7 +27,7 @@ class PostRepositoryImpl(
 ) : PostRepository {
     override val posts: Flow<PagingData<Post>>
         get() = Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)){
-            PostSource(api)
+            PostSource(api, source = PostSource.Source.Follows)
         }.flow
 
     override suspend fun createPost(description: String, imageUri: Uri): SimpleResource {

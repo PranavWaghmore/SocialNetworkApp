@@ -17,14 +17,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
+import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.components.Post
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.util.Screen
+import pw.coding.konnecto.core.util.UiText
 
 @Composable
 fun MainFeedScreen(
@@ -42,7 +45,7 @@ fun MainFeedScreen(
         StandardToolBar(
             title = {
                 Text(
-                    "Main Feed",
+                    stringResource(R.string.main_feed),
                     color = Color.White
                 )
             },
@@ -71,12 +74,14 @@ fun MainFeedScreen(
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             LazyColumn {
-                items(posts.itemCount) { i ->
+                items(
+                    count = posts.itemCount,
+                ) { i ->
                     val post = posts[i]
                     if (post != null) {
                         Post(
                             post = post,
-                            showProfileImage = false,
+                            showProfileImage = true,
                             onClick = {
                                onNavigate(Screen.PostDetailScreen.route)
                             }

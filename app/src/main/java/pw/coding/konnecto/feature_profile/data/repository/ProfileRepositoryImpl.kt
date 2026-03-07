@@ -2,10 +2,18 @@ package pw.coding.konnecto.feature_profile.data.repository
 
 import android.content.Context
 import android.net.Uri
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import pw.coding.konnecto.R
+import pw.coding.konnecto.core.data.paging.PostSource
+import pw.coding.konnecto.core.data.remote.PostApi
+import pw.coding.konnecto.core.domain.models.Post
+import pw.coding.konnecto.core.util.Constants
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
 import pw.coding.konnecto.core.util.UiText
@@ -19,7 +27,8 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class ProfileRepositoryImpl(
-    private val api: ProfileApi,
+    private val profileApi: ProfileApi,
+    private val postApi: PostApi,
     private val gson: Gson,
     private val context: Context
 ) : ProfileRepository {
@@ -27,7 +36,7 @@ class ProfileRepositoryImpl(
     override suspend fun getProfile(userId: String): Resource<Profile> {
 
         return try {
-            val response = api.getProfile(userId)
+            val response = profileApi.getProfile(userId)
             if (response.successful) {
                 Resource.Success(response.data?.toProfile())
             } else {
@@ -46,13 +55,22 @@ class ProfileRepositoryImpl(
         }
     }
 
+    override fun getPostForProfile(
+        userId: String
+    ): Flow<PagingData<Post>> {
+         return Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)){
+            PostSource(postApi, source = PostSource.Source.Profile(userId))
+        }.flow
+    }
+
+
     override suspend fun updateProfileData(
         updateProfileData: UpdateProfileData,
         profilePictureUri: Uri?,
         bannerImageUri: Uri?
     ): SimpleResource {
         return try {
-            val response = api.updateProfile(
+            val response = profileApi.updateProfile(
                 bannerImage = bannerImageUri?.let { uri ->
                     val file = uriToTempFile(context,uri)
                     MultipartBody.Part
@@ -98,7 +116,7 @@ class ProfileRepositoryImpl(
 
     override suspend fun getSkills(): Resource<List<Skill>> {
         return try {
-            val response = api.getSkills()
+            val response = profileApi.getSkills()
             Resource.Success(
                 data = response.map { it.toSkill() }
             )

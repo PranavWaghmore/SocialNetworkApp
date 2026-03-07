@@ -24,7 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
@@ -38,6 +40,7 @@ fun BannerSection(
     modifier: Modifier = Modifier,
     imageModifier: Modifier = Modifier,
     iconSize: Dp = 35.dp,
+    skillIconSize: Dp = 28.dp,
     leftIconModifier: Modifier = Modifier,
     rightIconModifier: Modifier = Modifier,
     topSkills: List<Skill> = emptyList(),
@@ -47,8 +50,9 @@ fun BannerSection(
     onGithubClick: () -> Unit = {},
     onInstagramClick: () -> Unit = {},
     onLeetCodeClick: () -> Unit = {},
-    bannerUrl : String ?= null
+    bannerUrl: String? = null
 ) {
+    val context = LocalContext.current
     BoxWithConstraints(
         modifier = modifier
     ) {
@@ -72,17 +76,28 @@ fun BannerSection(
         Row(
             modifier = leftIconModifier
                 .height(iconSize)
-                .align((Alignment.BottomStart))
+                .align(Alignment.BottomStart)
                 .padding(SmallSpace),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(SmallSpace))
-            topSkills.forEach { topSkill ->
+
+            topSkills.take(3).forEach { topSkill ->
                 AsyncImage(
-                    model = topSkill.imageUrl,
+                    model = ImageRequest.Builder(context)
+                        .data(topSkill.imageUrl)
+                        .crossfade(true)
+                        .build(),
+                    imageLoader = ImageLoader.Builder(context)
+                        .components {
+                            add(SvgDecoder.Factory())
+                        }
+                        .build(),
                     contentDescription = stringResource(R.string.skill),
-                    contentScale = ContentScale.Crop,
-                    modifier = imageModifier.fillMaxSize()
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(skillIconSize)
                 )
+
                 Spacer(modifier = Modifier.width(MediumSpace))
             }
         }
@@ -92,7 +107,7 @@ fun BannerSection(
                 .align(Alignment.BottomEnd)
                 .padding(SmallSpace)
         ) {
-            if(showGitHub){
+            if (showGitHub) {
                 IconButton(
                     onClick = onGithubClick, modifier = Modifier.size(iconSize)
                 ) {
@@ -103,18 +118,18 @@ fun BannerSection(
                     )
                 }
             }
-           if(showInstagram){
-               IconButton(
-                   onClick = onLeetCodeClick, modifier = Modifier.size(iconSize)
-               ) {
-                   Image(
-                       painter = painterResource(R.drawable.instagram_2016_5),
-                       contentDescription = "instagram",
-                       modifier = Modifier.size(iconSize)
-                   )
-               }
+            if (showInstagram) {
+                IconButton(
+                    onClick = onLeetCodeClick, modifier = Modifier.size(iconSize)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.instagram_2016_5),
+                        contentDescription = "instagram",
+                        modifier = Modifier.size(iconSize)
+                    )
+                }
             }
-            if(showLinkedIn){
+            if (showLinkedIn) {
                 IconButton(
                     onClick = onInstagramClick, modifier = Modifier.size(iconSize)
                 ) {

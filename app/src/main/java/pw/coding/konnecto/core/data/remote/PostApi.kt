@@ -1,4 +1,4 @@
-package pw.coding.konnecto.feature_post.data.remote
+package pw.coding.konnecto.core.data.remote
 
 import okhttp3.MultipartBody
 import pw.coding.konnecto.core.data.dto.BasicApiResponse
@@ -13,6 +13,13 @@ interface PostApi {
 
     @GET("/api/post/get")
     suspend fun getPostsForFollows(
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int,
+    ): List<Post>
+
+    @GET("api/user/post")
+    suspend fun getPostsForProfile(
+        @Query("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
     ): List<Post>

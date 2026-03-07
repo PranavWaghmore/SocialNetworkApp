@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -17,40 +18,45 @@ import pw.coding.konnecto.feature_profile.presentation.profile.components.Profil
 import javax.inject.Inject
 
 @HiltViewModel
- class ProfileViewModel @Inject constructor(
-     private val profileUseCases: ProfileUseCases,
-     savedStateHandle: SavedStateHandle
- ) : ViewModel(){
+class ProfileViewModel @Inject constructor(
+    private val profileUseCases: ProfileUseCases,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
-     private val _toolbarState= mutableStateOf(ProfileToolBarState())
-     val toolbarState : State<ProfileToolBarState> = _toolbarState
+    private val _toolbarState = mutableStateOf(ProfileToolBarState())
+    val toolbarState: State<ProfileToolBarState> = _toolbarState
 
     private val _state = mutableStateOf(ProfileState())
     val state: State<ProfileState> = _state
 
-    fun setExpandedRatio( ratio: Float){
-        _toolbarState.value = _toolbarState.value.copy(expandedRatio = ratio)
-    }
-
-     fun setToolbarOffset( value: Float){
-         _toolbarState.value = _toolbarState.value.copy(toolbarOffsetY = value)
-     }
-
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun getProfile(userId: String?){
+    val posts = profileUseCases.getPostsForProfile(
+        savedStateHandle.get<String>("userId") ?: ""
+    ).cachedIn(viewModelScope)
+
+    fun setExpandedRatio(ratio: Float) {
+        _toolbarState.value = _toolbarState.value.copy(expandedRatio = ratio)
+    }
+
+    fun setToolbarOffset(value: Float) {
+        _toolbarState.value = _toolbarState.value.copy(toolbarOffsetY = value)
+    }
+
+    fun getProfile(userId: String?) {
         viewModelScope.launch {
             _state.value = state.value.copy(isLoading = true)
-            when(val result = profileUseCases.getProfile(userId ?: "699005470ad3504f1d60cd0a")){
+            when (val result = profileUseCases.getProfile(userId ?: "699005470ad3504f1d60cd0a")) {
                 is Resource.Success -> {
                     _state.value = state.value.copy(
                         isLoading = false,
                         profile = result.data
                     )
                 }
+
                 is Resource.Error -> {
-                    _state.value= state.value.copy(isLoading = false)
+                    _state.value = state.value.copy(isLoading = false)
                     _eventFlow.emit(
                         UiEvent.ShowSnackbar(
                             uiText = result.uiText ?: UiText.unknownError()
@@ -60,4 +66,4 @@ import javax.inject.Inject
             }
         }
     }
- }
+}

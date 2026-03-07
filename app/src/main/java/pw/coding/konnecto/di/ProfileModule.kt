@@ -8,9 +8,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import pw.coding.konnecto.core.data.remote.PostApi
 import pw.coding.konnecto.feature_profile.data.remote.ProfileApi
 import pw.coding.konnecto.feature_profile.data.repository.ProfileRepositoryImpl
 import pw.coding.konnecto.feature_profile.domain.repository.ProfileRepository
+import pw.coding.konnecto.feature_profile.domain.use_case.GetPostsForProfileUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.GetProfileUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.GetSkillsUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.ProfileUseCases
@@ -38,11 +40,12 @@ object ProfileModule {
     @Provides
     @Singleton
     fun provideProfileRepository(
-        api: ProfileApi,
+        profileApi: ProfileApi,
+        postApi: PostApi,
         gson: Gson,
         @ApplicationContext context: Context
     ): ProfileRepository {
-        return ProfileRepositoryImpl(api,gson,context)
+        return ProfileRepositoryImpl(profileApi,postApi,gson,context ,)
     }
 
     @Provides
@@ -52,7 +55,8 @@ object ProfileModule {
             getProfile = GetProfileUseCase(repository),
             getSkills = GetSkillsUseCase(repository),
             updateProfile = UpdateProfileUseCase(repository),
-            setSkillSelected = SetSkillSelectedUseCase()
+            setSkillSelected = SetSkillSelectedUseCase(),
+            getPostsForProfile = GetPostsForProfileUseCase(repository)
         )
     }
 }

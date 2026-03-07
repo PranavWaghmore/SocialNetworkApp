@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import kotlinx.coroutines.flow.collectLatest
 import pw.coding.konnecto.R
@@ -58,6 +59,9 @@ fun ProfileScreen(
     profilePictureSize: Dp = ProfilePictureDpSizeLarge,
     snackBarHostState: SnackbarHostState
 ) {
+
+    val posts = viewModel.posts.collectAsLazyPagingItems()
+
     val toolbarState = viewModel.toolbarState.value
     val iconHorizontalCentreLength =
         (LocalConfiguration.current.screenWidthDp.dp.toPx() / 4f -
@@ -173,28 +177,22 @@ fun ProfileScreen(
                             onNavigate(Screen.EditProfileScreen.route + "/${profile.userId}")
                         }
                     )
-
                 }
             }
-            items(5) {
-                Spacer(modifier = Modifier.height(SmallSpace))
-                Post(
-                    post = Post(
-                        username = "Pranav Waghmore",
-                        imageUrl = "",
-                        description = "Not just another post, but a piece of my journey...",
-                        likeCount = 17,
-                        commentCount = 7,
-                        isLiked = false,
-                        isOwnPost = true,
-                        id = "",
-                        profilePictureUrl = "",
-                        userId = ""
-                    ),
-                    onClick = {
-                        onNavigate(Screen.PostDetailScreen.route)
-                    }
-                )
+            items(
+                count = posts.itemCount,
+                key = { i -> posts[i]?.id ?: i }
+            ) { i ->
+                val post = posts[i]
+                if (post != null) {
+                    Post(
+                        post = post,
+                        showProfileImage = false,
+                        onClick = {
+                            onNavigate(Screen.PostDetailScreen.route)
+                        }
+                    )
+                }
             }
         }
 
