@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import pw.coding.konnecto.core.domain.use_case.GetOwnUserIdUseCase
 import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.UiText
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases,
+    private val getOwnUserId: GetOwnUserIdUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -33,7 +35,7 @@ class ProfileViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     val posts = profileUseCases.getPostsForProfile(
-        savedStateHandle.get<String>("userId") ?: ""
+        userId = savedStateHandle.get<String>("userId") ?: getOwnUserId()
     ).cachedIn(viewModelScope)
 
     fun setExpandedRatio(ratio: Float) {
@@ -47,11 +49,13 @@ class ProfileViewModel @Inject constructor(
     fun getProfile(userId: String?) {
         viewModelScope.launch {
             _state.value = state.value.copy(isLoading = true)
-            when (val result = profileUseCases.getProfile(userId ?: "699005470ad3504f1d60cd0a")) {
+            val result = profileUseCases.getProfile(
+                userId ?: getOwnUserId()
+                )
+            when (result){
                 is Resource.Success -> {
                     _state.value = state.value.copy(
-                        isLoading = false,
-                        profile = result.data
+                        isLoading = false, profile = result.data
                     )
                 }
 

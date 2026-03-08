@@ -96,7 +96,8 @@ fun StandardScaffold(
                                 icon = bottomNavItem.icon,
                                 contentDescription = bottomNavItem.contentDescription,
                                 selected =
-                                    bottomNavItem.route == navController.currentDestination?.route,
+                                    navController.currentDestination?.route?.startsWith(
+                                        bottomNavItem.route) == true,
                                 alertCount = bottomNavItem.alertCount
                             ) {
                                 if (navController.currentDestination?.route != bottomNavItem.route) {

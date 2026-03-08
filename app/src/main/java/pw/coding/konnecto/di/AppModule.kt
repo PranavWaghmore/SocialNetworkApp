@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import pw.coding.konnecto.core.domain.use_case.GetOwnUserIdUseCase
 import pw.coding.konnecto.core.util.Constants
 import javax.inject.Singleton
 
@@ -49,5 +50,11 @@ object AppModule {
     @Singleton
     fun provideGson(): Gson{
         return Gson()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetOwnUserIdUseCase(sharedPreferences: SharedPreferences): GetOwnUserIdUseCase{
+        return GetOwnUserIdUseCase(sharedPreferences)
     }
 }

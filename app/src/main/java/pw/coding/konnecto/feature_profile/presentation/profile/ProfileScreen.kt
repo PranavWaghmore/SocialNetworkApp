@@ -11,7 +11,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -38,9 +42,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import kotlinx.coroutines.flow.collectLatest
 import pw.coding.konnecto.R
-import pw.coding.konnecto.core.domain.models.Post
 import pw.coding.konnecto.core.domain.models.User
 import pw.coding.konnecto.core.presentation.components.Post
+import pw.coding.konnecto.core.presentation.components.StandardToolBar
 import pw.coding.konnecto.core.presentation.ui.theme.ProfilePictureDpSizeLarge
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.util.UiEvent
@@ -142,116 +146,132 @@ fun ProfileScreen(
         }
         return
     }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(nestedScrollConnection)
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
-            state = lazyListState
-        ) {
-            item {
-                Spacer(
-                    modifier = Modifier.height(
-                        toolbarExpandedHeight - profilePictureSize / 2f
-                    )
-                )
-            }
-            item {
-                state.profile?.let { profile ->
-                    ProfileHeaderSection(
-                        user = User(
-                            userId = profile.userId,
-                            profilePictureUrl = profile.profilePictureUrl,
-                            username = profile.username,
-                            description = profile.bio,
-                            followersCount = profile.followerCount,
-                            followingCount = profile.followingCount,
-                            postCount = profile.postCount
-                        ),
-                        isOwnProfile = profile.isOwnProfile,
-                        modifier = Modifier.fillMaxSize(),
-                        onEditClick = {
-                            onNavigate(Screen.EditProfileScreen.route + "/${profile.userId}")
-                        }
-                    )
-                }
-            }
-            items(
-                count = posts.itemCount,
-                key = { i -> posts[i]?.id ?: i }
-            ) { i ->
-                val post = posts[i]
-                if (post != null) {
-                    Post(
-                        post = post,
-                        showProfileImage = false,
-                        onClick = {
-                            onNavigate(Screen.PostDetailScreen.route)
-                        }
-                    )
-                }
-            }
-        }
+   Column(
+       modifier = Modifier.fillMaxSize()
+   ) {
+       userId?.let {
+           StandardToolBar(
+                   title = {
+                       Text(
+                           text = state.profile.username,
+                           color = Color.White
+                       )
+               },
+               showBackArrow = true,
+               onNavigateUp = onNavigateUp,
+           )
+       }
+       Box(
+           modifier = Modifier
+               .fillMaxSize()
+               .nestedScroll(nestedScrollConnection)
+       ) {
+           LazyColumn(
+               modifier = Modifier
+                   .fillMaxSize(),
+               state = lazyListState
+           ) {
+               item {
+                   Spacer(
+                       modifier = Modifier.height(
+                           toolbarExpandedHeight - profilePictureSize / 2f
+                       )
+                   )
+               }
+               item {
+                   state.profile.let { profile ->
+                       ProfileHeaderSection(
+                           user = User(
+                               userId = profile.userId,
+                               profilePictureUrl = profile.profilePictureUrl,
+                               username = profile.username,
+                               description = profile.bio,
+                               followersCount = profile.followerCount,
+                               followingCount = profile.followingCount,
+                               postCount = profile.postCount
+                           ),
+                           isOwnProfile = profile.isOwnProfile,
+                           modifier = Modifier.fillMaxSize(),
+                           onEditClick = {
+                               onNavigate(Screen.EditProfileScreen.route + "/${profile.userId}")
+                           }
+                       )
+                   }
+               }
+               items(
+                   count = posts.itemCount,
+                   key = { i -> posts[i]?.id ?: i }
+               ) { i ->
+                   val post = posts[i]
+                   if (post != null) {
+                       Post(
+                           post = post,
+                           showProfileImage = false,
+                           onClick = {
+                               onNavigate(Screen.PostDetailScreen.route)
+                           }
+                       )
+                   }
+               }
+           }
 
-        Column(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-        ) {
-            state.profile?.let { profile ->
-                BannerSection(
-                    modifier = Modifier.height(
-                        (bannerHeight * toolbarState.expandedRatio).coerceIn(
-                            minimumValue = toolbarHeightCollapsed,
-                            maximumValue = bannerHeight
-                        )
-                    ),
-                    leftIconModifier = Modifier.graphicsLayer {
-                        translationY =
-                            (1f - toolbarState.expandedRatio) * -iconCollapsedOffsetY.toPx()
-                        translationX =
-                            (1f - toolbarState.expandedRatio) * iconHorizontalCentreLength
-                    },
-                    rightIconModifier = Modifier.graphicsLayer {
-                        translationY =
-                            (1f - toolbarState.expandedRatio) * -iconCollapsedOffsetY.toPx()
-                        translationX =
-                            (1f - toolbarState.expandedRatio) * -iconHorizontalCentreLength
-                    },
-                    showGitHub = !profile.gitHubUrl.isNullOrEmpty(),
-                    showInstagram = !profile.instagramUrl.isNullOrEmpty(),
-                    showLinkedIn = !profile.linkedInUrl.isNullOrEmpty(),
-                    bannerUrl = profile.bannerUrl,
-                    topSkills = profile.topSkills
-                )
-                AsyncImage(
-                    model = profile.profilePictureUrl,
-                    contentDescription = stringResource(R.string.profile),
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .graphicsLayer {
-                            translationY = (-profilePictureSize.toPx() / 2f -
-                                    (1 - toolbarState.expandedRatio) * imageCollapsedOffset.toPx())
-                            transformOrigin = TransformOrigin(
-                                pivotFractionX = 0.5f,
-                                pivotFractionY = 0f
-                            )
-                            val scale = 0.5f + toolbarState.expandedRatio * 0.5f
-                            scaleX = scale
-                            scaleY = scale
-                        }
-                        .size(profilePictureSize)
-                        .clip(CircleShape)
-                        .border(
-                            width = 1.dp,
-                            color = Color.LightGray,
-                            shape = CircleShape
-                        )
-                )
-            }
+           Column(
+               modifier = Modifier
+                   .align(Alignment.TopCenter)
+           ) {
+               state.profile.let { profile ->
+                   BannerSection(
+                       modifier = Modifier.height(
+                           (bannerHeight * toolbarState.expandedRatio).coerceIn(
+                               minimumValue = toolbarHeightCollapsed,
+                               maximumValue = bannerHeight
+                           )
+                       ),
+                       leftIconModifier = Modifier.graphicsLayer {
+                           translationY =
+                               (1f - toolbarState.expandedRatio) * -iconCollapsedOffsetY.toPx()
+                           translationX =
+                               (1f - toolbarState.expandedRatio) * iconHorizontalCentreLength
+                       },
+                       rightIconModifier = Modifier.graphicsLayer {
+                           translationY =
+                               (1f - toolbarState.expandedRatio) * -iconCollapsedOffsetY.toPx()
+                           translationX =
+                               (1f - toolbarState.expandedRatio) * -iconHorizontalCentreLength
+                       },
+                       showGitHub = !profile.gitHubUrl.isNullOrEmpty(),
+                       showInstagram = !profile.instagramUrl.isNullOrEmpty(),
+                       showLinkedIn = !profile.linkedInUrl.isNullOrEmpty(),
+                       bannerUrl = profile.bannerUrl,
+                       topSkills = profile.topSkills
+                   )
+                   AsyncImage(
+                       model = profile.profilePictureUrl,
+                       contentDescription = stringResource(R.string.profile),
+                       modifier = Modifier
+                           .align(Alignment.CenterHorizontally)
+                           .graphicsLayer {
+                               translationY = (-profilePictureSize.toPx() / 2f -
+                                       (1 - toolbarState.expandedRatio) * imageCollapsedOffset.toPx())
+                               transformOrigin = TransformOrigin(
+                                   pivotFractionX = 0.5f,
+                                   pivotFractionY = 0f
+                               )
+                               val scale = 0.5f + toolbarState.expandedRatio * 0.5f
+                               scaleX = scale
+                               scaleY = scale
+                           }
+                           .size(profilePictureSize)
+                           .clip(CircleShape)
+                           .border(
+                               width = 1.dp,
+                               color = Color.LightGray,
+                               shape = CircleShape
+                           )
+                   )
+               }
 
-        }
-    }
+           }
+       }
+   }
 }
