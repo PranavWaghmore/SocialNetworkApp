@@ -190,6 +190,7 @@ fun ProfileScreen(
                                followingCount = profile.followingCount,
                                postCount = profile.postCount
                            ),
+                           isFollowing = profile.isFollowing,
                            isOwnProfile = profile.isOwnProfile,
                            modifier = Modifier.fillMaxSize(),
                            onEditClick = {

@@ -25,6 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.datastore.dataStore
+import coil.compose.AsyncImage
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.User
 import pw.coding.konnecto.core.presentation.ui.theme.IconSizeMedium
@@ -58,9 +60,9 @@ fun UserProfileItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Image(
-                painter = painterResource(R.drawable.pranav),
-                contentDescription = stringResource(R.string.profile),
+            AsyncImage(
+                model = user.profilePictureUrl,
+                contentDescription = stringResource(R.string.profile_picture),
                 modifier = Modifier
                     .size(ProfilePictureDpSize)
                     .clip(CircleShape)

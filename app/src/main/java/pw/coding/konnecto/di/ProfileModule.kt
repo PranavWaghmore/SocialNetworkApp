@@ -16,7 +16,9 @@ import pw.coding.konnecto.feature_profile.domain.use_case.GetPostsForProfileUseC
 import pw.coding.konnecto.feature_profile.domain.use_case.GetProfileUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.GetSkillsUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.ProfileUseCases
+import pw.coding.konnecto.feature_profile.domain.use_case.SearchForUsersUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.SetSkillSelectedUseCase
+import pw.coding.konnecto.feature_profile.domain.use_case.ToggleFollowStateForUserUSeCase
 import pw.coding.konnecto.feature_profile.domain.use_case.UpdateProfileUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -56,7 +58,9 @@ object ProfileModule {
             getSkills = GetSkillsUseCase(repository),
             updateProfile = UpdateProfileUseCase(repository),
             setSkillSelected = SetSkillSelectedUseCase(),
-            getPostsForProfile = GetPostsForProfileUseCase(repository)
+            getPostsForProfile = GetPostsForProfileUseCase(repository),
+            searchUsers = SearchForUsersUseCase(repository),
+            toggleFollowStateForUser = ToggleFollowStateForUserUSeCase(repository)
         )
     }
 }

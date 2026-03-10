@@ -32,6 +32,6 @@ interface PostApi {
     ): BasicApiResponse<Unit>
 
     companion object{
-        const val BASE_URL = "http://192.168.1.39:8001/"
+        const val BASE_URL = "http://192.168.1.41:8001/"
     }
 }

@@ -1,6 +1,6 @@
-package pw.coding.konnecto.feature_profile.data.response
+package pw.coding.konnecto.core.data.response
 
-import pw.coding.konnecto.feature_profile.domain.model.UserItem
+import pw.coding.konnecto.core.domain.models.UserItem
 
 data class UserResponseItem(
     val userId: String,
@@ -10,7 +10,7 @@ data class UserResponseItem(
     val isFollowing: Boolean
 ){
 
-    fun toUserItem(): UserItem{
+    fun toUserItem(): UserItem {
         return UserItem(
             userId = userId,
             username = username,

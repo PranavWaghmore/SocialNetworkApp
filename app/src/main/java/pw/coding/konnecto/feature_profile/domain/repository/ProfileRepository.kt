@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import pw.coding.konnecto.core.domain.models.Post
+import pw.coding.konnecto.core.domain.models.UserItem
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
 import pw.coding.konnecto.feature_profile.domain.model.Profile
@@ -14,7 +15,17 @@ interface ProfileRepository{
 
     suspend fun getProfile(userId: String): Resource<Profile>
 
-     fun getPostForProfile(
+    suspend fun searchUsers(query: String): Resource<List<UserItem>>
+
+    suspend fun followUser(
+        userId: String
+    ): SimpleResource
+
+    suspend fun unFollowUser(
+        userId: String
+    ): SimpleResource
+
+    fun getPostForProfile(
         userId: String
     ): Flow<PagingData<Post>>
 

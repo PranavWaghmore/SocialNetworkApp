@@ -32,6 +32,7 @@ import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 fun ProfileHeaderSection(
     user: User,
     modifier: Modifier,
+    isFollowing : Boolean = false,
     isOwnProfile : Boolean = true,
     onEditClick : () ->  Unit
 ){
@@ -82,6 +83,7 @@ fun ProfileHeaderSection(
         }
         ProfileStats(
             user ,
+            isFollowing = isFollowing,
             isOwnProfile = isOwnProfile
         )
     }
