@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.Activity
-import pw.coding.konnecto.core.presentation.util.ActivityAction
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.ui.theme.TextWhite
+import pw.coding.konnecto.feature_activity.domain.ActivityType
 
 @Composable
 fun ActivityItem(
@@ -40,20 +40,25 @@ fun ActivityItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ){
-            val fillerText = when (activity.actionType) {
-                is ActivityAction.LikedPost ->
+            val fillerText = when (activity.activityType) {
+                is ActivityType.LikedPost ->
                     stringResource(id = R.string.liked)
-                is ActivityAction.CommentedOnPost ->
+                is ActivityType.CommentedOnPost ->
                     stringResource(id = R.string.commented_on)
-                is ActivityAction.FollowedYou ->
+                is ActivityType.LikedComment -> {
+                    stringResource(R.string.liked)
+                }
+                is ActivityType.FollowedUser ->
                     stringResource(id = R.string.followed_you)
             }
-            val actionText= when ( activity.actionType){
-                is ActivityAction.LikedPost ->
+            val actionText= when (activity.activityType){
+                is ActivityType.LikedPost ->
                     stringResource(R.string.you_post)
-                is ActivityAction.CommentedOnPost ->
+                is ActivityType.CommentedOnPost ->
                     stringResource(R.string.you_post)
-                is ActivityAction.FollowedYou -> ""
+                is ActivityType.LikedComment ->
+                    stringResource(R.string.your_comment)
+                is ActivityType.FollowedUser -> ""
             }
             Text(
                 text = buildAnnotatedString {

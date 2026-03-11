@@ -13,7 +13,7 @@ interface PostApi {
 
     @GET("/api/post/get")
     suspend fun getPostsForFollows(
-        @Query("page") page: Int,
+        @Query("page") page : Int,
         @Query("pageSize") pageSize: Int,
     ): List<Post>
 
