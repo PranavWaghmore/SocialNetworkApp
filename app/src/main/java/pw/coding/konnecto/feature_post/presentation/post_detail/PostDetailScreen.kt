@@ -112,10 +112,15 @@ fun PostDetailScreen(
                                         ActionRow(
                                             username = state.post.username,
                                             modifier = Modifier.fillMaxWidth(),
-                                            onLikeClick = {},
+                                            onLikeClick = { _ ->
+                                                viewModel.onEvent(
+                                                    PostDetailEvent.LikePost(post.id)
+                                                )
+                                            },
                                             onCommentClick = {},
                                             onShareClick = {},
-                                            onUsernameClick = {}
+                                            onUsernameClick = {},
+                                            isLiked = state.post.isLiked
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(SmallSpace))
@@ -127,7 +132,7 @@ fun PostDetailScreen(
                                     Text(
                                         text = stringResource(
                                             id = R.string.liked_by_x_people,
-                                            state.post.likeCount
+                                            post.likeCount
                                         ),
                                         style = MaterialTheme.typography.labelMedium,
                                         fontWeight = FontWeight.Bold
@@ -157,7 +162,10 @@ fun PostDetailScreen(
                             horizontal = MediumSpace
                         ),
                     comment = comment,
-                    onLikeClick = { /* Handle like click */ }
+                    onLikeClick = { _ ->
+                        viewModel.onEvent(PostDetailEvent.LikeComment(comment.id))
+                    },
+                    isLiked = comment.isLiked
                 )
             }
         }

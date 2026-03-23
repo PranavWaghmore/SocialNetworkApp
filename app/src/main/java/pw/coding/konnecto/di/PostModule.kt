@@ -15,6 +15,7 @@ import pw.coding.konnecto.feature_post.domain.use_case.GetCommentsForPostUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.GetPostDetailsUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.GetPostForFollowsUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.PostUseCases
+import pw.coding.konnecto.feature_post.domain.use_case.ToggleLikeUpdateStateUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -49,7 +50,8 @@ object PostModule {
             createPostUseCase = CreatePostUseCase(repository),
             getPostDetails = GetPostDetailsUseCase(repository),
             getComments = GetCommentsForPostUseCase(repository),
-            addComment = AddCommentForPostUseCase(repository)
+            addComment = AddCommentForPostUseCase(repository),
+            toggleLikeUpdateState = ToggleLikeUpdateStateUseCase(repository)
         )
     }
 }

@@ -5,10 +5,8 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import pw.coding.konnecto.core.domain.models.Comment
 import pw.coding.konnecto.core.domain.models.Post
-import pw.coding.konnecto.core.util.Constants
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
-import java.net.URI
 
 interface PostRepository {
 
@@ -30,5 +28,15 @@ interface PostRepository {
     suspend fun addComment(
         comment: String,
         postId: String
+    ): SimpleResource
+
+    suspend fun likeParent(
+        parentId: String,
+        parentType: Int
+    ): SimpleResource
+
+    suspend fun unlikeParent(
+        parentId: String,
+        parentType: Int
     ): SimpleResource
 }

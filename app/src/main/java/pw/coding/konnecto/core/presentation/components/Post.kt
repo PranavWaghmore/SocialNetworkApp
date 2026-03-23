@@ -101,7 +101,8 @@ fun Post(
 
                         },
                         onUsernameClick = { username ->
-                        }
+                        },
+                        isLiked = post.isLiked
                     )
                 }
                 Spacer(modifier = Modifier.height(SmallSpace))

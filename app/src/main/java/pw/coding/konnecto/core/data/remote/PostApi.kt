@@ -1,5 +1,6 @@
 package pw.coding.konnecto.core.data.remote
 
+import android.R
 import okhttp3.MultipartBody
 import okhttp3.Request
 import pw.coding.data.requests.CreateCommentRequest
@@ -7,7 +8,9 @@ import pw.coding.konnecto.core.data.dto.BasicApiResponse
 import pw.coding.konnecto.core.domain.models.Comment
 import pw.coding.konnecto.core.domain.models.Post
 import pw.coding.konnecto.feature_post.data.remote.dto.CommentDto
+import pw.coding.konnecto.feature_post.data.request.LikeUpdateRequest
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -49,6 +52,17 @@ interface PostApi {
     @POST("/api/comment/create")
     suspend fun addComment(
         @Body request: CreateCommentRequest
+    ): BasicApiResponse<Unit>
+
+    @POST("/api/like")
+    suspend fun likeParent(
+        @Body request: LikeUpdateRequest
+    ): BasicApiResponse<Unit>
+
+    @DELETE("/api/unlike")
+    suspend fun unlikeParent(
+        @Query ("parentId") parentId: String,
+        @Query("parentType") parentType: Int
     ): BasicApiResponse<Unit>
 
     companion object{

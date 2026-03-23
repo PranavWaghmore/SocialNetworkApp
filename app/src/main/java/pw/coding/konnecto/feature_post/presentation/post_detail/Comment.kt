@@ -40,6 +40,7 @@ import pw.coding.konnecto.core.presentation.util.DateFormatUtil
 fun Comment(
     modifier: Modifier = Modifier,
     comment: Comment,
+    isLiked: Boolean = false,
     onLikeClick: (Boolean) -> Unit = {}
 ) {
     Card(
@@ -83,7 +84,7 @@ fun Comment(
                 )
             }
 
-            Spacer(modifier = Modifier.height(MediumSpace))
+            Spacer(modifier = Modifier.height(SmallSpace))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -96,7 +97,9 @@ fun Comment(
                 )
                 Spacer(modifier = Modifier.width(MediumSpace))
                 IconButton(
-                    onClick = { onLikeClick(comment.isLiked) },
+                    onClick = {
+                        onLikeClick(!isLiked)
+                    },
                     modifier = Modifier.weight(1f)
                 ) {
                     Icon(
