@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavArgumentBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -72,7 +73,7 @@ fun Navigation(
         composable(
             route = Screen.ProfileScreen.route + "?userId={userId}",
             arguments = listOf(
-                navArgument(name = "userId"){
+                navArgument(name = "userId") {
                     type = NavType.StringType
                     nullable = true
                     defaultValue = null
@@ -99,29 +100,25 @@ fun Navigation(
                 onNavigateUp = navController::navigateUp
             )
         }
-        composable(Screen.PostDetailScreen.route) {
+        composable(
+            route = Screen.PostDetailScreen.route + "/{postId}",
+            arguments = listOf(
+                navArgument(name = "postId"){
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) {
             PostDetailScreen(
                 onNavigate = navController::navigate,
-                onNavigateUp = navController::navigateUp,
-                post = Post(
-                    username = "Pranav Waghmore",
-                    imageUrl = "",
-                    description = "Not just another post — it's a reflection of moments, memories, and milestones." +
-                            "Every image holds a story, and this one is a piece of my journey.",
-                    likeCount = 17,
-                    commentCount = 7,
-                    userId = "",
-                    profilePictureUrl = "",
-                    isLiked = true,
-                    isOwnPost = true,
-                    id = "",
-                )
+                onNavigateUp = navController::navigateUp
             )
         }
         composable(
             Screen.EditProfileScreen.route + "/{userId}",
             arguments = listOf(
-                navArgument(name = "userId"){
+                navArgument(name = "userId") {
                     type = NavType.StringType
                 }
             )

@@ -209,7 +209,7 @@ fun ProfileScreen(
                            post = post,
                            showProfileImage = false,
                            onClick = {
-                               onNavigate(Screen.PostDetailScreen.route)
+                               onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
                            }
                        )
                    }

@@ -50,6 +50,6 @@ interface ProfileApi {
     suspend fun getSkills(): List<SkillDto>
 
     companion object{
-        const val BASE_URL = "http://192.168.1.41:8001/"
+        const val BASE_URL = "http://192.168.1.37:8001/"
     }
 }

@@ -84,4 +84,5 @@
     <string name="main_feed">Main Feed</string>
     <string name="liked_your_comment">Liked your Comment</string>
     <string name="your_comment">your comment</string>
+    <string name="enter_comment">Enter Comment</string>
 </resources>
