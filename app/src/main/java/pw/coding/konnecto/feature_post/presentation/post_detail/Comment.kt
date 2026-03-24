@@ -1,6 +1,7 @@
 package pw.coding.konnecto.feature_post.presentation.post_detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,7 +42,8 @@ fun Comment(
     modifier: Modifier = Modifier,
     comment: Comment,
     isLiked: Boolean = false,
-    onLikeClick: (Boolean) -> Unit = {}
+    onLikeClick: (Boolean) -> Unit = {},
+    onLikedByClick: () -> Unit = {}
 ) {
     Card(
         modifier = modifier,
@@ -113,9 +115,17 @@ fun Comment(
             Spacer(modifier = Modifier.height(SmallSpace))
 
             Text(
-                text = stringResource(R.string.liked_by_x_people, comment.likeCount),
+                text = stringResource(
+                    R.string.liked_by_x_people, comment.likeCount
+                ),
                 style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable(
+                    enabled = comment.likeCount > 0,
+                    onClick = {
+                        onLikedByClick()
+                    }
+                )
             )
         }
     }

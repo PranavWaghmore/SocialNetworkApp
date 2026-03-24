@@ -5,6 +5,8 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import pw.coding.konnecto.core.domain.models.Comment
 import pw.coding.konnecto.core.domain.models.Post
+import pw.coding.konnecto.core.domain.models.User
+import pw.coding.konnecto.core.domain.models.UserItem
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
 
@@ -39,4 +41,8 @@ interface PostRepository {
         parentId: String,
         parentType: Int
     ): SimpleResource
+
+    suspend fun getUsersWhoLikedParent(
+        parentId: String
+    ): Resource<List<UserItem>>
 }

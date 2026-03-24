@@ -111,6 +111,7 @@ fun ProfileScreen(
     val state = viewModel.state.value
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
+        viewModel.setExpandedRatio(1f)
         viewModel.getProfile(userId)
         viewModel.eventFlow.collectLatest { event ->
             when (event) {

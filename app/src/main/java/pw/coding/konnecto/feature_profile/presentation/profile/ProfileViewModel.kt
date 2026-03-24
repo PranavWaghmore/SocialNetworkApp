@@ -70,4 +70,24 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
+    private fun toggleLikeState(
+        isLiked: Boolean,
+        parentId: String,
+        parentType: Int
+    ){
+        viewModelScope.launch {
+           // val result = postUseCases.toggleLikeUpdateState(isLiked, parentId, parentType)
+//            when(result){
+//                is Resource.Success -> Unit
+//                is Resource.Error -> {
+//                    _eventFlow.emit(
+//                        UiEvent.ShowSnackbar(
+//                            uiText = result.uiText ?: UiText.unknownError()
+//                        )
+//                    )
+//                }
+//            }
+        }
+    }
 }

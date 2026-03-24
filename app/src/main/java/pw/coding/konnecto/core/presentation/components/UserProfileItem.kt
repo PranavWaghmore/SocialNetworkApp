@@ -29,6 +29,7 @@ import androidx.datastore.dataStore
 import coil.compose.AsyncImage
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.User
+import pw.coding.konnecto.core.domain.models.UserItem
 import pw.coding.konnecto.core.presentation.ui.theme.IconSizeMedium
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.ProfilePictureDpSize
@@ -36,7 +37,7 @@ import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 
 @Composable
 fun UserProfileItem(
-    user: User,
+    user: UserItem,
     modifier: Modifier = Modifier,
     actionIcon: @Composable () -> Unit = {},
     onItemClick: () -> Unit = {},
@@ -81,7 +82,7 @@ fun UserProfileItem(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = user.description,
+                    text = user.bio,
                     style = MaterialTheme.typography.labelMedium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis

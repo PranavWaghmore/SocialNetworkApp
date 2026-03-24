@@ -14,6 +14,7 @@ import pw.coding.konnecto.feature_post.domain.use_case.CreatePostUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.GetCommentsForPostUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.GetPostDetailsUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.GetPostForFollowsUseCase
+import pw.coding.konnecto.feature_post.domain.use_case.GetUsersWhoLikedParentUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.PostUseCases
 import pw.coding.konnecto.feature_post.domain.use_case.ToggleLikeUpdateStateUseCase
 import retrofit2.Retrofit
@@ -51,7 +52,8 @@ object PostModule {
             getPostDetails = GetPostDetailsUseCase(repository),
             getComments = GetCommentsForPostUseCase(repository),
             addComment = AddCommentForPostUseCase(repository),
-            toggleLikeUpdateState = ToggleLikeUpdateStateUseCase(repository)
-        )
+            toggleLikeUpdateState = ToggleLikeUpdateStateUseCase(repository),
+            getUsersWhoLikedParent = GetUsersWhoLikedParentUseCase(repository)
+       )
     }
 }

@@ -5,6 +5,7 @@ import okhttp3.MultipartBody
 import okhttp3.Request
 import pw.coding.data.requests.CreateCommentRequest
 import pw.coding.konnecto.core.data.dto.BasicApiResponse
+import pw.coding.konnecto.core.data.response.UserResponseItem
 import pw.coding.konnecto.core.domain.models.Comment
 import pw.coding.konnecto.core.domain.models.Post
 import pw.coding.konnecto.feature_post.data.remote.dto.CommentDto
@@ -65,7 +66,12 @@ interface PostApi {
         @Query("parentType") parentType: Int
     ): BasicApiResponse<Unit>
 
+    @GET("/api/like/parent")
+    suspend fun getUsersWhoLikedParent(
+        @Query("parentId") parentId: String
+    ): List<UserResponseItem>
+
     companion object{
-        const val BASE_URL = "http://192.168.1.37:8001/"
+        const val BASE_URL = "http://192.168.1.34:8001/"
     }
 }

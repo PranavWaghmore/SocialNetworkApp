@@ -81,12 +81,7 @@ fun SearchScreen(
                 LazyColumn {
                     items(state.userItems) { userItem ->
                         UserProfileItem(
-                            user = User(
-                                userId = userItem.username,
-                                profilePictureUrl = userItem.profilePictureUrl,
-                                username = userItem.username,
-                                description = userItem.bio
-                            ),
+                            user = userItem,
                             actionIcon = {
                                 IconButton(
                                     onClick = {

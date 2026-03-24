@@ -1,7 +1,7 @@
 package pw.coding.konnecto.feature_post.presentation.post_detail
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,6 +44,7 @@ import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.ProfilePictureDpSize
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.ui.theme.TextWhite
+import pw.coding.konnecto.core.util.Screen
 
 @Composable
 fun PostDetailScreen(
@@ -132,10 +133,16 @@ fun PostDetailScreen(
                                     Text(
                                         text = stringResource(
                                             id = R.string.liked_by_x_people,
-                                            post.likeCount
+                                            post.likeCount,
                                         ),
                                         style = MaterialTheme.typography.labelMedium,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.clickable(
+                                            enabled = post.likeCount > 0,
+                                            onClick = {
+                                                onNavigate(Screen.PersonListScreen.route + "/${post.id}")
+                                            }
+                                        )
                                     )
                                 }
                             }
@@ -165,7 +172,10 @@ fun PostDetailScreen(
                     onLikeClick = { _ ->
                         viewModel.onEvent(PostDetailEvent.LikeComment(comment.id))
                     },
-                    isLiked = comment.isLiked
+                    isLiked = comment.isLiked,
+                    onLikedByClick = {
+                       onNavigate(Screen.PersonListScreen.route + "/${comment.id}")
+                    }
                 )
             }
         }

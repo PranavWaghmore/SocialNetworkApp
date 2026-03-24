@@ -103,7 +103,7 @@ fun Navigation(
         composable(
             route = Screen.PostDetailScreen.route + "/{postId}",
             arguments = listOf(
-                navArgument(name = "postId"){
+                navArgument(name = "postId") {
                     type = NavType.StringType
                     nullable = true
                     defaultValue = null
@@ -120,6 +120,8 @@ fun Navigation(
             arguments = listOf(
                 navArgument(name = "userId") {
                     type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
                 }
             )
         ) {
@@ -129,10 +131,20 @@ fun Navigation(
                 snackBarHostState = snackBarHostState
             )
         }
-        composable(Screen.PersonListScreen.route) {
+        composable(
+            route = Screen.PersonListScreen.route + "/{parentId}",
+            arguments = listOf(
+                navArgument(name = "parentId") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) {
             PersonListScreen(
                 onNavigate = navController::navigate,
-                onNavigateUp = navController::navigateUp
+                onNavigateUp = navController::navigateUp,
+                snackBarHostState = snackBarHostState
             )
         }
     }
