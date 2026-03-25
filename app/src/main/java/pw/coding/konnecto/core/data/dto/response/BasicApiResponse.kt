@@ -1,4 +1,4 @@
-package pw.coding.konnecto.core.data.dto
+package pw.coding.konnecto.core.data.dto.response
 
 data class BasicApiResponse<T>(
     val successful: Boolean,

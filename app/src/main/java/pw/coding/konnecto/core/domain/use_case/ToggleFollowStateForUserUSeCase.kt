@@ -1,7 +1,7 @@
-package pw.coding.konnecto.feature_profile.domain.use_case
+package pw.coding.konnecto.core.domain.use_case
 
 import pw.coding.konnecto.core.util.Resource
-import pw.coding.konnecto.feature_profile.domain.repository.ProfileRepository
+import pw.coding.konnecto.core.domain.repository.ProfileRepository
 
 class ToggleFollowStateForUserUSeCase(
     private val repository: ProfileRepository
@@ -10,7 +10,7 @@ class ToggleFollowStateForUserUSeCase(
     suspend operator fun invoke(
         userId: String,
         isFollowing: Boolean
-    ): Resource<Unit>{
+    ): Resource<Unit> {
         return if(isFollowing){
             repository.unFollowUser(userId)
         }else{

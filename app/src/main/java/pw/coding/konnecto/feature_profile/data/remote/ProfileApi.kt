@@ -3,8 +3,8 @@ package pw.coding.konnecto.feature_profile.data.remote
 
 import okhttp3.MultipartBody
 import pw.coding.konnecto.feature_profile.data.response.ProfileResponse
-import pw.coding.konnecto.core.data.dto.BasicApiResponse
-import pw.coding.konnecto.core.data.response.UserResponseItem
+import pw.coding.konnecto.core.data.dto.response.BasicApiResponse
+import pw.coding.konnecto.core.data.dto.response.UserItemDto
 import pw.coding.konnecto.feature_profile.data.request.FollowUpdateRequest
 import pw.coding.konnecto.feature_profile.data.response.SkillDto
 import retrofit2.http.Body
@@ -26,7 +26,7 @@ interface ProfileApi {
     @GET("api/user/search")
     suspend fun searchUsers(
         @Query ("query") query: String
-    ): List<UserResponseItem>
+    ): List<UserItemDto>
 
     @POST("api/following/follow")
     suspend fun followUser(
@@ -50,6 +50,6 @@ interface ProfileApi {
     suspend fun getSkills(): List<SkillDto>
 
     companion object{
-        const val BASE_URL = "http://192.168.1.34:8001/"
+        const val BASE_URL = "http://192.168.1.36:8001/"
     }
 }

@@ -1,4 +1,4 @@
-package pw.coding.konnecto.core.domain.state
+package pw.coding.konnecto.core.domain.states
 
 import pw.coding.konnecto.core.util.Error
 

@@ -1,12 +1,9 @@
 package pw.coding.konnecto.core.data.remote
 
-import android.R
 import okhttp3.MultipartBody
-import okhttp3.Request
 import pw.coding.data.requests.CreateCommentRequest
-import pw.coding.konnecto.core.data.dto.BasicApiResponse
-import pw.coding.konnecto.core.data.response.UserResponseItem
-import pw.coding.konnecto.core.domain.models.Comment
+import pw.coding.konnecto.core.data.dto.response.BasicApiResponse
+import pw.coding.konnecto.core.data.dto.response.UserItemDto
 import pw.coding.konnecto.core.domain.models.Post
 import pw.coding.konnecto.feature_post.data.remote.dto.CommentDto
 import pw.coding.konnecto.feature_post.data.request.LikeUpdateRequest
@@ -28,9 +25,9 @@ interface PostApi {
 
     @GET("api/user/post")
     suspend fun getPostsForProfile(
-        @Query("userId") userId: String,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
+        @Query("userId") userId: String,
     ): List<Post>
 
     @Multipart
@@ -69,9 +66,9 @@ interface PostApi {
     @GET("/api/like/parent")
     suspend fun getUsersWhoLikedParent(
         @Query("parentId") parentId: String
-    ): List<UserResponseItem>
+    ): List<UserItemDto>
 
     companion object{
-        const val BASE_URL = "http://192.168.1.34:8001/"
+        const val BASE_URL = "http://192.168.1.36:8001/"
     }
 }

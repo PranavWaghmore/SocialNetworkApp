@@ -63,8 +63,7 @@ fun ProfileScreen(
     profilePictureSize: Dp = ProfilePictureDpSizeLarge,
     snackBarHostState: SnackbarHostState
 ) {
-
-    val posts = viewModel.posts.collectAsLazyPagingItems()
+    val pagingState = viewModel.pagingState.value
 
     val toolbarState = viewModel.toolbarState.value
     val iconHorizontalCentreLength =
@@ -201,19 +200,19 @@ fun ProfileScreen(
                    }
                }
                items(
-                   count = posts.itemCount,
-                   key = { i -> posts[i]?.id ?: i }
+                   count = pagingState.items.size,
                ) { i ->
-                   val post = posts[i]
-                   if (post != null) {
-                       Post(
-                           post = post,
-                           showProfileImage = false,
-                           onClick = {
-                               onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
-                           }
-                       )
+                   val post = pagingState.items[i]
+                   if (i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
+                       viewModel.loadNextPosts()
                    }
+                   Post(
+                       post = post,
+                       showProfileImage = false,
+                       onClick = {
+                           onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
+                       }
+                   )
                }
            }
 

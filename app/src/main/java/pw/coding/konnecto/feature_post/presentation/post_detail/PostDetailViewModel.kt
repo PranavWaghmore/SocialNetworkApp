@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import pw.coding.konnecto.core.domain.state.StandardTextFieldState
+import pw.coding.konnecto.core.domain.states.StandardTextFieldState
 import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.UiText

@@ -1,6 +1,6 @@
 package pw.coding.konnecto.feature_auth.data.remote
 
-import pw.coding.konnecto.core.data.dto.BasicApiResponse
+import pw.coding.konnecto.core.data.dto.response.BasicApiResponse
 import pw.coding.konnecto.feature_auth.data.remote.request.CreateAccountRequest
 import pw.coding.konnecto.feature_auth.data.remote.request.LoginRequest
 import pw.coding.konnecto.feature_auth.data.remote.response.AuthResponse
@@ -24,6 +24,6 @@ interface AuthApi {
     suspend fun authenticate()
 
     companion object{
-        const val BASE_URL = "http://192.168.1.34:8001/"
+        const val BASE_URL = "http://192.168.1.36:8001/"
     }
 }

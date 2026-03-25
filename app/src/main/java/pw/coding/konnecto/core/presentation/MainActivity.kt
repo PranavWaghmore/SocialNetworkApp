@@ -1,4 +1,4 @@
-package pw.coding.konnecto.core
+package pw.coding.konnecto.core.presentation
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
             SocialNetworkTheme {
                 Surface(
                     color = MaterialTheme.colorScheme.surface,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.Companion.fillMaxSize()
                 )
                 {
                     val navController = rememberNavController()
@@ -40,9 +40,9 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         showBottomBar = shouldShowBottomBar(backStackEntry = navBackStackEntry),
                         snackBarHostState = snackBarState,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.Companion.fillMaxSize()
                     ) {
-                        Navigation(navController, snackBarHostState = snackBarState )
+                        Navigation(navController, snackBarHostState = snackBarState)
                     }
                 }
             }

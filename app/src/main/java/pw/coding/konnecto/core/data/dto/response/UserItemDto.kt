@@ -1,8 +1,8 @@
-package pw.coding.konnecto.core.data.response
+package pw.coding.konnecto.core.data.dto.response
 
 import pw.coding.konnecto.core.domain.models.UserItem
 
-data class UserResponseItem(
+data class UserItemDto(
     val userId: String,
     val username: String,
     val profilePictureUrl: String,

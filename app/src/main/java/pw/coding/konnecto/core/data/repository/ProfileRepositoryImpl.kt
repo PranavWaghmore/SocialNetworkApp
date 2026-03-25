@@ -1,4 +1,4 @@
-package pw.coding.konnecto.feature_profile.data.repository
+package pw.coding.konnecto.core.data.repository
 
 import android.content.Context
 import android.net.Uri
@@ -24,7 +24,7 @@ import pw.coding.konnecto.feature_profile.data.request.FollowUpdateRequest
 import pw.coding.konnecto.feature_profile.domain.model.Profile
 import pw.coding.konnecto.feature_profile.domain.model.Skill
 import pw.coding.konnecto.feature_profile.domain.model.UpdateProfileData
-import pw.coding.konnecto.feature_profile.domain.repository.ProfileRepository
+import pw.coding.konnecto.core.domain.repository.ProfileRepository
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -114,13 +114,27 @@ class ProfileRepositoryImpl(
         }
     }
 
-
-    override fun getPostForProfile(
+    override suspend fun getPostForProfile(
+        page: Int,
+        pageSize: Int,
         userId: String
-    ): Flow<PagingData<Post>> {
-         return Pager(PagingConfig(pageSize = Constants.DEFAULT_PAGE_SIZE)){
-            PostSource(postApi, source = PostSource.Source.Profile(userId))
-        }.flow
+    ): Resource<List<Post>> {
+        return try {
+            val response = postApi.getPostsForProfile(
+                userId = userId,
+                page = page,
+               pageSize =  pageSize
+            )
+            Resource.Success(data = response)
+        } catch (e: IOException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.coudnt_reach_server)
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.something_went_wrong)
+            )
+        }
     }
 
 
@@ -132,7 +146,7 @@ class ProfileRepositoryImpl(
         return try {
             val response = profileApi.updateProfile(
                 bannerImage = bannerImageUri?.let { uri ->
-                    val file = uriToTempFile(context,uri)
+                    val file = uriToTempFile(context, uri)
                     MultipartBody.Part
                         .createFormData(
                             "banner_image",
@@ -141,7 +155,7 @@ class ProfileRepositoryImpl(
                         )
                 },
                 profilePicture = profilePictureUri?.let { uri ->
-                    val file = uriToTempFile(context,uri)
+                    val file = uriToTempFile(context, uri)
                     MultipartBody.Part
                         .createFormData(
                             "profile_picture",

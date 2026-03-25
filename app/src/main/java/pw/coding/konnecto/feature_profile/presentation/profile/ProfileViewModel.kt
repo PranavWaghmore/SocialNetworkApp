@@ -5,12 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import pw.coding.konnecto.core.domain.models.Post
 import pw.coding.konnecto.core.domain.use_case.GetOwnUserIdUseCase
+import pw.coding.konnecto.core.presentation.PagingState
 import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.UiText
@@ -22,7 +23,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases,
     private val getOwnUserId: GetOwnUserIdUseCase,
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _toolbarState = mutableStateOf(ProfileToolBarState())
@@ -34,9 +35,9 @@ class ProfileViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    val posts = profileUseCases.getPostsForProfile(
-        userId = savedStateHandle.get<String>("userId") ?: getOwnUserId()
-    ).cachedIn(viewModelScope)
+    private val _pagingState = mutableStateOf<PagingState<Post>>(PagingState())
+    val pagingState: State<PagingState<Post>> = _pagingState
+
 
     fun setExpandedRatio(ratio: Float) {
         _toolbarState.value = _toolbarState.value.copy(expandedRatio = ratio)
@@ -44,6 +45,11 @@ class ProfileViewModel @Inject constructor(
 
     fun setToolbarOffset(value: Float) {
         _toolbarState.value = _toolbarState.value.copy(toolbarOffsetY = value)
+    }
+
+    init {
+
+        loadNextPosts()
     }
 
     fun getProfile(userId: String?) {
@@ -65,6 +71,45 @@ class ProfileViewModel @Inject constructor(
                         UiEvent.ShowSnackbar(
                             uiText = result.uiText ?: UiText.unknownError()
                         )
+                    )
+                }
+            }
+        }
+    }
+
+    var page = 0
+
+    fun loadNextPosts(){
+        viewModelScope.launch {
+            _pagingState.value = pagingState.value.copy(
+                isLoading = true
+            )
+            val userId = savedStateHandle.get<String>("userId") ?: getOwnUserId()
+
+            val result = profileUseCases.getPostsForProfile(
+                userId = userId,
+                page = page,
+            )
+
+            when(result){
+                is Resource.Success -> {
+                    val posts = result.data ?: emptyList()
+                    _pagingState.value = pagingState.value.copy(
+                        items = pagingState.value.items + posts,
+                        isLoading = false,
+                        endReached = posts.isEmpty()
+                    )
+                    page++;
+                }
+
+                is Resource.Error -> {
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            result.uiText ?: UiText.unknownError()
+                        )
+                    )
+                    _pagingState.value = pagingState.value.copy(
+                        isLoading = false
                     )
                 }
             }

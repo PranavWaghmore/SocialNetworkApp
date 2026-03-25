@@ -6,7 +6,7 @@ import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.SimpleResource
 import pw.coding.konnecto.core.util.UiText
 import pw.coding.konnecto.feature_profile.domain.model.UpdateProfileData
-import pw.coding.konnecto.feature_profile.domain.repository.ProfileRepository
+import pw.coding.konnecto.core.domain.repository.ProfileRepository
 
 class UpdateProfileUseCase(
     private val repository: ProfileRepository
