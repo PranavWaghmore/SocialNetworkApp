@@ -11,11 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -38,14 +34,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import kotlinx.coroutines.flow.collectLatest
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.User
 import pw.coding.konnecto.core.presentation.components.Post
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
-import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.ProfilePictureDpSizeLarge
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.util.UiEvent

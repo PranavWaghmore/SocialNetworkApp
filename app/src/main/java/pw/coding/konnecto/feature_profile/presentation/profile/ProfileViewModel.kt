@@ -13,6 +13,7 @@ import pw.coding.konnecto.core.domain.models.Post
 import pw.coding.konnecto.core.domain.use_case.GetOwnUserIdUseCase
 import pw.coding.konnecto.core.presentation.PagingState
 import pw.coding.konnecto.core.presentation.util.UiEvent
+import pw.coding.konnecto.core.util.DefaultPaginator
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.UiText
 import pw.coding.konnecto.feature_post.domain.use_case.PostUseCases
@@ -42,6 +43,32 @@ class ProfileViewModel @Inject constructor(
     val pagingState: State<PagingState<Post>> = _pagingState
 
 
+    private val paginator = DefaultPaginator(
+        onLoadUpdated = { isLoading ->
+            _pagingState.value = pagingState.value.copy(
+                isLoading = isLoading
+            )
+        },
+        onRequest = { page->
+
+            val userId = savedStateHandle.get<String>("userId") ?: getOwnUserId()
+            profileUseCases.getPostsForProfile(
+                userId = userId,
+                page = page,
+            )
+        },
+        onSuccess = { posts ->
+            _pagingState.value = pagingState.value.copy(
+                items = pagingState.value.items + posts,
+                isLoading = false,
+                endReached = posts.isEmpty()
+            )
+        },
+        onError = { uiText ->
+            _eventFlow.emit(UiEvent.ShowSnackbar(uiText))
+        }
+    )
+
     fun setExpandedRatio(ratio: Float) {
         _toolbarState.value = _toolbarState.value.copy(expandedRatio = ratio)
     }
@@ -51,7 +78,6 @@ class ProfileViewModel @Inject constructor(
     }
 
     init {
-
         loadNextPosts()
     }
 
@@ -74,7 +100,7 @@ class ProfileViewModel @Inject constructor(
             _state.value = state.value.copy(isLoading = true)
             val result = profileUseCases.getProfile(
                 userId ?: getOwnUserId()
-                )
+            )
             when (result){
                 is Resource.Success -> {
                     _state.value = state.value.copy(
@@ -94,42 +120,9 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    var page = 0
-
     fun loadNextPosts(){
         viewModelScope.launch {
-            _pagingState.value = pagingState.value.copy(
-                isLoading = true
-            )
-            val userId = savedStateHandle.get<String>("userId") ?: getOwnUserId()
-
-            val result = profileUseCases.getPostsForProfile(
-                userId = userId,
-                page = page,
-            )
-
-            when(result){
-                is Resource.Success -> {
-                    val posts = result.data ?: emptyList()
-                    _pagingState.value = pagingState.value.copy(
-                        items = pagingState.value.items + posts,
-                        isLoading = false,
-                        endReached = posts.isEmpty()
-                    )
-                    page++;
-                }
-
-                is Resource.Error -> {
-                    _eventFlow.emit(
-                        UiEvent.ShowSnackbar(
-                            result.uiText ?: UiText.unknownError()
-                        )
-                    )
-                    _pagingState.value = pagingState.value.copy(
-                        isLoading = false
-                    )
-                }
-            }
+            paginator.loadNextItems()
         }
     }
 

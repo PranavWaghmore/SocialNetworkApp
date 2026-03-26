@@ -97,7 +97,7 @@ fun Comment(
                     color = Color.White,
                     modifier = Modifier.weight(9f)
                 )
-                Spacer(modifier = Modifier.width(MediumSpace))
+                Spacer(modifier = Modifier.width(MediumSpace)) 
                 IconButton(
                     onClick = {
                         onLikeClick(!isLiked)

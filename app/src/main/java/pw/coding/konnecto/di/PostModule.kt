@@ -47,7 +47,7 @@ object PostModule {
     @Singleton
     fun providePostUseCase(repository: PostRepository): PostUseCases{
         return PostUseCases(
-            getPostForFollowsUseCase =  GetPostForFollowsUseCase(repository),
+            getPostForFollows =  GetPostForFollowsUseCase(repository),
             createPostUseCase = CreatePostUseCase(repository),
             getPostDetails = GetPostDetailsUseCase(repository),
             getComments = GetCommentsForPostUseCase(repository),

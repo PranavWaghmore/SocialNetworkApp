@@ -12,7 +12,10 @@ import pw.coding.konnecto.core.util.SimpleResource
 
 interface PostRepository {
 
-    val posts: Flow<PagingData<Post>>
+    suspend fun getPostsForFollows(
+        page: Int,
+        pageSize: Int
+    ): Resource<List<Post>>
 
     suspend fun createPost(
         description: String,

@@ -2,7 +2,9 @@ package pw.coding.konnecto.feature_post.presentation.main_feed
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -13,32 +15,50 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.components.Post
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
+import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
+import pw.coding.konnecto.core.presentation.util.UiEvent
+import pw.coding.konnecto.core.presentation.util.asString
 import pw.coding.konnecto.core.util.Screen
-import pw.coding.konnecto.core.util.UiText
 
 @Composable
 fun MainFeedScreen(
     onNavigate: (String) -> Unit = {},
     onNavigateUp: () -> Unit = {},
+    viewModel: MainFeedViewModel = hiltViewModel(),
     snackBarHostState: SnackbarHostState,
-    viewModel: MainFeedViewModel = hiltViewModel()
 ) {
-    val posts = viewModel.posts.collectAsLazyPagingItems()
-    val scope = rememberCoroutineScope()
-    val state = viewModel.state.value
+
+    val pagingState = viewModel.pagingState.value
+    val context = LocalContext.current
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+           when(event){
+               is UiEvent.ShowSnackbar ->{
+                   snackBarHostState.showSnackbar(
+                       message = event.uiText.asString(context)
+                   )
+               }
+               else -> {}
+           }
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -70,54 +90,36 @@ fun MainFeedScreen(
                 .fillMaxSize()
                 .padding(vertical = MediumSpace)
         ) {
-            if(state.isLoadingFirstTime){
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            }
             LazyColumn {
                 items(
-                    count = posts.itemCount,
+                    count = pagingState.items.size
                 ) { i ->
-                    val post = posts[i]
-                    if (post != null) {
-                        Post(
-                            post = post,
-                            showProfileImage = true,
-                            onPostClick = {
-                               onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
-                            }
-                        )
-                    }
+                    val post = pagingState.items[i]
+                    Post(
+                        post = post,
+                        showProfileImage = true,
+                        onPostClick = {
+                           onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
+                        },
+                        onLikeClick = {
+
+                        },
+                        onUsernameClick = {
+
+                        },
+                        onShareClick = {
+
+                        }
+                    )
                 }
                 item {
-                    if (state.isLoadingNewPost) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.BottomCenter)
-                        )
-                    }
+                    Spacer(modifier = Modifier.height(94.dp))
                 }
-                posts.apply {
-                    when {
-                        loadState.refresh is LoadState.Loading -> {
-                            viewModel.onEvent(MainFeedEvent.LoadedPage)
-                        }
-
-                        loadState.append is LoadState.Loading -> {
-                            viewModel.onEvent(MainFeedEvent.LoadMorePosts)
-                        }
-
-                        loadState.append is LoadState.NotLoading -> {
-                            viewModel.onEvent(MainFeedEvent.LoadedPage)
-                        }
-
-                        loadState.append is LoadState.Error -> {
-                            scope.launch {
-                                snackBarHostState.showSnackbar(
-                                    message = "Error Loading more posts"
-                                )
-                            }
-                        }
-                    }
-                }
+            }
+            if (pagingState.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
         }
     }
