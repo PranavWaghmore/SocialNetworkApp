@@ -113,7 +113,7 @@ fun PostDetailScreen(
                                         ActionRow(
                                             username = state.post.username,
                                             modifier = Modifier.fillMaxWidth(),
-                                            onLikeClick = { _ ->
+                                            onLikeClick = {
                                                 viewModel.onEvent(
                                                     PostDetailEvent.LikePost(post.id)
                                                 )

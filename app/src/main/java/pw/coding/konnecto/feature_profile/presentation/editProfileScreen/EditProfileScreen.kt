@@ -86,6 +86,7 @@ fun EditProfileScreen(
     val bannerImageGalleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
+
         uri?.let {
             bannerImageCropActivityLauncher.launch(it)
         }

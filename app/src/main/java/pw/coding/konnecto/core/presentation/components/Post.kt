@@ -1,5 +1,6 @@
 package pw.coding.konnecto.core.presentation.components
 
+import android.R.attr.clickable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,7 +52,12 @@ fun Post(
     post: Post,
     showProfileImage: Boolean =true,
     profilePictureDpSize: Dp = 40.dp,
-    onClick :() -> Unit ={}
+    onPostClick: () -> Unit = {},
+    onLikeClick: () -> Unit = {},
+    onCommentClick: () -> Unit = {},
+    onShareClick: () -> Unit = {},
+    onUsernameClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -62,14 +68,16 @@ fun Post(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(MaterialTheme.shapes.medium)
-                .clickable(
-                    onClick = onClick
-                )
+
         ) {
             AsyncImage(
                 model = post.imageUrl,
                 contentDescription = "Post image",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                    onClick = onPostClick
+                )
             )
             Column(
                 modifier = Modifier
@@ -92,16 +100,10 @@ fun Post(
                     ActionRow(
                         username = post.username,
                         modifier = Modifier.fillMaxWidth(),
-                        onLikeClick = { isLiked ->
-                        },
-                        onCommentClick = {
-
-                        },
-                        onShareClick = {
-
-                        },
-                        onUsernameClick = { username ->
-                        },
+                        onLikeClick = onLikeClick,
+                        onCommentClick = onCommentClick,
+                        onShareClick = onShareClick,
+                        onUsernameClick = onUsernameClick,
                         isLiked = post.isLiked
                     )
                 }
@@ -137,7 +139,7 @@ fun Post(
                             post.likeCount
                         ),
                         style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = stringResource(
@@ -157,9 +159,9 @@ fun EngagementButtons(
     modifier: Modifier = Modifier,
     iconSize: Dp = 30.dp,
     isLiked: Boolean = false,
-    onLikeClick: (Boolean) -> Unit,
-    onCommentClick: (Boolean) -> Unit,
-    onShareClick: (Boolean) -> Unit,
+    onLikeClick: () -> Unit = {},
+    onCommentClick: () -> Unit = {},
+    onShareClick: () -> Unit = {},
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceAround,
@@ -168,7 +170,7 @@ fun EngagementButtons(
     ) {
         IconButton(
             onClick = {
-                onLikeClick(!isLiked)
+                onLikeClick()
             },
             modifier = Modifier.size(iconSize)
         ) {
@@ -189,7 +191,7 @@ fun EngagementButtons(
         Spacer(modifier = Modifier.width(SmallSpace))
         IconButton(
             onClick = {
-                onCommentClick
+                onCommentClick()
             },
             modifier = Modifier.size(iconSize)
         ) {
@@ -202,7 +204,7 @@ fun EngagementButtons(
         Spacer(modifier = Modifier.width(SmallSpace))
         IconButton(
             onClick = {
-                onShareClick
+                onShareClick()
             },
             modifier = Modifier.size(iconSize)
         ) {
@@ -219,11 +221,11 @@ fun EngagementButtons(
 fun ActionRow(
     modifier: Modifier = Modifier,
     isLiked: Boolean = false,
-    onLikeClick: (Boolean) -> Unit,
-    onCommentClick: (Boolean) -> Unit,
-    onShareClick: (Boolean) -> Unit,
+    onLikeClick: () -> Unit = {},
+    onCommentClick: () -> Unit = {},
+    onShareClick: () -> Unit = {},
     username: String,
-    onUsernameClick: (String) -> Unit,
+    onUsernameClick: () -> Unit = {},
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -244,7 +246,7 @@ fun ActionRow(
                 modifier = Modifier
                     .clickable(
                         onClick = {
-                            onUsernameClick(username)
+                            onUsernameClick()
                         }
                     )
             ) }

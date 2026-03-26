@@ -82,7 +82,7 @@ fun MainFeedScreen(
                         Post(
                             post = post,
                             showProfileImage = true,
-                            onClick = {
+                            onPostClick = {
                                onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
                             }
                         )

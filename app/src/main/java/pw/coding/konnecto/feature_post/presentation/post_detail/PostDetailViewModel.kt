@@ -51,9 +51,9 @@ class PostDetailViewModel @Inject constructor(
                 _state.value = state.value.copy(
                     post = currentPost.copy(
                         isLiked = !currentPost.isLiked,
-                        likeCount = if(currentPost.isLiked){
+                        likeCount = if (currentPost.isLiked) {
                             currentPost.likeCount - 1
-                        }else{
+                        } else {
                             currentPost.likeCount + 1
                         }
                     )
@@ -72,6 +72,7 @@ class PostDetailViewModel @Inject constructor(
                     text = event.comment
                 )
             }
+
             is PostDetailEvent.Comment -> {
                 addComment(
                     comment = commentTextFieldState.value.text,
@@ -80,36 +81,38 @@ class PostDetailViewModel @Inject constructor(
             }
 
             is PostDetailEvent.LikeComment -> {
-
+                var isLiked: Boolean? = null
                 val updatedComments = _state.value.comments.map { comment ->
 
-                    if(comment.id == event.commentId){
+                    if (comment.id == event.commentId) {
 
-                        val isLiked = comment.isLiked
-
-                        toggleLikeState(
-                            parentId = comment.id,
-                            parentType = ParentType.Comment.type,
-                            isLiked = isLiked
-                        )
-
+                        val currentLiked = comment.isLiked
+                        isLiked = currentLiked
                         comment.copy(
-                            isLiked = !isLiked,
-                            likeCount = if(isLiked){
+                            isLiked = !currentLiked,
+                            likeCount = if (currentLiked) {
                                 comment.likeCount - 1
-                            }else{
+                            } else {
                                 comment.likeCount + 1
                             }
                         )
-                    }else{
+                    } else {
                         comment
                     }
                 }
 
+                if (isLiked == null) {
+                    return
+                }
                 _state.value = _state.value.copy(
                     comments = updatedComments
                 )
 
+                toggleLikeState(
+                    parentId = event.commentId,
+                    parentType = ParentType.Comment.type,
+                    isLiked = isLiked
+                )
             }
 
             is PostDetailEvent.SharePost -> {
@@ -118,21 +121,21 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    private fun loadPost(postId: String){
+    private fun loadPost(postId: String) {
         viewModelScope.launch {
             _state.value = state.value.copy(
                 isLoadingPost = true
             )
             val result = postUseCases.getPostDetails(postId)
-            when(result){
+            when (result) {
                 is Resource.Success -> {
-                   _state.value = state.value.copy(
-                       post = result.data,
-                       isLoadingPost = false
-                   )
+                    _state.value = state.value.copy(
+                        post = result.data,
+                        isLoadingPost = false
+                    )
                 }
 
-                is Resource.Error ->{
+                is Resource.Error -> {
                     _state.value = state.value.copy(
                         isLoadingPost = false
                     )
@@ -147,20 +150,21 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    private fun loadComments(postId: String){
+    private fun loadComments(postId: String) {
         viewModelScope.launch {
             _state.value = state.value.copy(
                 isLoadingComments = true
             )
 
             val result = postUseCases.getComments(postId)
-            when(result){
+            when (result) {
                 is Resource.Success -> {
                     _state.value = state.value.copy(
                         comments = result.data ?: emptyList(),
                         isLoadingComments = false
                     )
                 }
+
                 is Resource.Error -> {
                     _state.value = state.value.copy(
                         isLoadingComments = false
@@ -174,7 +178,7 @@ class PostDetailViewModel @Inject constructor(
     private fun addComment(
         comment: String,
         postId: String
-    ){
+    ) {
         viewModelScope.launch {
             _commentState.value = commentState.value.copy(
                 isLoading = true
@@ -184,7 +188,7 @@ class PostDetailViewModel @Inject constructor(
                 postId
             )
 
-            when(result){
+            when (result) {
                 is Resource.Success -> {
                     _commentState.value = commentState.value.copy(
                         isLoading = false
@@ -194,6 +198,7 @@ class PostDetailViewModel @Inject constructor(
                     )
                     loadComments(postId)
                 }
+
                 is Resource.Error -> {
                     _commentState.value = commentState.value.copy(
                         isLoading = false
@@ -212,10 +217,10 @@ class PostDetailViewModel @Inject constructor(
         isLiked: Boolean,
         parentId: String,
         parentType: Int
-    ){
+    ) {
         viewModelScope.launch {
-            val result = postUseCases.toggleLikeUpdateState(isLiked, parentId, parentType)
-            when(result){
+            val result = postUseCases.toggleLikeForParent(isLiked, parentId, parentType)
+            when (result) {
                 is Resource.Success -> Unit
                 is Resource.Error -> {
                     _eventFlow.emit(

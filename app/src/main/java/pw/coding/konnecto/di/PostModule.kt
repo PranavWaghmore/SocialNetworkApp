@@ -16,7 +16,7 @@ import pw.coding.konnecto.feature_post.domain.use_case.GetPostDetailsUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.GetPostForFollowsUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.GetUsersWhoLikedParentUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.PostUseCases
-import pw.coding.konnecto.feature_post.domain.use_case.ToggleLikeUpdateStateUseCase
+import pw.coding.konnecto.feature_post.domain.use_case.ToggleLikeForParentUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -52,7 +52,7 @@ object PostModule {
             getPostDetails = GetPostDetailsUseCase(repository),
             getComments = GetCommentsForPostUseCase(repository),
             addComment = AddCommentForPostUseCase(repository),
-            toggleLikeUpdateState = ToggleLikeUpdateStateUseCase(repository),
+            toggleLikeForParent = ToggleLikeForParentUseCase(repository),
             getUsersWhoLikedParent = GetUsersWhoLikedParentUseCase(repository)
        )
     }

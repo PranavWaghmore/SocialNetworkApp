@@ -45,6 +45,7 @@ import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.User
 import pw.coding.konnecto.core.presentation.components.Post
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
+import pw.coding.konnecto.core.presentation.ui.theme.LargeSpace
 import pw.coding.konnecto.core.presentation.ui.theme.ProfilePictureDpSizeLarge
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.util.UiEvent
@@ -209,10 +210,18 @@ fun ProfileScreen(
                    Post(
                        post = post,
                        showProfileImage = false,
-                       onClick = {
+                       onPostClick = {
                            onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
-                       }
+                       },
+                       onLikeClick = {
+                           viewModel.onEvent(ProfileEvent.LikePost(post.id))
+                       },
+
                    )
+               }
+
+               item {
+                   Spacer(modifier = Modifier.height(90.dp))
                }
            }
 

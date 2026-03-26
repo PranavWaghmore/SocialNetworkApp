@@ -15,6 +15,8 @@ import pw.coding.konnecto.core.presentation.PagingState
 import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.UiText
+import pw.coding.konnecto.feature_post.domain.use_case.PostUseCases
+import pw.coding.konnecto.feature_post.util.ParentType
 import pw.coding.konnecto.feature_profile.domain.use_case.ProfileUseCases
 import pw.coding.konnecto.feature_profile.presentation.profile.components.ProfileToolBarState
 import javax.inject.Inject
@@ -22,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases,
+    private val postUseCases: PostUseCases,
     private val getOwnUserId: GetOwnUserIdUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -50,6 +53,20 @@ class ProfileViewModel @Inject constructor(
     init {
 
         loadNextPosts()
+    }
+
+    fun onEvent(event: ProfileEvent){
+
+        when(event){
+
+            is ProfileEvent.LikePost -> {
+                toggleLikeState(parentId = event.postId)
+            }
+
+            is ProfileEvent.GetProfile -> {
+
+            }
+        }
     }
 
     fun getProfile(userId: String?) {
@@ -117,22 +134,46 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun toggleLikeState(
-        isLiked: Boolean,
-        parentId: String,
-        parentType: Int
+        parentId: String
     ){
         viewModelScope.launch {
-           // val result = postUseCases.toggleLikeUpdateState(isLiked, parentId, parentType)
-//            when(result){
-//                is Resource.Success -> Unit
-//                is Resource.Error -> {
-//                    _eventFlow.emit(
-//                        UiEvent.ShowSnackbar(
-//                            uiText = result.uiText ?: UiText.unknownError()
-//                        )
-//                    )
-//                }
-//            }
+
+            var isLiked: Boolean ?= null
+            val updatedItems = _pagingState.value.items.map { post ->
+                if(post.id == parentId){
+                    val currentLiked  = post.isLiked
+                    isLiked = currentLiked
+
+                    post.copy(
+                        isLiked = !currentLiked,
+                        likeCount = if(currentLiked){
+                            post.likeCount - 1
+                        }else post.likeCount + 1
+                    )
+                }else{
+                    post
+                }
+            }
+            if(isLiked == null) return@launch
+
+            _pagingState.value = _pagingState.value.copy(
+                items = updatedItems
+            )
+            val result = postUseCases.toggleLikeForParent(
+                isLiked = isLiked,
+                parentId = parentId,
+                parentType = ParentType.Post.type
+            )
+            when(result){
+                is Resource.Success -> Unit
+                is Resource.Error -> {
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            uiText = result.uiText ?: UiText.unknownError()
+                        )
+                    )
+                }
+            }
         }
     }
 }

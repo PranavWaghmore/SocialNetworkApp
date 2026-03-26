@@ -3,7 +3,7 @@ package pw.coding.konnecto.feature_post.domain.use_case
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.feature_post.domain.repository.PostRepository
 
-class ToggleLikeUpdateStateUseCase(
+class ToggleLikeForParentUseCase(
     private val repository: PostRepository
 ) {
 
