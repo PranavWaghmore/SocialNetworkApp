@@ -18,6 +18,7 @@ import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.UiText
 import pw.coding.konnecto.feature_post.domain.use_case.PostUseCases
 import pw.coding.konnecto.feature_post.util.ParentType
+import pw.coding.konnecto.feature_profile.domain.model.Profile
 import pw.coding.konnecto.feature_profile.domain.use_case.ProfileUseCases
 import pw.coding.konnecto.feature_profile.presentation.profile.components.ProfileToolBarState
 import javax.inject.Inject
@@ -49,7 +50,7 @@ class ProfileViewModel @Inject constructor(
                 isLoading = isLoading
             )
         },
-        onRequest = { page->
+        onRequest = { page ->
 
             val userId = savedStateHandle.get<String>("userId") ?: getOwnUserId()
             profileUseCases.getPostsForProfile(
@@ -81,9 +82,9 @@ class ProfileViewModel @Inject constructor(
         loadNextPosts()
     }
 
-    fun onEvent(event: ProfileEvent){
+    fun onEvent(event: ProfileEvent) {
 
-        when(event){
+        when (event) {
 
             is ProfileEvent.LikePost -> {
                 toggleLikeState(parentId = event.postId)
@@ -91,6 +92,10 @@ class ProfileViewModel @Inject constructor(
 
             is ProfileEvent.GetProfile -> {
 
+            }
+
+            is ProfileEvent.Follow -> {
+                toggleFollowState(event.userId)
             }
         }
     }
@@ -101,7 +106,7 @@ class ProfileViewModel @Inject constructor(
             val result = profileUseCases.getProfile(
                 userId ?: getOwnUserId()
             )
-            when (result){
+            when (result) {
                 is Resource.Success -> {
                     _state.value = state.value.copy(
                         isLoading = false, profile = result.data
@@ -120,34 +125,71 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun loadNextPosts(){
+    fun loadNextPosts() {
         viewModelScope.launch {
             paginator.loadNextItems()
         }
     }
 
+    private fun toggleFollowState(userId: String) {
+        viewModelScope.launch {
+            val previousState = _state.value
+            val currentProfile = _state.value.profile ?: return@launch
+            val oldFollowState = currentProfile.isFollowing
+            val newFollowState = !oldFollowState
+
+            _state.value = _state.value.copy(
+                profile = currentProfile.copy(
+                    isFollowing = newFollowState,
+                    followerCount = if (newFollowState) {
+                        currentProfile.followerCount + 1
+                    } else {
+                        (currentProfile.followerCount - 1).coerceAtLeast(0)
+                    }
+                )
+            )
+
+            val result = profileUseCases.toggleFollowStateForUser(
+                userId = userId,
+                isFollowing = oldFollowState
+            )
+
+            when (result) {
+                is Resource.Success -> Unit
+                is Resource.Error -> {
+                    _state.value = previousState
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            result.uiText ?: UiText.unknownError()
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     private fun toggleLikeState(
         parentId: String
-    ){
+    ) {
         viewModelScope.launch {
 
-            var isLiked: Boolean ?= null
+            var isLiked: Boolean? = null
             val updatedItems = _pagingState.value.items.map { post ->
-                if(post.id == parentId){
-                    val currentLiked  = post.isLiked
+                if (post.id == parentId) {
+                    val currentLiked = post.isLiked
                     isLiked = currentLiked
 
                     post.copy(
                         isLiked = !currentLiked,
-                        likeCount = if(currentLiked){
+                        likeCount = if (currentLiked) {
                             post.likeCount - 1
-                        }else post.likeCount + 1
+                        } else post.likeCount + 1
                     )
-                }else{
+                } else {
                     post
                 }
             }
-            if(isLiked == null) return@launch
+            if (isLiked == null) return@launch
 
             _pagingState.value = _pagingState.value.copy(
                 items = updatedItems
@@ -157,7 +199,7 @@ class ProfileViewModel @Inject constructor(
                 parentId = parentId,
                 parentType = ParentType.Post.type
             )
-            when(result){
+            when (result) {
                 is Resource.Success -> Unit
                 is Resource.Error -> {
                     _eventFlow.emit(

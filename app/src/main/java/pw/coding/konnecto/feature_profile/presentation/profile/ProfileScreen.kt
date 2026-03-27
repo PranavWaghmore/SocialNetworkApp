@@ -186,6 +186,9 @@ fun ProfileScreen(
                                postCount = profile.postCount
                            ),
                            isFollowing = profile.isFollowing,
+                           onFollowClick = {
+                               viewModel.onEvent(ProfileEvent.Follow(profile.userId))
+                           },
                            isOwnProfile = profile.isOwnProfile,
                            modifier = Modifier.fillMaxSize(),
                            onEditClick = {
