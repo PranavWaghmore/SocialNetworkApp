@@ -102,10 +102,14 @@ fun MainFeedScreen(
                            onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
                         },
                         onLikeClick = {
-
+                            viewModel.onEvent(MainFeedEvent.OnPostLiked(post.id))
                         },
                         onUsernameClick = {
-
+                            onNavigate(Screen.ProfileScreen.route + "?userId=${post.userId}")
+                        },
+                        onCommentClick = {
+                            onNavigate(Screen.PostDetailScreen.route +
+                                    "/${post.id}?shouldShowKeyboard=true")
                         },
                         onShareClick = {
 

@@ -139,7 +139,7 @@ fun Post(
                             post.likeCount
                         ),
                         style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = stringResource(

@@ -21,19 +21,27 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
+import kotlinx.coroutines.flow.collectLatest
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.presentation.components.ActionRow
 import pw.coding.konnecto.core.presentation.components.StandardTextField
@@ -44,15 +52,38 @@ import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.ui.theme.ProfilePictureDpSize
 import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.ui.theme.TextWhite
+import pw.coding.konnecto.core.presentation.util.UiEvent
+import pw.coding.konnecto.core.presentation.util.asString
 import pw.coding.konnecto.core.util.Screen
 
 @Composable
 fun PostDetailScreen(
     viewModel: PostDetailViewModel = hiltViewModel(),
     onNavigate: (String) -> Unit = {},
-    onNavigateUp: () -> Unit = {}
+    onNavigateUp: () -> Unit = {},
+    snackBarHostState: SnackbarHostState,
+    shouldShowKeyBoard: Boolean = false
 ) {
     val state = viewModel.state.value
+
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    val context = LocalContext.current
+    LaunchedEffect(key1 = true) {
+        if(shouldShowKeyBoard){
+            focusRequester.requestFocus()
+            keyboardController?.show()
+        }
+        viewModel.eventFlow.collectLatest { event ->
+            when(event){
+                is UiEvent.ShowSnackbar -> {
+                    snackBarHostState.showSnackbar(event.uiText.asString(context))
+                }
+                else -> {}
+            }
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -118,9 +149,14 @@ fun PostDetailScreen(
                                                     PostDetailEvent.LikePost(post.id)
                                                 )
                                             },
-                                            onCommentClick = {},
+                                            onCommentClick = {
+                                                focusRequester.requestFocus()
+                                                keyboardController?.show()
+                                            },
                                             onShareClick = {},
-                                            onUsernameClick = {},
+                                            onUsernameClick = {
+                                                onNavigate(Screen.ProfileScreen.route + "?userId=${post.userId}")
+                                            },
                                             isLiked = state.post.isLiked
                                         )
                                     }
@@ -188,7 +224,9 @@ fun PostDetailScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             StandardTextField(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .focusRequester(focusRequester),
                 text = viewModel.commentTextFieldState.value.text,
                 hint = stringResource(R.string.enter_comment),
                 onValueChange = {

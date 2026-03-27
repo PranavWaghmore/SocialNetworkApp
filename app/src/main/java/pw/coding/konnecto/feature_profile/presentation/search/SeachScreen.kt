@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import pw.coding.konnecto.R
-import pw.coding.konnecto.core.domain.models.User
 import pw.coding.konnecto.core.presentation.components.StandardTextField
 import pw.coding.konnecto.core.presentation.components.StandardToolBar
 import pw.coding.konnecto.core.presentation.components.UserProfileItem

@@ -101,18 +101,23 @@ fun Navigation(
             )
         }
         composable(
-            route = Screen.PostDetailScreen.route + "/{postId}",
+            route = Screen.PostDetailScreen.route + "/{postId}?shouldShowKeyboard={shouldShowKeyboard}",
             arguments = listOf(
                 navArgument(name = "postId") {
                     type = NavType.StringType
-                    nullable = true
-                    defaultValue = null
+                },
+                navArgument(name = "shouldShowKeyboard") {
+                    type = NavType.BoolType
+                    defaultValue = false
                 }
             )
         ) {
+            val shouldShowKeyboard = it.arguments?.getBoolean("shouldShowKeyboard") ?: false
             PostDetailScreen(
                 onNavigate = navController::navigate,
-                onNavigateUp = navController::navigateUp
+                onNavigateUp = navController::navigateUp,
+                snackBarHostState = snackBarHostState,
+                shouldShowKeyBoard = shouldShowKeyboard
             )
         }
         composable(
