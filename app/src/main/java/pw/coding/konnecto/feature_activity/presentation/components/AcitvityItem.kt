@@ -3,6 +3,7 @@ package pw.coding.konnecto.feature_activity.presentation.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -34,12 +35,13 @@ fun ActivityItem(
     activity: Activity
 ) {
     Card(
+        modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(SmallSpace),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -98,8 +100,8 @@ fun ActivityItem(
                             styles = linkStyle,
                             linkInteractionListener = {
                                 val parentId = activity.parentId
-                                if (parentId.isBlank()) {
-                                    onNavigate(Screen.PostDetailScreen.route)
+                                if (parentId.isNotBlank()) {
+                                    onNavigate(Screen.PostDetailScreen.route + "/${activity.parentId}")
                                 }
                             }
                         )

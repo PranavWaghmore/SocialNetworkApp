@@ -95,6 +95,9 @@ fun MainFeedScreen(
                     count = pagingState.items.size
                 ) { i ->
                     val post = pagingState.items[i]
+                    if (i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
+                        viewModel.loadNextItems()
+                    }
                     Post(
                         post = post,
                         showProfileImage = true,

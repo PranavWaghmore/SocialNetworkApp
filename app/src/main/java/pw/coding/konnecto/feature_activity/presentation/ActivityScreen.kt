@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -28,18 +30,16 @@ fun ActivityScreen(
     onNavigate: (String) -> Unit = {},
     onNavigateUp: () -> Unit = {},
 ) {
-    val state = viewModel.state.value
-    val activities = viewModel.activities.collectAsLazyPagingItems()
+    val pagingState = viewModel.pagingState.value
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        if (state.isLoading) {
+        if(pagingState.isLoading){
             CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                color = MaterialTheme.colorScheme.primary
+                modifier = Modifier
+                    .align(Alignment.Center)
             )
         }
-
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -60,21 +60,17 @@ fun ActivityScreen(
                     .background(DarkGrey),
                 contentPadding = PaddingValues(MediumSpace)
             ) {
-                items(activities.itemCount) { i ->
-                    val activity = activities[i]
-                    activity?.let {
-                        ActivityItem(
-                            modifier = Modifier,
-                            activity = Activity(
-                                username = activity.username,
-                                activityType = activity.activityType,
-                                formattedTime = activity.formattedTime,
-                                userId = activity.userId,
-                                parentId = activity.parentId
-                            ),
-                            onNavigate = onNavigate
-                        )
+                items(pagingState.items.size) { i ->
+                    val activity = pagingState.items[i]
+                    if (i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
+                        viewModel.loadNextItems()
                     }
+                    ActivityItem(
+                        modifier = Modifier,
+                        activity = activity,
+                        onNavigate = onNavigate
+                    )
+                    Spacer(modifier = Modifier.height(MediumSpace))
                 }
             }
         }

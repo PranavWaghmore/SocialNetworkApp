@@ -16,6 +16,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,72 +45,66 @@ fun RowScope.StandardBottomNavItem(
     unselectedColor: Color = TextWhite,
     enabled: Boolean = true,
     onClick: () -> Unit,
-){
-    if(alertCount!=null && alertCount<0){
+) {
+    if (alertCount != null && alertCount < 0) {
         throw IllegalArgumentException("AlertCount can't be negative")
     }
 
-    val lineLength = animateFloatAsState(
-        targetValue = if(selected) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 300
-        )
+    val lineLength by animateFloatAsState(
+        targetValue = if (selected) 1f else 0f,
+        animationSpec = tween(durationMillis = 300),
+        label = "bottom_nav_line"
     )
+
     NavigationBarItem(
-        modifier = modifier.
-        padding(
-           start= SmallSpace,
-           end= SmallSpace,
-           bottom = LargeSpace,
+        modifier = modifier.padding(
+            start = SmallSpace,
+            end = SmallSpace,
+            bottom = LargeSpace,
         ),
         selected = selected,
-        onClick=onClick,
-        enabled=enabled,
+        onClick = onClick,
+        enabled = enabled,
         colors = NavigationBarItemDefaults.colors(
             selectedIconColor = selectedColor,
             unselectedIconColor = unselectedColor,
             indicatorColor = Color.Transparent
         ),
         icon = {
-            Box (
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding(SmallSpace)
-                    .drawBehind{
-                      if(lineLength.value > 0f) {
+                    .drawBehind {
+                        if (lineLength > 0f) {
+                            val halfLine = 15.dp.toPx() * lineLength
                             drawLine(
-                                color = if (selected) selectedColor
-                                else unselectedColor,
+                                color = selectedColor,
                                 start = Offset(
-                                    x=(size.width / 2f - lineLength.value * 15.dp.toPx()),
-                                    y= size.height
+                                    x = size.width / 2f - halfLine,
+                                    y = size.height
                                 ),
                                 end = Offset(
-                                    x=size.width / 2f + lineLength.value * 15.dp.toPx(),
-                                    y=size.height
+                                    x = size.width / 2f + halfLine,
+                                    y = size.height
                                 ),
                                 strokeWidth = 2.dp.toPx(),
                                 cap = StrokeCap.Round
                             )
-                      }
-
+                        }
                     }
-            ){
-                if(icon!=null){
+            ) {
+                if (icon != null) {
                     Icon(
                         imageVector = icon,
-                        contentDescription=contentDescription,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(30.dp)
+                        contentDescription = contentDescription,
+                        modifier = Modifier.size(30.dp)
                     )
                 }
-                if(alertCount!=null){
-                    val alertText=if(alertCount>99){
-                        "99+"
-                    }else{
-                        alertCount.toString()
-                    }
+
+                if (alertCount != null) {
+                    val alertText = if (alertCount > 99) "99+" else alertCount.toString()
+
                     Text(
                         text = alertText,
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -117,8 +112,8 @@ fun RowScope.StandardBottomNavItem(
                         textAlign = TextAlign.Center,
                         fontSize = 10.sp,
                         modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .offset(9.dp)
+                            .align(Alignment.TopEnd)
+                            .offset(x = 9.dp, y = (-4).dp)
                             .size(20.dp)
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.primary)

@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.models.BottomNavItem
 import pw.coding.konnecto.core.presentation.ui.theme.DarkGrey
@@ -67,7 +68,11 @@ fun StandardScaffold(
     ),
     content: @Composable () -> Unit
 ) {
+    val navBackStackEntry = navController.currentBackStackEntryAsState().value
+    val currentRoute = navBackStackEntry?.destination?.route
+
     Scaffold(
+        modifier = modifier,
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState) { data ->
                 Snackbar(
@@ -82,8 +87,7 @@ fun StandardScaffold(
             if (showBottomBar) {
                 Column {
                     HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         thickness = 1.dp,
                         color = LightGray
                     )
@@ -91,17 +95,21 @@ fun StandardScaffold(
                         containerColor = DarkGrey,
                         tonalElevation = 8.dp,
                     ) {
-                        bottomNavItems.forEachIndexed { i, bottomNavItem ->
+                        bottomNavItems.forEach { bottomNavItem ->
                             StandardBottomNavItem(
                                 icon = bottomNavItem.icon,
                                 contentDescription = bottomNavItem.contentDescription,
-                                selected =
-                                    navController.currentDestination?.route?.startsWith(
-                                        bottomNavItem.route) == true,
+                                selected = currentRoute?.startsWith(bottomNavItem.route) == true,
                                 alertCount = bottomNavItem.alertCount
                             ) {
-                                if (navController.currentDestination?.route != bottomNavItem.route) {
-                                    navController.navigate(bottomNavItem.route)
+                                if (currentRoute != bottomNavItem.route) {
+                                    navController.navigate(bottomNavItem.route) {
+                                        launchSingleTop = true
+                                        restoreState = true
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            saveState = true
+                                        }
+                                    }
                                 }
                             }
                         }
