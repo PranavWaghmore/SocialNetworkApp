@@ -49,7 +49,9 @@ interface ProfileApi {
     @GET("/api/skills/get")
     suspend fun getSkills(): List<SkillDto>
 
+    fun logOut()
+
     companion object{
-        const val BASE_URL = "http://192.168.1.36:8001/"
+        const val BASE_URL = "http://192.168.1.38:8001/"
     }
 }

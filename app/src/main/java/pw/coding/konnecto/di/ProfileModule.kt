@@ -1,6 +1,7 @@
 package pw.coding.konnecto.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -19,6 +20,7 @@ import pw.coding.konnecto.feature_profile.domain.use_case.ProfileUseCases
 import pw.coding.konnecto.feature_profile.domain.use_case.SearchForUsersUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.SetSkillSelectedUseCase
 import pw.coding.konnecto.core.domain.use_case.ToggleFollowStateForUserUSeCase
+import pw.coding.konnecto.feature_profile.domain.use_case.LogoutUseCase
 import pw.coding.konnecto.feature_profile.domain.use_case.UpdateProfileUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -45,9 +47,10 @@ object ProfileModule {
         profileApi: ProfileApi,
         postApi: PostApi,
         gson: Gson,
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        sharedPreferences: SharedPreferences
     ): ProfileRepository {
-        return ProfileRepositoryImpl(profileApi,postApi,gson,context ,)
+        return ProfileRepositoryImpl(profileApi,postApi,gson,context,sharedPreferences )
     }
 
     @Provides
@@ -60,7 +63,8 @@ object ProfileModule {
             setSkillSelected = SetSkillSelectedUseCase(),
             getPostsForProfile = GetPostsForProfileUseCase(repository),
             searchUsers = SearchForUsersUseCase(repository),
-            toggleFollowStateForUser = ToggleFollowStateForUserUSeCase(repository)
+            toggleFollowStateForUser = ToggleFollowStateForUserUSeCase(repository),
+            logout = LogoutUseCase(repository)
         )
     }
 }

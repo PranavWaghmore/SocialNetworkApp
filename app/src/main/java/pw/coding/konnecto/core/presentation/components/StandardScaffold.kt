@@ -95,7 +95,7 @@ fun StandardScaffold(
                         containerColor = DarkGrey,
                         tonalElevation = 8.dp,
                     ) {
-                        bottomNavItems.forEach { bottomNavItem ->
+                        bottomNavItems.forEach { bottomNavItem  ->
                             StandardBottomNavItem(
                                 icon = bottomNavItem.icon,
                                 contentDescription = bottomNavItem.contentDescription,

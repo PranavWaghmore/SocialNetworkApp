@@ -90,12 +90,24 @@ class ProfileViewModel @Inject constructor(
                 toggleLikeState(parentId = event.postId)
             }
 
-            is ProfileEvent.GetProfile -> {
-
-            }
-
             is ProfileEvent.Follow -> {
                 toggleFollowState(event.userId)
+            }
+
+            is ProfileEvent.ShowLogOutDialog -> {
+                _state.value = _state.value.copy(
+                    isLogOutDialogVisible = true
+                )
+            }
+
+            is ProfileEvent.DismissLogOutDialog -> {
+                _state.value = _state.value.copy(
+                    isLogOutDialogVisible = false
+                )
+            }
+
+            is ProfileEvent.Logout -> {
+                profileUseCases.logout()
             }
         }
     }

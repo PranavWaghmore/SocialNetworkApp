@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -54,6 +56,7 @@ fun ProfileScreen(
     userId: String ?= null,
     onNavigate: (String) -> Unit = {},
     onNavigateUp: () -> Unit = {},
+    onLogout: () -> Unit = {},
     viewModel: ProfileViewModel = hiltViewModel(),
     profilePictureSize: Dp = ProfilePictureDpSizeLarge,
     snackBarHostState: SnackbarHostState
@@ -141,148 +144,192 @@ fun ProfileScreen(
         }
         return
     }
-   Column(
-       modifier = Modifier.fillMaxSize()
-   ) {
-       userId?.let {
-           StandardToolBar(
-                   title = {
-                       Text(
-                           text = state.profile.username,
-                           color = Color.White
-                       )
-               },
-               showBackArrow = true,
-               onNavigateUp = onNavigateUp,
-           )
-       }
-       Box(
-           modifier = Modifier
-               .fillMaxSize()
-               .nestedScroll(nestedScrollConnection)
-       ) {
-           LazyColumn(
-               modifier = Modifier
-                   .fillMaxSize(),
-               state = lazyListState
-           ) {
-               item {
-                   Spacer(
-                       modifier = Modifier.height(
-                           toolbarExpandedHeight - profilePictureSize / 2f
-                       )
-                   )
-               }
-               item {
-                   state.profile.let { profile ->
-                       ProfileHeaderSection(
-                           user = User(
-                               userId = profile.userId,
-                               profilePictureUrl = profile.profilePictureUrl,
-                               username = profile.username,
-                               description = profile.bio,
-                               followersCount = profile.followerCount,
-                               followingCount = profile.followingCount,
-                               postCount = profile.postCount
-                           ),
-                           isFollowing = profile.isFollowing,
-                           onFollowClick = {
-                               viewModel.onEvent(ProfileEvent.Follow(profile.userId))
-                           },
-                           isOwnProfile = profile.isOwnProfile,
-                           modifier = Modifier.fillMaxSize(),
-                           onEditClick = {
-                               onNavigate(Screen.EditProfileScreen.route + "/${profile.userId}")
-                           }
-                       )
-                   }
-               }
-               items(
-                   count = pagingState.items.size,
-               ) { i ->
-                   val post = pagingState.items[i]
-                   if (i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
-                       viewModel.loadNextPosts()
-                   }
-                   Post(
-                       post = post,
-                       showProfileImage = false,
-                       onPostClick = {
-                           onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
-                       },
-                       onLikeClick = {
-                           viewModel.onEvent(ProfileEvent.LikePost(post.id))
-                       },
-                       onCommentClick = {
-                           onNavigate(Screen.PostDetailScreen.route +
-                                   "/${post.id}?shouldShowKeyboard=true")
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            userId?.let {
+                StandardToolBar(
+                    title = {
+                        Text(
+                            text = state.profile.username,
+                            color = Color.White
+                        )
+                    },
+                    showBackArrow = true,
+                    onNavigateUp = onNavigateUp,
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .nestedScroll(nestedScrollConnection)
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    state = lazyListState
+                ) {
+                    item {
+                        Spacer(
+                            modifier = Modifier.height(
+                                toolbarExpandedHeight - profilePictureSize / 2f
+                            )
+                        )
+                    }
+                    item {
+                        state.profile.let { profile ->
+                            ProfileHeaderSection(
+                                user = User(
+                                    userId = profile.userId,
+                                    profilePictureUrl = profile.profilePictureUrl,
+                                    username = profile.username,
+                                    description = profile.bio,
+                                    followersCount = profile.followerCount,
+                                    followingCount = profile.followingCount,
+                                    postCount = profile.postCount
+                                ),
+                                isFollowing = profile.isFollowing,
+                                onFollowClick = {
+                                    viewModel.onEvent(ProfileEvent.Follow(profile.userId))
+                                },
+                                isOwnProfile = profile.isOwnProfile,
+                                modifier = Modifier.fillMaxSize(),
+                                onEditClick = {
+                                    onNavigate(Screen.EditProfileScreen.route + "/${profile.userId}")
+                                },
+                                onLogOutClick = {
+                                    viewModel.onEvent(ProfileEvent.ShowLogOutDialog)
+                                }
+                            )
+                        }
+                    }
+                    items(
+                        count = pagingState.items.size,
+                    ) { i ->
+                        val post = pagingState.items[i]
+                        if (i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
+                            viewModel.loadNextPosts()
+                        }
+                        Post(
+                            post = post,
+                            showProfileImage = false,
+                            onPostClick = {
+                                onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
+                            },
+                            onLikeClick = {
+                                viewModel.onEvent(ProfileEvent.LikePost(post.id))
+                            },
+                            onCommentClick = {
+                                onNavigate(Screen.PostDetailScreen.route +
+                                        "/${post.id}?shouldShowKeyboard=true")
+                            },
+                        )
+                    }
 
-                       },
-                   )
-               }
+                    item {
+                        Spacer(modifier = Modifier.height(90.dp))
+                    }
+                }
 
-               item {
-                   Spacer(modifier = Modifier.height(90.dp))
-               }
-           }
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                ) {
+                    state.profile.let { profile ->
+                        BannerSection(
+                            modifier = Modifier.height(
+                                (bannerHeight * toolbarState.expandedRatio).coerceIn(
+                                    minimumValue = toolbarHeightCollapsed,
+                                    maximumValue = bannerHeight
+                                )
+                            ),
+                            leftIconModifier = Modifier.graphicsLayer {
+                                translationY =
+                                    (1f - toolbarState.expandedRatio) * -iconCollapsedOffsetY.toPx()
+                                translationX =
+                                    (1f - toolbarState.expandedRatio) * iconHorizontalCentreLength
+                            },
+                            rightIconModifier = Modifier.graphicsLayer {
+                                translationY =
+                                    (1f - toolbarState.expandedRatio) * -iconCollapsedOffsetY.toPx()
+                                translationX =
+                                    (1f - toolbarState.expandedRatio) * -iconHorizontalCentreLength
+                            },
+                            showGitHub = !profile.gitHubUrl.isNullOrEmpty(),
+                            showInstagram = !profile.instagramUrl.isNullOrEmpty(),
+                            showLinkedIn = !profile.linkedInUrl.isNullOrEmpty(),
+                            bannerUrl = profile.bannerUrl,
+                            topSkills = profile.topSkills
+                        )
+                        AsyncImage(
+                            model = profile.profilePictureUrl,
+                            contentDescription = stringResource(R.string.profile),
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .graphicsLayer {
+                                    translationY = (-profilePictureSize.toPx() / 2f -
+                                            (1 - toolbarState.expandedRatio) * imageCollapsedOffset.toPx())
+                                    transformOrigin = TransformOrigin(
+                                        pivotFractionX = 0.5f,
+                                        pivotFractionY = 0f
+                                    )
+                                    val scale = 0.5f + toolbarState.expandedRatio * 0.5f
+                                    scaleX = scale
+                                    scaleY = scale
+                                }
+                                .size(profilePictureSize)
+                                .clip(CircleShape)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color.LightGray,
+                                    shape = CircleShape
+                                )
+                        )
+                    }
 
-           Column(
-               modifier = Modifier
-                   .align(Alignment.TopCenter)
-           ) {
-               state.profile.let { profile ->
-                   BannerSection(
-                       modifier = Modifier.height(
-                           (bannerHeight * toolbarState.expandedRatio).coerceIn(
-                               minimumValue = toolbarHeightCollapsed,
-                               maximumValue = bannerHeight
-                           )
-                       ),
-                       leftIconModifier = Modifier.graphicsLayer {
-                           translationY =
-                               (1f - toolbarState.expandedRatio) * -iconCollapsedOffsetY.toPx()
-                           translationX =
-                               (1f - toolbarState.expandedRatio) * iconHorizontalCentreLength
-                       },
-                       rightIconModifier = Modifier.graphicsLayer {
-                           translationY =
-                               (1f - toolbarState.expandedRatio) * -iconCollapsedOffsetY.toPx()
-                           translationX =
-                               (1f - toolbarState.expandedRatio) * -iconHorizontalCentreLength
-                       },
-                       showGitHub = !profile.gitHubUrl.isNullOrEmpty(),
-                       showInstagram = !profile.instagramUrl.isNullOrEmpty(),
-                       showLinkedIn = !profile.linkedInUrl.isNullOrEmpty(),
-                       bannerUrl = profile.bannerUrl,
-                       topSkills = profile.topSkills
-                   )
-                   AsyncImage(
-                       model = profile.profilePictureUrl,
-                       contentDescription = stringResource(R.string.profile),
-                       modifier = Modifier
-                           .align(Alignment.CenterHorizontally)
-                           .graphicsLayer {
-                               translationY = (-profilePictureSize.toPx() / 2f -
-                                       (1 - toolbarState.expandedRatio) * imageCollapsedOffset.toPx())
-                               transformOrigin = TransformOrigin(
-                                   pivotFractionX = 0.5f,
-                                   pivotFractionY = 0f
-                               )
-                               val scale = 0.5f + toolbarState.expandedRatio * 0.5f
-                               scaleX = scale
-                               scaleY = scale
-                           }
-                           .size(profilePictureSize)
-                           .clip(CircleShape)
-                           .border(
-                               width = 1.dp,
-                               color = Color.LightGray,
-                               shape = CircleShape
-                           )
-                   )
-               }
+                }
+            }
+        }
 
-           }
-       }
-   }
+        if(state.isLogOutDialogVisible){
+
+            AlertDialog(
+                onDismissRequest = {
+                    viewModel.onEvent(ProfileEvent.DismissLogOutDialog)
+                },
+                title = {
+                    Text(text = "Logout")
+                },
+                text = {
+                    Text(text = "Do you want to logout your account?")
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.onEvent(ProfileEvent.Logout)
+                            viewModel.onEvent(ProfileEvent.DismissLogOutDialog)
+                            onLogout()
+                        }
+                    ) {
+                        Text(
+                            stringResource(R.string.yes)
+                        )
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.onEvent(ProfileEvent.DismissLogOutDialog)
+                        }
+                    ) {
+                        Text(stringResource(R.string.no))
+                    }
+                }
+            )
+        }
+    }
 }

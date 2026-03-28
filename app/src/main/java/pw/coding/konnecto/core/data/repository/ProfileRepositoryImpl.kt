@@ -1,6 +1,7 @@
 package pw.coding.konnecto.core.data.repository
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -27,12 +28,14 @@ import pw.coding.konnecto.feature_profile.domain.model.UpdateProfileData
 import pw.coding.konnecto.core.domain.repository.ProfileRepository
 import retrofit2.HttpException
 import java.io.IOException
+import androidx.core.content.edit
 
 class ProfileRepositoryImpl(
     private val profileApi: ProfileApi,
     private val postApi: PostApi,
     private val gson: Gson,
-    private val context: Context
+    private val context: Context,
+    private val sharedPreferences: SharedPreferences
 ) : ProfileRepository {
 
     override suspend fun getProfile(userId: String): Resource<Profile> {
@@ -204,4 +207,13 @@ class ProfileRepositoryImpl(
             )
         }
     }
+
+    override fun logout() {
+        sharedPreferences.edit {
+            remove(Constants.KEY_JWT_TOKEN)
+                remove(Constants.KEY_USER_ID)
+        }
+    }
+
+
 }

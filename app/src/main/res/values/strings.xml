@@ -85,4 +85,7 @@
     <string name="liked_your_comment">Liked your Comment</string>
     <string name="your_comment">your comment</string>
     <string name="enter_comment">Enter Comment</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logOut">Logout Account</string>
 </resources>

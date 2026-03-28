@@ -39,4 +39,6 @@ interface ProfileRepository{
         ): SimpleResource
 
     suspend fun getSkills(): Resource<List<Skill>>
+
+    fun logout()
 }
