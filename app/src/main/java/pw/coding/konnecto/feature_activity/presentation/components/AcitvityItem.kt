@@ -100,7 +100,8 @@ fun ActivityItem(
                             styles = linkStyle,
                             linkInteractionListener = {
                                 val parentId = activity.parentId
-                                if (parentId.isNotBlank()) {
+                                if (parentId.isNotBlank() &&
+                                    activity.activityType !is ActivityType.LikedComment) {
                                     onNavigate(Screen.PostDetailScreen.route + "/${activity.parentId}")
                                 }
                             }

@@ -33,6 +33,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -47,6 +48,7 @@ import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
 import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.presentation.util.asString
 import pw.coding.konnecto.core.util.Screen
+import pw.coding.konnecto.core.util.sendSharePost
 import pw.coding.konnecto.core.util.toPx
 import pw.coding.konnecto.feature_profile.presentation.profile.components.BannerSection
 import pw.coding.konnecto.feature_profile.presentation.profile.components.ProfileHeaderSection
@@ -227,6 +229,9 @@ fun ProfileScreen(
                                 onNavigate(Screen.PostDetailScreen.route +
                                         "/${post.id}?shouldShowKeyboard=true")
                             },
+                            onShareClick = {
+                                context.sendSharePost(post.id)
+                            }
                         )
                     }
 
@@ -302,7 +307,11 @@ fun ProfileScreen(
                     viewModel.onEvent(ProfileEvent.DismissLogOutDialog)
                 },
                 title = {
-                    Text(text = "Logout")
+                    Text(
+                        text = "Logout",
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 },
                 text = {
                     Text(text = "Do you want to logout your account?")

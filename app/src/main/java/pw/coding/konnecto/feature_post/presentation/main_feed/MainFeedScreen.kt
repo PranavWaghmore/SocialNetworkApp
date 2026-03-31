@@ -36,6 +36,7 @@ import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
 import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.presentation.util.asString
 import pw.coding.konnecto.core.util.Screen
+import pw.coding.konnecto.core.util.sendSharePost
 
 @Composable
 fun MainFeedScreen(
@@ -115,7 +116,7 @@ fun MainFeedScreen(
                                     "/${post.id}?shouldShowKeyboard=true")
                         },
                         onShareClick = {
-
+                            context.sendSharePost(post.id)
                         }
                     )
                 }

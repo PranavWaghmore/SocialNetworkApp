@@ -5,5 +5,4 @@ sealed class PostDetailEvent {
     data class LikePost(val postId: String): PostDetailEvent()
     object Comment: PostDetailEvent()
     data class LikeComment(val commentId: String): PostDetailEvent()
-    object SharePost: PostDetailEvent()
 }

@@ -2,6 +2,7 @@ package pw.coding.konnecto.feature_post.presentation.post_detail
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.util.fastCbrt
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,10 +10,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import pw.coding.konnecto.R
 import pw.coding.konnecto.core.domain.states.StandardTextFieldState
 import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.util.Resource
 import pw.coding.konnecto.core.util.UiText
+import pw.coding.konnecto.feature_auth.domain.use_case.AuthenticateUseCase
 import pw.coding.konnecto.feature_post.domain.use_case.PostUseCases
 import pw.coding.konnecto.feature_post.util.ParentType
 import javax.inject.Inject
@@ -20,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PostDetailViewModel @Inject constructor(
     private val postUseCases: PostUseCases,
+    private val authenticate: AuthenticateUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -42,6 +46,8 @@ class PostDetailViewModel @Inject constructor(
             loadComments(postId)
         }
     }
+
+    var isUserLoggedIn = false
 
     fun onEvent(event: PostDetailEvent) {
 
@@ -114,10 +120,6 @@ class PostDetailViewModel @Inject constructor(
                     isLiked = isLiked
                 )
             }
-
-            is PostDetailEvent.SharePost -> {
-
-            }
         }
     }
 
@@ -180,6 +182,15 @@ class PostDetailViewModel @Inject constructor(
         postId: String
     ) {
         viewModelScope.launch {
+            isUserLoggedIn = authenticate() is Resource.Success
+            if(!isUserLoggedIn){
+                _eventFlow.emit(
+                    UiEvent.ShowSnackbar(
+                        uiText = UiText.StringResource(R.string.please_login_first)
+                    )
+                )
+                return@launch
+            }
             _commentState.value = commentState.value.copy(
                 isLoading = true
             )
@@ -219,6 +230,15 @@ class PostDetailViewModel @Inject constructor(
         parentType: Int
     ) {
         viewModelScope.launch {
+            isUserLoggedIn = authenticate() is Resource.Success
+            if(!isUserLoggedIn){
+                _eventFlow.emit(
+                    UiEvent.ShowSnackbar(
+                        uiText = UiText.StringResource(R.string.please_login_first)
+                    )
+                )
+                return@launch
+            }
             val result = postUseCases.toggleLikeForParent(isLiked, parentId, parentType)
             when (result) {
                 is Resource.Success -> Unit

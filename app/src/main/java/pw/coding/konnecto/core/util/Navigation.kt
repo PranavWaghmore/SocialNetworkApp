@@ -1,29 +1,28 @@
 package pw.coding.konnecto.core.util
 
+import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavArgumentBuilder
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import pw.coding.konnecto.core.domain.models.Post
+import androidx.navigation.navDeepLink
 import pw.coding.konnecto.feature_activity.presentation.ActivityScreen
+import pw.coding.konnecto.feature_auth.presentation.login.LoginScreen
+import pw.coding.konnecto.feature_auth.presentation.register.RegisterScreen
+import pw.coding.konnecto.feature_auth.presentation.splash.SplashScreen
 import pw.coding.konnecto.feature_chat.chat.ChatScreen
 import pw.coding.konnecto.feature_post.presentation.create_post.CreatePostScreen
-import pw.coding.konnecto.feature_profile.presentation.editProfileScreen.EditProfileScreen
-import pw.coding.konnecto.feature_auth.presentation.login.LoginScreen
 import pw.coding.konnecto.feature_post.presentation.main_feed.MainFeedScreen
 import pw.coding.konnecto.feature_post.presentation.personlist.PersonListScreen
 import pw.coding.konnecto.feature_post.presentation.post_detail.PostDetailScreen
+import pw.coding.konnecto.feature_profile.presentation.editProfileScreen.EditProfileScreen
 import pw.coding.konnecto.feature_profile.presentation.profile.ProfileScreen
-import pw.coding.konnecto.feature_auth.presentation.register.RegisterScreen
 import pw.coding.konnecto.feature_profile.presentation.search.SearchScreen
-import pw.coding.konnecto.feature_auth.presentation.splash.SplashScreen
 
 
 @Composable
@@ -116,6 +115,12 @@ fun Navigation(
                 navArgument(name = "shouldShowKeyboard") {
                     type = NavType.BoolType
                     defaultValue = false
+                }
+            ),
+            deepLinks = listOf(
+                navDeepLink {
+                    action = Intent.ACTION_VIEW
+                    uriPattern = "konnecto://post/{postId}"
                 }
             )
         ) {

@@ -55,6 +55,7 @@ import pw.coding.konnecto.core.presentation.ui.theme.TextWhite
 import pw.coding.konnecto.core.presentation.util.UiEvent
 import pw.coding.konnecto.core.presentation.util.asString
 import pw.coding.konnecto.core.util.Screen
+import pw.coding.konnecto.core.util.sendSharePost
 
 @Composable
 fun PostDetailScreen(
@@ -153,7 +154,9 @@ fun PostDetailScreen(
                                                 focusRequester.requestFocus()
                                                 keyboardController?.show()
                                             },
-                                            onShareClick = {},
+                                            onShareClick = {
+                                                context.sendSharePost(post.id)
+                                            },
                                             onUsernameClick = {
                                                 onNavigate(Screen.ProfileScreen.route + "?userId=${post.userId}")
                                             },

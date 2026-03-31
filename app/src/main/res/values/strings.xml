@@ -88,4 +88,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="logOut">Logout Account</string>
+    <string name="share_intent_text">Hey, I found a great post, check it out :)\n%s</string>
+    <string name="please_login_first">Please login first before doing something!</string>
 </resources>
