@@ -10,4 +10,5 @@ val TextWhite=Color(0xFFEEEEEE)
 val GreenAccent=Color(0xFF08FF04)
 val TextGray = Color(0xFFA6A6A6)
 val TextGrayLighter = Color(0xFFD3D3D3)
+val DarkerGreen = Color(0xFF075E54)
 

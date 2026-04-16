@@ -123,6 +123,15 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
 
+
+    // Scarlet
+    val scarletVersion = "0.1.12"
+    implementation("com.tinder.scarlet:scarlet:$scarletVersion")
+    implementation ("com.tinder.scarlet:websocket-okhttp:$scarletVersion")
+    implementation ("com.tinder.scarlet:lifecycle-android:$scarletVersion")
+    implementation ("com.tinder.scarlet:message-adapter-gson:$scarletVersion")
+    implementation ("com.tinder.scarlet:stream-adapter-coroutines:$scarletVersion")
+
     // WebSocket Communication (Ktor)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)

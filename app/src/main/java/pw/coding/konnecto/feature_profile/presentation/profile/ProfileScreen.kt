@@ -1,5 +1,6 @@
 package pw.coding.konnecto.feature_profile.presentation.profile
 
+import android.util.Base64
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -207,6 +208,12 @@ fun ProfileScreen(
                                 },
                                 onLogOutClick = {
                                     viewModel.onEvent(ProfileEvent.ShowLogOutDialog)
+                                },
+                                onMessageClick = {
+                                    val encodedProfilePictureUrl = Base64.encodeToString(profile.profilePictureUrl.encodeToByteArray(), 0)
+                                    onNavigate(
+                                        Screen.MessagesScreen.route + "/${profile.userId}/${profile.username}/${encodedProfilePictureUrl}"
+                                    )
                                 }
                             )
                         }

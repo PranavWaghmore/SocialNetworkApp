@@ -15,7 +15,8 @@ import pw.coding.konnecto.feature_activity.presentation.ActivityScreen
 import pw.coding.konnecto.feature_auth.presentation.login.LoginScreen
 import pw.coding.konnecto.feature_auth.presentation.register.RegisterScreen
 import pw.coding.konnecto.feature_auth.presentation.splash.SplashScreen
-import pw.coding.konnecto.feature_chat.chat.ChatScreen
+import pw.coding.konnecto.feature_chat.presentation.chat.ChatScreen
+import pw.coding.konnecto.feature_chat.presentation.message.MessageScreen
 import pw.coding.konnecto.feature_post.presentation.create_post.CreatePostScreen
 import pw.coding.konnecto.feature_post.presentation.main_feed.MainFeedScreen
 import pw.coding.konnecto.feature_post.presentation.personlist.PersonListScreen
@@ -60,6 +61,35 @@ fun Navigation(
         }
         composable(Screen.ChatScreen.route) {
             ChatScreen(
+                onNavigate = navController::navigate,
+                onNavigateUp = navController::navigateUp
+            )
+        }
+        composable(
+            route = Screen.MessagesScreen.route + "/{remoteUserId}/{remoteUsername}/{remoteUserProfilePictureUrl}?chatId={chatId}",
+            arguments = listOf(
+                navArgument("chatId") {
+                    type = NavType.StringType
+                    nullable = true
+                },
+                navArgument("remoteUserId") {
+                    type = NavType.StringType
+                },
+                navArgument("remoteUsername") {
+                    type = NavType.StringType
+                },
+                navArgument("remoteUserProfilePictureUrl") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            val remoteUserId = it.arguments?.getString("remoteUserId")!!
+            val remoteUsername = it.arguments?.getString("remoteUsername")!!
+            val remoteUserProfilePictureUrl = it.arguments?.getString("remoteUserProfilePictureUrl")!!
+            MessageScreen(
+                remoteUserId = remoteUserId,
+                remoteUsername = remoteUsername,
+                encodedRemoteUserProfilePictureUrl = remoteUserProfilePictureUrl,
                 onNavigate = navController::navigate,
                 onNavigateUp = navController::navigateUp
             )
