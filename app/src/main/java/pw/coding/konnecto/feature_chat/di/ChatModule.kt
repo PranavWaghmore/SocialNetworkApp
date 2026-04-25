@@ -38,7 +38,7 @@ object ChatModule {
             .addMessageAdapterFactory(CustomGsonMessageAdapter.Factory(Gson()))
             .addStreamAdapterFactory(CoroutinesStreamAdapterFactory())
             .webSocketFactory(
-                client.newWebSocketFactory("ws://192.168.1.41:8001/api/chat/websocket")
+                client.newWebSocketFactory("ws://192.168.1.38:8001/api/chat/websocket")
             )
             .backoffStrategy(LinearBackoffStrategy(Constants.RECONNECT_INTERVAL))
             .build()

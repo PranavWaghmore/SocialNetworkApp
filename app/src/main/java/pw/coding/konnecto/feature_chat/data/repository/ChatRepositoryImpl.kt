@@ -36,10 +36,15 @@ class ChatRepositoryImpl(
     }
 
     override fun observeMessages(): Flow<Message> {
+        println("Received Message from server Euu")
         return chatService
             .observeMessages()
             .consumeAsFlow()
+            .also {
+                println("Received Message from server Euu")
+            }
             .map { it.toMessage() }
+
     }
 
     override suspend fun getChatsForUser(): Resource<List<Chat>> {

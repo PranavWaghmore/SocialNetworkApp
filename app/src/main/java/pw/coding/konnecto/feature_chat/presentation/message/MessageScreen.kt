@@ -34,6 +34,7 @@ import java.nio.charset.Charset
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.LaunchedEffect
+import pw.coding.konnecto.core.presentation.util.DateFormatUtil
 
 @Composable
 fun MessageScreen(
@@ -49,13 +50,7 @@ fun MessageScreen(
     }
 
     val pagingState = viewModel.pagingState.value
-    val listState = rememberLazyListState()
 
-    LaunchedEffect(pagingState.items.size) {
-        if (pagingState.items.isNotEmpty()) {
-            listState.animateScrollToItem(pagingState.items.lastIndex)
-        }
-    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -88,7 +83,6 @@ fun MessageScreen(
             )
 
             LazyColumn(
-                state = listState,
                 modifier = Modifier
                     .weight(1f)
                     .padding(MediumSpace)
@@ -99,20 +93,26 @@ fun MessageScreen(
                     if (message.fromId == remoteUserId) {
                         RemoteMessage(
                             message = message.text,
-                            formattedTime = message.timestamp.toString(),
+                            formattedTime = DateFormatUtil.timestampToFormattedString(
+                                message.timestamp,
+                                "HH:mm"
+                            ),
                             color = MaterialTheme.colorScheme.surface,
                             textColor = Color.White
                         )
+                        Spacer(modifier = Modifier.height(MediumSpace))
                     } else {
                         OwnMessage(
                             message = message.text,
-                            formattedTime = message.timestamp.toString(),
+                            formattedTime = DateFormatUtil.timestampToFormattedString(
+                                message.timestamp,
+                                "HH:mm"
+                            ),
                             color = DarkerGreen,
                             textColor = MaterialTheme.colorScheme.onPrimary
                         )
+                        Spacer(modifier = Modifier.height(MediumSpace))
                     }
-
-                    Spacer(modifier = Modifier.height(MediumSpace))
                 }
             }
 

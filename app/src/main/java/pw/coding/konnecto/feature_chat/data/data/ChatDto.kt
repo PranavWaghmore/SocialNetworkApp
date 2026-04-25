@@ -13,10 +13,10 @@ data class ChatDto(
     fun toChat(): Chat {
         return Chat(
             chatId = chatId,
-            remoteUserId = remoteUserId ?: "",
+            remoteUserId = remoteUserId ?: "unknownRemoteUserId",
             remoteUsername = remoteUsername ?: "Unknown user",
             remoteUserProfilePictureUrl = remoteUserProfilePictureUrl ?: "",
-            lastMessage = lastMessage ?: "",
+            lastMessage = lastMessage ?: "HardCoded",
             timestamp = timestamp ?: System.currentTimeMillis()
         )
     }

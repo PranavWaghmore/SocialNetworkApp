@@ -58,6 +58,7 @@ class MessageViewModel @Inject constructor(
     init {
         loadNextMessages()
         observerChatEvents()
+        observeChatMessages()
     }
 
     fun loadNextMessages() {
@@ -66,28 +67,29 @@ class MessageViewModel @Inject constructor(
         }
     }
 
+    private var isObservingMessages = false
     private fun observeChatMessages(){
+        if (isObservingMessages) return
+        isObservingMessages = true
+
         chatUseCases.observeMessages()
             .onEach { message ->
-                _pagingState.value = pagingState.value.copy(
+                println("Received Message in viewmodel $message")
+                _pagingState.value = _pagingState.value.copy(
                     items = _pagingState.value.items + message
                 )
-            }.launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
     }
     private fun observerChatEvents() {
         chatUseCases.observeChatEvents().onEach { event ->
-            when(event) {
-
-                is WebSocket.Event.OnConnectionOpened<*> -> {
-                    observeChatMessages()
-                }
+            when (event) {
                 is WebSocket.Event.OnConnectionFailed -> {
                     println("Connection Failed : ${event.throwable}")
                 }
-
-                else -> {}
+                else -> Unit
             }
-            }.launchIn(viewModelScope)
+        }.launchIn(viewModelScope)
     }
 
     private fun sendMessages() {
@@ -99,7 +101,7 @@ class MessageViewModel @Inject constructor(
 
         val chatId = savedStateHandle.get<String>("chatId")
         chatUseCases.sendMessage(toId, messageTextField.value.text.trim(), chatId)
-
+        _messageTextField.value = messageTextField.value.copy(text = "")
     }
 
     fun onEvent(event: MessageEvent) {

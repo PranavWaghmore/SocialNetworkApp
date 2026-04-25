@@ -52,6 +52,6 @@ interface ProfileApi {
     fun logOut()
 
     companion object{
-        const val BASE_URL = "http://192.168.1.41:8001/"
+        const val BASE_URL = "http://192.168.1.38:8001/"
     }
 }
