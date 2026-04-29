@@ -1,0 +1,120 @@
+package pw.coding.konnecto.feature_profile.presentation.profile.components
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.automirrored.filled.Message
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Message
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import pw.coding.konnecto.R
+import pw.coding.konnecto.core.domain.models.User
+import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
+import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
+
+@Composable
+fun ProfileHeaderSection(
+    user: User,
+    modifier: Modifier,
+    isFollowing : Boolean = false,
+    onFollowClick: () -> Unit,
+    isOwnProfile : Boolean = true,
+    onEditClick : () ->  Unit = {},
+    onMessageClick: () -> Unit = {},
+    onLogOutClick: () -> Unit = {}
+){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Spacer(modifier = Modifier.height(SmallSpace))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .offset(
+                    x= if(isOwnProfile){
+                        (35.dp + SmallSpace)/2f
+                    }else 0.dp
+                )
+        ) {
+            Text(
+                text = user.username,
+                style = MaterialTheme.typography.displayLarge.copy(
+                    fontSize = 24.sp
+                )
+            )
+            if(isOwnProfile){
+                Spacer(Modifier.width(SmallSpace))
+                IconButton(
+                    onClick = onEditClick,
+                    modifier = Modifier.size(35.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit ,
+                        contentDescription = stringResource(R.string.edit),
+                        tint = Color.White
+                    )
+                }
+                Spacer(Modifier.width(SmallSpace))
+                IconButton(
+                    onClick = onLogOutClick,
+                    modifier = Modifier.size(35.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Logout,
+                        contentDescription = stringResource(R.string.logOut),
+                        tint = Color.White
+                    )
+                }
+            }
+            Spacer(Modifier.width(SmallSpace))
+            IconButton(
+                onClick = onMessageClick,
+                modifier = Modifier.size(35.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Message,
+                    contentDescription = stringResource(R.string.send_message),
+                    tint = Color.White
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(MediumSpace))
+        if(user.description.isNotEmpty()){
+            Text(
+                text = user.description,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(MediumSpace)
+            )
+            Spacer(modifier = Modifier.height(MediumSpace))
+        }
+        ProfileStats(
+            user,
+            isFollowing = isFollowing,
+            isOwnProfile = isOwnProfile,
+            onFollowClick = onFollowClick
+        )
+    }
+}

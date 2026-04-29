@@ -1,0 +1,99 @@
+package pw.coding.konnecto.core.presentation.components
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.datastore.dataStore
+import coil.compose.AsyncImage
+import pw.coding.konnecto.R
+import pw.coding.konnecto.core.domain.models.User
+import pw.coding.konnecto.core.domain.models.UserItem
+import pw.coding.konnecto.core.presentation.ui.theme.IconSizeMedium
+import pw.coding.konnecto.core.presentation.ui.theme.MediumSpace
+import pw.coding.konnecto.core.presentation.ui.theme.ProfilePictureDpSize
+import pw.coding.konnecto.core.presentation.ui.theme.SmallSpace
+
+@Composable
+fun UserProfileItem(
+    user: UserItem,
+    modifier: Modifier = Modifier,
+    actionIcon: @Composable () -> Unit = {},
+    onItemClick: () -> Unit = {},
+    onActionItemClick: ()-> Unit = {},
+    ) {
+    Card(
+        modifier = modifier
+            .clickable(
+                enabled = true,
+                onClick = onItemClick
+            ),
+        elevation = CardDefaults.cardElevation(5.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    vertical = SmallSpace,
+                    horizontal = MediumSpace
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            AsyncImage(
+                model = user.profilePictureUrl,
+                contentDescription = stringResource(R.string.profile_picture),
+                modifier = Modifier
+                    .size(ProfilePictureDpSize)
+                    .clip(CircleShape)
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(0.8f)
+                    .padding(
+                        horizontal = SmallSpace
+                    )
+            ) {
+                Text(
+                    text = user.username,
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = user.bio,
+                    style = MaterialTheme.typography.labelMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            IconButton(
+                onClick = onActionItemClick,
+                modifier = Modifier.size(IconSizeMedium)
+            ) {
+                actionIcon()
+            }
+        }
+    }
+}

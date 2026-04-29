@@ -1,21 +1,20 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kapt)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.parcelize)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "pw.coding.konnecto"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "pw.coding.konnecto"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -35,9 +34,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+
     buildFeatures {
         compose = true
     }
@@ -48,6 +45,11 @@ android {
             excludes += "META-INF/AL2.0"
             excludes += "META-INF/LGPL2.1"
         }
+    }
+}
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
     }
 }
 
@@ -64,6 +66,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
+    implementation("androidx.paging:paging-compose:3.4.1")
 
     // Compose Additional Dependencies
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -83,6 +86,9 @@ dependencies {
     // Image Loading (Coil)
     implementation(libs.coil.compose)
     implementation(libs.coil.svg)
+
+    // UCrop for cropping image
+    implementation("com.github.yalantis:ucrop:2.2.8")
 
     // Asynchronous Programming (Coroutines)
     implementation(libs.kotlinx.coroutines.core)
@@ -105,8 +111,10 @@ dependencies {
     // Dependency Injection (Dagger-Hilt)
     implementation(libs.hilt.android)
     implementation(libs.androidx.junit.ktx)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.paging.common)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     // Networking (Retrofit)
@@ -114,6 +122,15 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+
+
+    // Scarlet
+    val scarletVersion = "0.1.12"
+    implementation("com.tinder.scarlet:scarlet:$scarletVersion")
+    implementation ("com.tinder.scarlet:websocket-okhttp:$scarletVersion")
+    implementation ("com.tinder.scarlet:lifecycle-android:$scarletVersion")
+    implementation ("com.tinder.scarlet:message-adapter-gson:$scarletVersion")
+    implementation ("com.tinder.scarlet:stream-adapter-coroutines:$scarletVersion")
 
     // WebSocket Communication (Ktor)
     implementation(libs.ktor.client.core)
@@ -151,7 +168,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.android.compiler)
+    kspAndroidTest(libs.hilt.android.compiler)
 
     // Debugging Tools
     debugImplementation(libs.androidx.ui.tooling)
